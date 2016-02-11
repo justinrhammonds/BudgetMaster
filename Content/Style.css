@@ -1,0 +1,14 @@
+﻿body {
+    font-family: 'Quicksand', sans-serif;
+    font-size:1.6em;
+}
+
+@media (min-width: 768px) {
+    .sidebar {
+        margin-top:64px !important;
+        width: 150px !important;
+    }
+    #page-wrapper {
+        margin: 0 0 0 150px !important;
+    }
+}
