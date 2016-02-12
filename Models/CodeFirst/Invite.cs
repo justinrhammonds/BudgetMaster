@@ -9,7 +9,7 @@ namespace BudgetMaster.Models.CodeFirst
     public class Invite
     {
         public int Id { get; set; }
-        [Required]
+
         public string GeneratedCode { get; set; }
         [Required]
         public string InvitedUser { get; set; }

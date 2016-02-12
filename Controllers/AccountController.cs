@@ -9,12 +9,14 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using BudgetMaster.Models;
+using BudgetMaster.Models.CodeFirst;
 
 namespace BudgetMaster.Controllers
 {
     [Authorize]
     public class AccountController : Controller
     {
+        private ApplicationDbContext db = new ApplicationDbContext();
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
@@ -75,11 +77,24 @@ namespace BudgetMaster.Controllers
 
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
+
+            //these two lines will go in every controller...
+            //var user = db.Users.Find(User.Identity.GetUserId());
+            //Household household = db.Households.Find(user.HouseholdId);
+            ///////////////////////////////////////////////////////////
             var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+           
             switch (result)
             {
                 case SignInStatus.Success:
+                    var user = UserManager.FindByEmail(model.Email);
+                    if (user.HouseholdId == null)
+                    {
+                        return RedirectToAction("Create", "Households");
+                    }
+
                     return RedirectToAction("Index", "Households");
+            
                     //return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
@@ -152,6 +167,7 @@ namespace BudgetMaster.Controllers
         {
             if (ModelState.IsValid)
             {
+
                 var user = new ApplicationUser { FirstName = model.FirstName, LastName = model.LastName, UserName = model.Email, Email = model.Email };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
@@ -164,7 +180,12 @@ namespace BudgetMaster.Controllers
                     var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
-                    return RedirectToAction("Index", "Home");
+                    //these two lines will go in every controller...
+                    //var user = db.Users.Find(User.Identity.GetUserId());
+                    //Household household = db.Households.Find(user.HouseholdId);
+                    ///////////////////////////////////////////////////////////
+
+                    return RedirectToAction("Create", "Households");
                 }
                 AddErrors(result);
             }
@@ -331,10 +352,16 @@ namespace BudgetMaster.Controllers
 
             // Sign in the user with this external login provider if the user already has a login
             var result = await SignInManager.ExternalSignInAsync(loginInfo, isPersistent: false);
+            var user = db.Users.Find(User.Identity.GetUserId());
             switch (result)
             {
                 case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
+                    if(user.HouseholdId == null)
+                    {
+                        return RedirectToAction("Create", "Households");
+                    }
+                    return RedirectToAction("Index", "Households");
+                //return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
@@ -368,7 +395,7 @@ namespace BudgetMaster.Controllers
                 {
                     return View("ExternalLoginFailure");
                 }
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser { FirstName = model.FirstName, LastName = model.LastName, UserName = model.Email, Email = model.Email };
                 var result = await UserManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
@@ -376,7 +403,7 @@ namespace BudgetMaster.Controllers
                     if (result.Succeeded)
                     {
                         await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-                        return RedirectToLocal(returnUrl);
+                        return RedirectToAction("Create", "Households");
                     }
                 }
                 AddErrors(result);

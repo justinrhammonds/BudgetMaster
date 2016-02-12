@@ -1,33 +1,115 @@
-﻿@model IEnumerable<BudgetMaster.Models.CodeFirst.Household>
+﻿@model BudgetMaster.Models.CodeFirst.Household
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Details";
 }
 
-<h2>Index</h2>
-
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Name)
-        </th>
-        <th></th>
-    </tr>
-
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
-    </tr>
-}
-
-</table>
+<div class="row">
+    <h2>HouseholdName</h2>
+    <a href="#">[leave your current household]</a>
+    <hr />
+</div>
+<div class="row">
+    <div class="col-sm-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Current Account Balances
+            </div>
+            <div class="panel-body">
+                <p>Checking: $432.03</p>
+                <p>Savings: $2,000,000.00</p>
+            </div>
+            @*<div class="panel-footer">
+                    Panel Footer
+                </div>*@
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Household Members
+            </div>
+            <div class="panel-body">
+                <ul>
+                    <li>JoeBob</li>
+                    <li>BillyBob</li>
+                    <li>Nathaniel</li>
+                </ul>
+            </div>
+            @*<div class="panel-footer">
+                Panel Footer
+            </div>*@
+        </div>
+    </div>
+        <div class="col-sm-8">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Recent Transactions
+                </div>
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Account</th>
+                                    <th>Total</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>12/01/16</td>
+                                    <td>Checking - Mark</td>
+                                    <td>$123.45</td>
+                                    <td>Bought a Suit</td>
+                                </tr>
+                                <tr>
+                                    <td>12/01/16</td>
+                                    <td>Checking - Mark</td>
+                                    <td>$123.45</td>
+                                    <td>Bought a Basketball Goal</td>
+                                </tr>
+                                <tr>
+                                    <td>12/01/16</td>
+                                    <td>Checking - Mark</td>
+                                    <td>$123.45</td>
+                                    <td>Bought a Treadmill</td>
+                                </tr>
+                                <tr>
+                                    <td>12/01/16</td>
+                                    <td>Checking - Mark</td>
+                                    <td>$123.45</td>
+                                    <td>Bought a Treadmill</td>
+                                </tr>
+                                <tr>
+                                    <td>12/01/16</td>
+                                    <td>Checking - Mark</td>
+                                    <td>$123.45</td>
+                                    <td>Bought a Treadmill</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.table-responsive -->
+                </div>
+                <!-- /.panel-body -->
+            </div>
+            <!-- /.panel -->
+        </div>
+    <hr />
+</div>
+<div class="row">
+    <div class="col-sm-10 col-sm-offset-1">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Bar Chart Example
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                <div id="morris-bar-chart"></div>
+            </div>
+            <!-- /.panel-body -->
+        </div>
+        <!-- /.panel -->
+    </div>
+</div>

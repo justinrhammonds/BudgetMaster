@@ -16,14 +16,15 @@ namespace BudgetMaster.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
+        [HttpGet]
         // GET: Households/Details/5
-        public ActionResult Details(int? id)
+        public ActionResult Index()
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Household household = db.Households.Find(id);
+            //these two lines will go in every controller...
+            var user = db.Users.Find(User.Identity.GetUserId());
+            Household household = db.Households.Find(user.HouseholdId);
+            ///////////////////////////////////////////////////////////
+
             if (household == null)
             {
                 return HttpNotFound();
@@ -31,8 +32,9 @@ namespace BudgetMaster.Controllers
             return View(household);
         }
 
+        [HttpGet]
         // GET: Households/Create
-        public ActionResult Index()
+        public ActionResult Create()
         {
             return View();
         }
@@ -42,92 +44,110 @@ namespace BudgetMaster.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Index([Bind(Include = "Id,Name")] Household household)
+        public ActionResult Create([Bind(Include = "Id,Name")] Household household)
         {
             if (ModelState.IsValid)
             {
-
-                if (String.IsNullOrWhiteSpace(household.Name))
+                var user = db.Users.Find(User.Identity.GetUserId());
+                if (user.HouseholdId == null)
                 {
-                    ModelState.AddModelError("Name", "Invalid Name.");
-                    return View(household);
+                    db.Households.Add(household);
+                    db.SaveChanges();
+                    var hh = db.Households.FirstOrDefault(h => h.Name == household.Name);
+                    user = db.Users.Find(User.Identity.GetUserId());
+                    user.HouseholdId = hh.Id;
+                    db.SaveChanges();
+
+                    return RedirectToAction("Index", new { id = hh.Id });
                 }
-                //access current user's ID
-                var manager = new UserManager<ApplicationUser>(new Microsoft.AspNet.Identity.EntityFramework.UserStore<ApplicationUser>(new ApplicationDbContext()));
-                var currentUser = manager.FindById(User.Identity.GetUserId());
-                //add household ID to current user's db.HouseholdId
-                db.Households.Add(household);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                //change to throw an error message up "You need to leave your current household before creating a new one."
+                return RedirectToAction("Index", "Households", new { id = user.HouseholdId });
             }
 
             return View(household);
         }
 
-        // GET: Households/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Household household = db.Households.Find(id);
-            if (household == null)
-            {
-                return HttpNotFound();
-            }
-            return View(household);
-        }
-
-        // POST: Households/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Households/Invite
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name")] Household household)
+        public ActionResult Invite(string Email)
+        {
+
+            if (ModelState.IsValid)
+            {
+                Invite invite = new Models.CodeFirst.Invite();
+                var user = db.Users.Find(User.Identity.GetUserId());
+                //Household household = db.Households.Find(user.HouseholdId);
+                invite.HouseholdId = (int)user.HouseholdId;
+
+                invite.InvitedUser = Email;
+
+                var Code = StringUtilities.RandomString(6);
+                invite.GeneratedCode = Code;
+
+                db.Invites.Add(invite);
+                db.SaveChanges();
+                return RedirectToAction("Index", "Households");
+            }
+
+            return View();
+        }
+
+        [HttpGet]
+        // GET: Households/Join/5
+        public ActionResult Join()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        // POST: Households/Join/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        public ActionResult Join(string Code)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(household).State = EntityState.Modified;
+                var user = db.Users.Find(User.Identity.GetUserId());
+                var invitation = db.Invites.FirstOrDefault(i => i.GeneratedCode == Code && i.InvitedUser == user.Email);
+
+                if (invitation != null)
+                {
+                    user.HouseholdId = invitation.HouseholdId;
+                    db.SaveChanges();
+                    return RedirectToAction("Index", "Households", new { id = user.HouseholdId });
+                }
+                
+                return RedirectToAction("Index", "Households"); 
+
+            }
+
+            return View();
+        }
+
+        [HttpGet]
+        // GET: Households/Leave
+        public ActionResult Leave()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        // POST: Households/Leave
+        public ActionResult Leave(int? Id)
+        {
+            if (ModelState.IsValid)
+            {
+
+                var user = db.Users.Find(User.Identity.GetUserId());
+                user.HouseholdId = null;
                 db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(household);
-        }
 
-        // GET: Households/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Household household = db.Households.Find(id);
-            if (household == null)
-            {
-                return HttpNotFound();
-            }
-            return View(household);
-        }
+                return RedirectToAction("Create");
 
-        // POST: Households/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            Household household = db.Households.Find(id);
-            db.Households.Remove(household);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
             }
-            base.Dispose(disposing);
+
+            return View();
         }
     }
 }

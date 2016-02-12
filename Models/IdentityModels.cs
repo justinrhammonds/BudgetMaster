@@ -13,6 +13,9 @@ namespace BudgetMaster.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public int? HouseholdId { get; set; }
+
+        public virtual Household household { get; set; }
+
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
