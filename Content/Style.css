@@ -1,6 +1,34 @@
 ﻿body {
     font-family: 'Quicksand', sans-serif;
-    font-size:1.6em;
+    font-size:1.4em;
+    position:relative;
+    background-color:#e4e4e4 !important;
+
+}
+
+header {
+    height:240px;
+    margin:0;
+    z-index:1;
+    background: #1abc9c;
+    border-bottom: 25px solid #59d0b8;
+}
+
+.navbar {
+    width:100%;
+    height:80px;
+}
+
+.nav > li > a {
+    display:inline;
+}
+
+.household-name {
+    padding:25px !important;
+}
+
+.panel, .btn, .input-group input {
+    border-radius: 0 !important;
 }
 
 @media (min-width: 768px) {
@@ -8,7 +36,17 @@
         margin-top:64px !important;
         width: 150px !important;
     }
+    #page-wrapper .body-content {
+        padding:0 30px;
+    }
     #page-wrapper {
-        margin: 0 0 0 150px !important;
+        margin: 0 10% 0 10% !important;
+        border-top:10px solid #e57034;
+        border-left:0px !important;
+        z-index:1000 !important;
+        overflow:visible !important;
+        position:relative;
+        bottom:90px;
+        padding:0 !important;
     }
 }

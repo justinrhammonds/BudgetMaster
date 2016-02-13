@@ -9,10 +9,14 @@ using System.Web.Mvc;
 using BudgetMaster.Models;
 using BudgetMaster.Models.CodeFirst;
 using Microsoft.AspNet.Identity;
+using SendGrid;
+using System.Net.Mail;
+using System.Configuration;
+using AspNetIdentity2.Controllers;
 
 namespace BudgetMaster.Controllers
 {
-    public class HouseholdsController : Controller
+    public class HouseholdsController : ApplicationBaseController
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
@@ -81,12 +85,24 @@ namespace BudgetMaster.Controllers
                 invite.HouseholdId = (int)user.HouseholdId;
 
                 invite.InvitedUser = Email;
-
+                var duplicates = db.Invites.Where(i => i.InvitedUser == Email);
+                foreach (var duplicate in duplicates)
+                {
+                    db.Invites.Remove(duplicate);
+                }
+                
                 var Code = StringUtilities.RandomString(6);
                 invite.GeneratedCode = Code;
-
                 db.Invites.Add(invite);
                 db.SaveChanges();
+                EmailService es = new EmailService();
+                var im = new IdentityMessage();
+                im.Body = "You've been invited to join a household by " + user.FirstName + " " + user.LastName + ". Visit https://jhammonds-budgetmaster.azurewebsites.net to register. Once registered, enter the following code to join: " + Code + "";
+                im.Destination = invite.InvitedUser;
+                im.Subject = "You're Invited to BudgetMaster";
+                es.SendAsync(im);
+                ViewBag.Message = "Your Message Was Sent Successfully.";
+
                 return RedirectToAction("Index", "Households");
             }
 
@@ -114,6 +130,7 @@ namespace BudgetMaster.Controllers
                 if (invitation != null)
                 {
                     user.HouseholdId = invitation.HouseholdId;
+                    db.Invites.Remove(invitation);
                     db.SaveChanges();
                     return RedirectToAction("Index", "Households", new { id = user.HouseholdId });
                 }
@@ -125,16 +142,9 @@ namespace BudgetMaster.Controllers
             return View();
         }
 
-        [HttpGet]
-        // GET: Households/Leave
-        public ActionResult Leave()
-        {
-            return View();
-        }
-
         [HttpPost]
         // POST: Households/Leave
-        public ActionResult Leave(int? Id)
+        public ActionResult Leave()
         {
             if (ModelState.IsValid)
             {
@@ -143,7 +153,7 @@ namespace BudgetMaster.Controllers
                 user.HouseholdId = null;
                 db.SaveChanges();
 
-                return RedirectToAction("Create");
+                return RedirectToAction("Create", "Households");
 
             }
 

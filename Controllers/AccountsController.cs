@@ -8,10 +8,11 @@ using System.Web;
 using System.Web.Mvc;
 using BudgetMaster.Models;
 using BudgetMaster.Models.CodeFirst;
+using AspNetIdentity2.Controllers;
 
 namespace BudgetMaster
 {
-    public class AccountsController : Controller
+    public class AccountsController : ApplicationBaseController
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 

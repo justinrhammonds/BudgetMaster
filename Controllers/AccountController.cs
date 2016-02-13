@@ -10,11 +10,12 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using BudgetMaster.Models;
 using BudgetMaster.Models.CodeFirst;
+using AspNetIdentity2.Controllers;
 
 namespace BudgetMaster.Controllers
 {
     [Authorize]
-    public class AccountController : Controller
+    public class AccountController : ApplicationBaseController
     {
         private ApplicationDbContext db = new ApplicationDbContext();
         private ApplicationSignInManager _signInManager;
@@ -88,6 +89,7 @@ namespace BudgetMaster.Controllers
             {
                 case SignInStatus.Success:
                     var user = UserManager.FindByEmail(model.Email);
+                    ViewBag.DisplayName = user.FirstName + user.LastName;
                     if (user.HouseholdId == null)
                     {
                         return RedirectToAction("Create", "Households");

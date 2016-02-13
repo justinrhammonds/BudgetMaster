@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AspNetIdentity2.Controllers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -6,7 +7,7 @@ using System.Web.Mvc;
 
 namespace BudgetMaster.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : ApplicationBaseController
     {
         public ActionResult Index()
         {

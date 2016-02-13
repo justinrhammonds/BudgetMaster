@@ -14,6 +14,20 @@ namespace BudgetMaster.Models
         public bool BrowserRemembered { get; set; }
     }
 
+    public class EditProfileViewModel
+    {
+        [Required]
+        [Display(Name = "First Name")]
+        public string FirstName { get; set; }
+
+        [Required]
+        [Display(Name = "Last Name")]
+        public string LastName { get; set; }
+
+    
+    }
+
+
     public class ManageLoginsViewModel
     {
         public IList<UserLoginInfo> CurrentLogins { get; set; }

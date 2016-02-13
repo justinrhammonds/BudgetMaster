@@ -7,11 +7,12 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using BudgetMaster.Models;
+using AspNetIdentity2.Controllers;
 
 namespace BudgetMaster.Controllers
 {
     [Authorize]
-    public class ManageController : Controller
+    public class ManageController : ApplicationBaseController
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
