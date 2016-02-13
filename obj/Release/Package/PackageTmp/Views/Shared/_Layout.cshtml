@@ -17,38 +17,51 @@
     <link href="~/Content/bootstrap-social.css" rel="stylesheet" />
 </head>
 <body>
-    <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+    <header>
         <div class="navbar-header">
             <a class="navbar-brand" href="index.html">
                 <img src="~/Content/BudgetMasterLogo.svg" style="width:80px;"/>
             </a>
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            @*<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
-            </button>
+            </button>*@
             
         </div>
-            <ul class="nav navbar-top-links navbar-right">
-                @Html.Partial("_LoginPartial")
-            </ul>
-            <!-- /.navbar-top-links -->
 
-            <div class="navbar-default sidebar" role="navigation">
+            @*<div class="navbar-default sidebar" role="navigation">
                 <div class="sidebar-nav navbar-collapse">
                     <ul class="nav" id="side-menu">
-                        <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                        <li>@Html.ActionLink("About", "About", "Home")</li>
-                        <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+
                     </ul>
                 </div>
-                <!-- /.sidebar-collapse -->
-            </div>
-            <!-- /.navbar-static-side -->
-        </nav>
+            </div>*@
+        </header>
 
     <div id="page-wrapper">
+        <nav class="navbar navbar-default navbar-static-top" role="navigation">
+            <div id="popover-content" class="hide">
+                <form class="form-inline" action=@Url.Action("Leave", "Households") method="post">
+                    <div>
+                        <p>Are you sure you would like to leave your current household? Upon leaving you will no longer have access to your information saved to this household.</p>
+                        <input type="submit" value="Yes, Leave" id="popover-button" class="btn btn-default" />
+                    </div>
+                </form>
+            </div>
+            <div>
+                <div class="household-name">
+                    <span><strong>@Model.Name Household</strong></span>
+                    <a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="Leave Household">[leave this household]</a>
+                    <ul class="nav navbar-top-links navbar-right">
+                        @Html.Partial("_LoginPartial")
+                    </ul>
+                </div>
+
+            </div>
+
+        </nav>
         <div class="container body-content">
             @RenderBody()
         </div>
