@@ -1,0 +1,16 @@
+﻿@model BudgetMaster.Models.CodeFirst.Household
+
+<div id="popover-content" class="hide">
+    <form class="form-inline" action=@Url.Action("Leave", "Households") method="post">
+        <div>
+            <p>Are you sure you would like to leave your current household? Upon leaving you will no longer have access to your information saved to this household.</p>
+            <input type="submit" value="Yes, Leave" id="popover-button" class="btn btn-default" />
+        </div>
+    </form>
+</div>
+<div>
+    <div class="household-name">
+        <span><strong>@Model.Name Household</strong></span>
+        <a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="Leave Household">[leave this household]</a>
+    </div>
+</div>

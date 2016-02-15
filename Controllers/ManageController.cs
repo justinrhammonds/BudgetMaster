@@ -14,6 +14,7 @@ namespace BudgetMaster.Controllers
     [Authorize]
     public class ManageController : ApplicationBaseController
     {
+        private ApplicationDbContext db = new ApplicationDbContext();
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
@@ -76,7 +77,36 @@ namespace BudgetMaster.Controllers
             return View(model);
         }
 
-        //
+        //GET: /Manage/ManageDisplayName
+        [HttpGet]
+        public ActionResult ManageDisplayName()
+        {
+            ApplicationUser user = db.Users.Find(User.Identity.GetUserId());
+            return View(user);
+        }
+
+        // POST: Manage/ManageDisplayName
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ManageDisplayName(string Id,string FirstName, string LastName)
+        {
+            var user = db.Users.Find(Id);
+            if (ModelState.IsValid)
+            {
+               
+                user.FirstName = FirstName;
+                user.LastName = LastName;
+
+                db.SaveChanges();
+                return RedirectToAction("Index", "Manage");
+            }
+            return View(user);
+        }
+
+
+
         // POST: /Manage/RemoveLogin
         [HttpPost]
         [ValidateAntiForgeryToken]

@@ -1,0 +1,46 @@
+﻿@model BudgetMaster.Models.ApplicationUser
+@{
+    ViewBag.Title = "ManageDisplayName";
+}
+
+<h2>ManageDisplayName</h2>
+
+@*@using (Html.BeginForm("ManageDisplayName", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <h4>Change Display Name:</h4>
+    <hr />
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(m => m.FirstName, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBox(Model.FirstName, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.LastName, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBox(Model.LastName, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Submit Changes" class="btn btn-default" />
+        </div>
+    </div>
+}*@
+
+<form action="@Url.Action("ManageDisplayName","Manage")" method="post">
+    @Html.AntiForgeryToken()
+    <div class="form-group">
+        <input type="hidden" class="form-control" name="Id" value="@Model.Id" />
+        <label for="FirstName">First Name:</label>
+        <input class="form-control" name="FirstName" value="@Model.FirstName" />
+        <label for="LastName">Last Name:</label>
+        <input class="form-control" name="LastName" value="@Model.LastName" />
+    </div>
+    <input type="submit" value="Submit Changes" class="btn btn-default" />
+</form>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
