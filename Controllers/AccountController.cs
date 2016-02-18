@@ -14,6 +14,7 @@ using AspNetIdentity2.Controllers;
 
 namespace BudgetMaster.Controllers
 {
+    [RequireHttps]
     [Authorize]
     public class AccountController : ApplicationBaseController
     {

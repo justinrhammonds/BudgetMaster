@@ -34,14 +34,28 @@
                 Current Account Balances
             </div>
             <div class="panel-body">
-                <p>Checking: $432.03</p>
-                <p>Savings: $2,000,000.00</p>
+                @foreach (var account in Model.Accounts)
+                {
+                    <p>@account.Name: $@account.Balance</p>
+                }
             </div>
-            @*<div class="panel-footer">
-                    Panel Footer
-                </div>*@
+            @*<hr />*@
+            @*@using (Html.BeginForm("Create", "Accounts"))
+            {
+                @Html.AntiForgeryToken()
+                <div class="input-group custom-search-form">
+                    <input type="text" name="Name" class="form-control" placeholder="Add New Account">
+                    <input type="text" name="Balance" class="form-control" placeholder="Set Starting Balance">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="submit">
+                            <i class="fa fa-plus"></i>
+                        </button>
+                    </span>
+                </div>
+            }*@
+
         </div>
-        <div class="panel panel-default">
+        <div id="hh-manage" class="panel panel-default">
             <div class="panel-heading">
                 Household Members
             </div>
@@ -50,6 +64,7 @@
                 {
                     <div>@user.FirstName @user.LastName  ( @user.Email )</div>
                 }
+                <span id="leave-hh">[leave this household]</span>
                 <hr />
                 @using (Html.BeginForm("Invite", "Households"))
                 {
@@ -96,40 +111,24 @@
                                     <th>Date</th>
                                     <th>Account</th>
                                     <th>Total</th>
+                                    <th>Category</th>
                                     <th>Description</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>12/01/16</td>
-                                    <td>Checking - Mark</td>
-                                    <td>$123.45</td>
-                                    <td>Bought a Suit</td>
-                                </tr>
-                                <tr>
-                                    <td>12/01/16</td>
-                                    <td>Checking - Mark</td>
-                                    <td>$123.45</td>
-                                    <td>Bought a Basketball Goal</td>
-                                </tr>
-                                <tr>
-                                    <td>12/01/16</td>
-                                    <td>Checking - Mark</td>
-                                    <td>$123.45</td>
-                                    <td>Bought a Treadmill</td>
-                                </tr>
-                                <tr>
-                                    <td>12/01/16</td>
-                                    <td>Checking - Mark</td>
-                                    <td>$123.45</td>
-                                    <td>Bought a Treadmill</td>
-                                </tr>
-                                <tr>
-                                    <td>12/01/16</td>
-                                    <td>Checking - Mark</td>
-                                    <td>$123.45</td>
-                                    <td>Bought a Treadmill</td>
-                                </tr>
+                                @foreach (var transaction in Model.Accounts.SelectMany(a=>a.Transactions))
+                                {
+                                    <tr>
+                                        <td>@transaction.PostedDate.ToString("M/dd/yy")</td>
+                                        <td>
+                                            @transaction.Account.Name @*- @transaction.PostedBy.FirstName*@
+                                        </td>
+                                        <td>$@transaction.Amount</td>
+                                        <td>@transaction.Category.Name</td>
+                                        <td>@transaction.Description</td>
+                                    </tr>
+                                }
+
                             </tbody>
                         </table>
                     </div>
@@ -156,14 +155,12 @@
         <!-- /.panel -->
     </div>
 </div>
-@section scripts {
-<script>
-    $("[data-toggle=popover]").popover({
-        html: true,
-        content: function () {
-        return $('#popover-content').html();
-    }
-    });
-</script>
-    
+
+@section Scripts {
+    <script>
+
+        $("#leave-hh").click(function () {
+            $("#hh-manage").load("Households/_LeavePV");
+        })
+    </script>
 }

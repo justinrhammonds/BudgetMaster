@@ -15,6 +15,7 @@
     <link href="~/Content/morris.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <link href="~/Content/bootstrap-social.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-datepicker3.css" rel="stylesheet" />
 </head>
 <body>
     <header>
@@ -42,18 +43,32 @@
 
     <div id="page-wrapper">
         <nav class="navbar navbar-default navbar-static-top" role="navigation">
-            <div id="popover-content" class="hide">
+            @*<div id="popover-content" class="hide">
                 <form class="form-inline" action=@Url.Action("Leave", "Households") method="post">
                     <div>
                         <p>Are you sure you would like to leave your current household? Upon leaving you will no longer have access to your information saved to this household.</p>
                         <input type="submit" value="Yes, Leave" id="popover-button" class="btn btn-default" />
                     </div>
                 </form>
-            </div>
+            </div>*@
             <div>
+                @*<div id="popover-content" class="hide">
+                    <form class="form-inline" action=@Url.Action("Leave", "Households") method="post">
+                        <div>
+                            <p>Are you sure you would like to leave your current household? Upon leaving you will no longer have access to your information saved to this household.</p>
+                            <input type="submit" value="Yes, Leave" id="popover-button" class="btn btn-default" />
+                        </div>
+                    </form>
+                </div>*@
                 <div class="household-name">
-                    <span><strong>@*@Model.Name*@ Household</strong></span>
-                    <a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="Leave Household">[leave this household]</a>
+                    <span class="dropdown-toggle" data-toggle="dropdown">
+                        <span><i class="fa fa-bars"></i></span>
+                    </span>
+                    <ul class="dropdown-menu" role="menu">
+                        @*<li>
+                            <a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="Leave Household">Leave Your Current Household</a>
+                        </li>*@
+                    </ul>
                     <ul class="nav navbar-top-links navbar-right">
                         @Html.Partial("_LoginPartial")
                     </ul>
@@ -73,6 +88,15 @@
         <script src="~/Scripts/morris.min.js"></script>
         <script src="~/Scripts/morris-data.js"></script>
         <script src="~/Scripts/sb-admin-2.js"></script>
+        <script src="~/Scripts/bootstrap-datepicker.min.js"></script>
+        <script>
+        $("[data-toggle=popover]").popover({
+            html: true,
+            content: function () {
+            return $('#popover-content').html();
+        }
+        });
+        </script>
         @RenderSection("scripts", required: false)
 </body>
 </html>

@@ -8,9 +8,11 @@
         </div>
     </form>
 </div>
-<div>
-    <div class="household-name">
-        <span><strong>@Model.Name Household</strong></span>
-        <a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="Leave Household">[leave this household]</a>
-    </div>
-</div>
+<span class="household-name dropdown-toggle" data-toggle="dropdown">
+    <span><i class="fa fa-bars"></i></span>
+</span>
+<ul class="dropdown-menu" role="menu">
+    <li>
+        <a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="Leave Household">Leave Your Current Household</a>
+    </li>
+</ul>

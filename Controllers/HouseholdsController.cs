@@ -1,21 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
+﻿using System.Data;
 using System.Linq;
-using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using BudgetMaster.Models;
 using BudgetMaster.Models.CodeFirst;
 using Microsoft.AspNet.Identity;
-using SendGrid;
-using System.Net.Mail;
-using System.Configuration;
 using AspNetIdentity2.Controllers;
+using BudgetMaster.HelperExtensions;
 
 namespace BudgetMaster.Controllers
 {
+    [RequireHttps]
+    [Authorize]
     public class HouseholdsController : ApplicationBaseController
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -26,7 +21,7 @@ namespace BudgetMaster.Controllers
         {
             //these two lines will go in every controller...
             var user = db.Users.Find(User.Identity.GetUserId());
-            Household household = db.Households.Find(user.HouseholdId);
+            Household household = db.Households.Include("Accounts").FirstOrDefault(h=>h.Id == user.HouseholdId);
             ///////////////////////////////////////////////////////////
 
             if (household == null)
@@ -60,6 +55,7 @@ namespace BudgetMaster.Controllers
                     var hh = db.Households.FirstOrDefault(h => h.Name == household.Name);
                     user = db.Users.Find(User.Identity.GetUserId());
                     user.HouseholdId = hh.Id;
+                    household.PopulateCategories();
                     db.SaveChanges();
 
                     return RedirectToAction("Index", new { id = hh.Id });
@@ -79,7 +75,7 @@ namespace BudgetMaster.Controllers
 
             if (ModelState.IsValid)
             {
-                Invite invite = new Models.CodeFirst.Invite();
+                Invite invite = new Invite();
                 var user = db.Users.Find(User.Identity.GetUserId());
                 //Household household = db.Households.Find(user.HouseholdId);
                 invite.HouseholdId = (int)user.HouseholdId;
@@ -140,6 +136,13 @@ namespace BudgetMaster.Controllers
             }
 
             return View();
+        }
+
+        // GET: Households/_LeavePV
+        [HttpGet]
+        public PartialViewResult _LeavePV()
+        {
+            return PartialView();
         }
 
         [HttpPost]

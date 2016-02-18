@@ -12,8 +12,6 @@ namespace BudgetMaster.Models.CodeFirst
         [Required]
         public string Name { get; set; }
         [Required]
-        public bool Type { get; set; }
-        [Required]
         public decimal Amount { get; set; }
         public int Frequency { get; set; }
 

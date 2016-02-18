@@ -4,42 +4,55 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<h3>Current Accounts</h3>
+@if (Model.Count() == 0)
+{
+    <p>There are currently no accounts created for your household.</p>
+}
+else
+{
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Balance)
+            </th>
+        </tr>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Household.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Balance)
-        </th>
-        <th></th>
-    </tr>
-
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Household.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Balance)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
-    </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Balance)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                </td>
+            </tr>
+        }
+    </table>
 }
 
-</table>
+
+@using (Html.BeginForm("Create", "Accounts"))
+{
+    @Html.AntiForgeryToken()
+    <div class="input-group custom-search-form form-inline">
+        <div class="form-group">
+            <input type="hidden" name="HouseholdId" value="@ViewBag.HouseholdId"/>
+            <input type="text" name="Name" class="form-control" placeholder="Account Name">
+            <input type="text" name="Balance" class="form-control" placeholder="Starting Balance">
+            <span class="input-group-btn">
+                <button class="btn btn-default" type="submit">
+                    <i class="fa fa-plus"></i>
+                </button>
+            </span>
+        </div>
+    </div>
+}

@@ -9,9 +9,13 @@ using System.Web.Mvc;
 using BudgetMaster.Models;
 using BudgetMaster.Models.CodeFirst;
 using AspNetIdentity2.Controllers;
+using BudgetMaster.HelperExtensions;
+using Microsoft.AspNet.Identity;
 
 namespace BudgetMaster.Controllers
 {
+    [RequireHttps]
+    [Authorize]
     public class CategoriesController : ApplicationBaseController
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -19,24 +23,31 @@ namespace BudgetMaster.Controllers
         // GET: Categories
         public ActionResult Index()
         {
-            var categories = db.Categories.Include(c => c.Household);
+            var userHHID = Convert.ToInt32(User.Identity.GetHouseholdId());
+            var categories = db.Categories.Where(c => c.HouseholdId == userHHID);
+            //var categories = db.Categories.Include(c => c.Household);
             return View(categories.ToList());
         }
 
-        // GET: Categories/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Category category = db.Categories.Find(id);
-            if (category == null)
-            {
-                return HttpNotFound();
-            }
-            return View(category);
-        }
+        //var userHHID = Convert.ToInt32(User.Identity.GetHouseholdId());
+        //var transactions = db.Transactions.Where(t => t.AccountId == t.Account.Id && t.Account.HouseholdId == userHHID);
+        //var model = transactions.OrderByDescending(d => d.PostedDate).ToList();
+        //    return View(model);
+
+        //// GET: Categories/Details/5
+        //public ActionResult Details(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+
+        //    if (category == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    return View(category);
+        //}
 
         // GET: Categories/Create
         public ActionResult Create()
@@ -46,14 +57,14 @@ namespace BudgetMaster.Controllers
         }
 
         // POST: Categories/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,HouseholdId")] Category category)
+        public ActionResult Create([Bind(Include = "Id,Name,Type,HouseholdId")] Category category)
         {
             if (ModelState.IsValid)
             {
+                var userHHID = Convert.ToInt32(User.Identity.GetHouseholdId());
+                category.HouseholdId = userHHID;
                 db.Categories.Add(category);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -80,11 +91,9 @@ namespace BudgetMaster.Controllers
         }
 
         // POST: Categories/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,HouseholdId")] Category category)
+        public ActionResult Edit([Bind(Include = "Id,Name,Type,HouseholdId")] Category category)
         {
             if (ModelState.IsValid)
             {

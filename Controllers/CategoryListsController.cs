@@ -48,7 +48,7 @@ namespace BudgetMaster.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name")] CategoryList categoryList)
+        public ActionResult Create([Bind(Include = "Id,Name,Type")] CategoryList categoryList)
         {
             if (ModelState.IsValid)
             {
@@ -80,7 +80,7 @@ namespace BudgetMaster.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name")] CategoryList categoryList)
+        public ActionResult Edit([Bind(Include = "Id,Name,Type")] CategoryList categoryList)
         {
             if (ModelState.IsValid)
             {

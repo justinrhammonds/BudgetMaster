@@ -9,9 +9,13 @@ using System.Web.Mvc;
 using BudgetMaster.Models;
 using BudgetMaster.Models.CodeFirst;
 using AspNetIdentity2.Controllers;
+using BudgetMaster.HelperExtensions;
+using Microsoft.AspNet.Identity;
 
 namespace BudgetMaster.Controllers
 {
+    [RequireHttps]
+    [Authorize]
     public class TransactionsController : ApplicationBaseController
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -19,8 +23,10 @@ namespace BudgetMaster.Controllers
         // GET: Transactions
         public ActionResult Index()
         {
-            var transactions = db.Transactions.Include(t => t.Account).Include(t => t.Category);
-            return View(transactions.ToList());
+            var userHHID = Convert.ToInt32(User.Identity.GetHouseholdId());
+            var transactions = db.Transactions.Where(t => t.AccountId == t.Account.Id && t.Account.HouseholdId == userHHID);
+            var model = transactions.OrderByDescending(d => d.PostedDate).ToList();
+            return View(model);
         }
 
         // GET: Transactions/Details/5
@@ -41,22 +47,29 @@ namespace BudgetMaster.Controllers
         // GET: Transactions/Create
         public ActionResult Create()
         {
-            ViewBag.AccountId = new SelectList(db.Accounts, "Id", "Name");
+            var userHHID = Convert.ToInt32(User.Identity.GetHouseholdId());
+            var accounts = db.Accounts.Where(a => a.HouseholdId == userHHID);
+            ViewBag.AccountId = new SelectList(accounts.ToList(), "Id", "Name");
             ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Name");
             return View();
         }
 
         // POST: Transactions/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,PostedDate,Amount,Type,Reconciled,Description,CategoryId,AccountId")] Transaction transaction)
+        public ActionResult Create([Bind(Include = "Id,PostedDate,Amount,Reconciled,Description,CategoryId,AccountId")] Transaction transaction)
         {
             if (ModelState.IsValid)
             {
+
+                var userId = User.Identity.GetUserId();
+                var account = db.Accounts.FirstOrDefault(a => a.Id == transaction.AccountId);
+                transaction.PostedById = userId;
                 db.Transactions.Add(transaction);
                 db.SaveChanges();
+                transaction = db.Transactions.Include("Category").FirstOrDefault(t => t.Id == transaction.Id);
+                transaction.UpdateAccountBalance(userId);
+                //db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
@@ -83,16 +96,22 @@ namespace BudgetMaster.Controllers
         }
 
         // POST: Transactions/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,PostedDate,Amount,Type,Reconciled,Description,CategoryId,AccountId")] Transaction transaction)
+        public ActionResult Edit([Bind(Include = "Id,PostedDate,Amount,Reconciled,Description,CategoryId,AccountId")] Transaction transaction)
         {
             if (ModelState.IsValid)
             {
+                var userId = User.Identity.GetUserId();
+                var account = db.Accounts.FirstOrDefault(a => a.Id == transaction.AccountId);
+                var OldTr = db.Transactions.AsNoTracking().FirstOrDefault(t => t.Id == transaction.Id);
+               
+                OldTr.ReverseAccountBalance(userId);
+               
                 db.Entry(transaction).State = EntityState.Modified;
                 db.SaveChanges();
+                transaction = db.Transactions.Include("Category").FirstOrDefault(t => t.Id == transaction.Id);
+                transaction.UpdateAccountBalance(userId);
                 return RedirectToAction("Index");
             }
             ViewBag.AccountId = new SelectList(db.Accounts, "Id", "Name", transaction.AccountId);
@@ -120,7 +139,9 @@ namespace BudgetMaster.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
+            var userId = User.Identity.GetUserId();
             Transaction transaction = db.Transactions.Find(id);
+            transaction.ReverseAccountBalance(userId);
             db.Transactions.Remove(transaction);
             db.SaveChanges();
             return RedirectToAction("Index");

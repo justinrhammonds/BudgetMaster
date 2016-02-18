@@ -12,7 +12,8 @@ namespace BudgetMaster.Models.CodeFirst
         public int Id { get; set; }
         [Required]
         public string Name { get; set; }
-
+        [Required]
+        public string Type { get; set; }
         public int? HouseholdId { get; set; }
 
         public virtual Household Household { get; set; }

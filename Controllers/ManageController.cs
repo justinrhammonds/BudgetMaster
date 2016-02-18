@@ -11,6 +11,7 @@ using AspNetIdentity2.Controllers;
 
 namespace BudgetMaster.Controllers
 {
+    [RequireHttps]
     [Authorize]
     public class ManageController : ApplicationBaseController
     {
@@ -246,7 +247,13 @@ namespace BudgetMaster.Controllers
         // GET: /Manage/ChangePassword
         public ActionResult ChangePassword()
         {
-            return View();
+            var user = db.Users.Find(User.Identity.GetUserId());
+            if (user.PasswordHash != null)
+            {
+                return View();
+            }
+            return RedirectToAction("SetPassword", "Manage");
+            
         }
 
         //

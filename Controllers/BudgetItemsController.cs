@@ -12,6 +12,8 @@ using AspNetIdentity2.Controllers;
 
 namespace BudgetMaster
 {
+    [RequireHttps]
+    [Authorize]
     public class BudgetItemsController : ApplicationBaseController
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -51,7 +53,7 @@ namespace BudgetMaster
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,Type,Amount,Frequency,CategoryId,HouseholdId")] BudgetItem budgetItem)
+        public ActionResult Create([Bind(Include = "Id,Name,Amount,Frequency,CategoryId,HouseholdId")] BudgetItem budgetItem)
         {
             if (ModelState.IsValid)
             {
@@ -87,7 +89,7 @@ namespace BudgetMaster
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,Type,Amount,Frequency,CategoryId,HouseholdId")] BudgetItem budgetItem)
+        public ActionResult Edit([Bind(Include = "Id,Name,Amount,Frequency,CategoryId,HouseholdId")] BudgetItem budgetItem)
         {
             if (ModelState.IsValid)
             {

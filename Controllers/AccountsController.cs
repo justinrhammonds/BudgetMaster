@@ -9,33 +9,29 @@ using System.Web.Mvc;
 using BudgetMaster.Models;
 using BudgetMaster.Models.CodeFirst;
 using AspNetIdentity2.Controllers;
+using BudgetMaster.HelperExtensions;
 
 namespace BudgetMaster
 {
+    [RequireHttps]
+    [Authorize]
     public class AccountsController : ApplicationBaseController
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Accounts
+        [Authorize]
         public ActionResult Index()
         {
-            var accounts = db.Accounts.Include(a => a.Household);
-            return View(accounts.ToList());
-        }
-
-        // GET: Accounts/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Account account = db.Accounts.Find(id);
-            if (account == null)
-            {
-                return HttpNotFound();
-            }
-            return View(account);
+            var userHHID = Convert.ToInt32(User.Identity.GetHouseholdId());
+            var accounts = db.Accounts.Where(a => a.HouseholdId == userHHID);
+            //if (accounts.Count() == 0)
+            //{
+            //    return View();
+            //}
+            var model = accounts.ToList();
+            ViewBag.HouseholdId = userHHID;
+            return View(model);
         }
 
         // GET: Accounts/Create
@@ -54,9 +50,11 @@ namespace BudgetMaster
         {
             if (ModelState.IsValid)
             {
+                var userHHID = Convert.ToInt32(User.Identity.GetHouseholdId());
+                account.HouseholdId = userHHID;
                 db.Accounts.Add(account);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Accounts");
             }
 
             ViewBag.HouseholdId = new SelectList(db.Households, "Id", "Name", account.HouseholdId);
@@ -75,7 +73,7 @@ namespace BudgetMaster
             {
                 return HttpNotFound();
             }
-            ViewBag.HouseholdId = new SelectList(db.Households, "Id", "Name", account.HouseholdId);
+            //ViewBag.HouseholdId = new SelectList(db.Households, "Id", "Name", account.HouseholdId);
             return View(account);
         }
 
@@ -88,6 +86,8 @@ namespace BudgetMaster
         {
             if (ModelState.IsValid)
             {
+                //var userHHID = Convert.ToInt32(User.Identity.GetHouseholdId());
+                //account.HouseholdId = userHHID;
                 db.Entry(account).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
