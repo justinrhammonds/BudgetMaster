@@ -12,25 +12,22 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Account.Name)
+            Account
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Category.Name)
+            Category
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.PostedDate)
+            Date
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Amount)
+            Amount
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Type)
+            Reconciled?
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Reconciled)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Description)
+            Description
         </th>
         <th></th>
     </tr>
@@ -44,13 +41,9 @@
             @Html.DisplayFor(modelItem => item.Category.Name)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.PostedDate)
+            @item.PostedDate.ToString("M/d/yy")
         </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Amount)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Type)
+        <td>@Html.DisplayFor(modelItem => item.Amount)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Reconciled)
