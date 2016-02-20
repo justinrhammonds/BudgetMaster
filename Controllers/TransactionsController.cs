@@ -29,20 +29,20 @@ namespace BudgetMaster.Controllers
             return View(model);
         }
 
-        // GET: Transactions/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Transaction transaction = db.Transactions.Find(id);
-            if (transaction == null)
-            {
-                return HttpNotFound();
-            }
-            return View(transaction);
-        }
+        //// GET: Transactions/Details/5
+        //public ActionResult Details(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //    Transaction transaction = db.Transactions.Find(id);
+        //    if (transaction == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    return View(transaction);
+        //}
 
         // GET: Transactions/Create
         public ActionResult Create()
@@ -61,7 +61,6 @@ namespace BudgetMaster.Controllers
         {
             if (ModelState.IsValid)
             {
-
                 var userId = User.Identity.GetUserId();
                 var account = db.Accounts.FirstOrDefault(a => a.Id == transaction.AccountId);
                 transaction.PostedById = userId;
@@ -69,7 +68,6 @@ namespace BudgetMaster.Controllers
                 db.SaveChanges();
                 transaction = db.Transactions.Include("Category").FirstOrDefault(t => t.Id == transaction.Id);
                 transaction.UpdateAccountBalance(userId);
-                //db.SaveChanges();
                 return RedirectToAction("Index");
             }
 

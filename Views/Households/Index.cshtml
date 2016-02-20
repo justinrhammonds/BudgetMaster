@@ -5,29 +5,6 @@
 }
 
 <div class="row">
-    <div class="col-md-12">
-        @*<div>
-            <span>@Model.Name Household</span>
-            <a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="Leave Household">[leave this household]</a>
-        </div>
-        <div id="popover-content" class="hide">
-            <form class="form-inline" action=@Url.Action("Leave", "Households") method="post">
-                <div>
-                    <p>Are you sure you would like to leave your current household? Upon leaving you will no longer have access to your information saved to this household.</p>
-                    <input type="submit" value="Yes, Leave" id="popover-button" class="btn btn-default" />
-                </div>
-            </form>
-        </div>*@
-    </div>
-    @*<form action="@Url.Action("Invite","Households")" method="post">
-        @Html.AntiForgeryToken()
-        <div class="form-horizontal">
-            <input type="text" name="Email" placeholder="Invite New Member to Household" />
-            <input type="submit" value="Invite" class="btn btn-default" />
-        </div>
-    </form>*@
-</div>
-<div class="row">
     <div class="col-sm-4">
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -39,21 +16,6 @@
                     <p>@account.Name: $@account.Balance</p>
                 }
             </div>
-            @*<hr />*@
-            @*@using (Html.BeginForm("Create", "Accounts"))
-            {
-                @Html.AntiForgeryToken()
-                <div class="input-group custom-search-form">
-                    <input type="text" name="Name" class="form-control" placeholder="Add New Account">
-                    <input type="text" name="Balance" class="form-control" placeholder="Set Starting Balance">
-                    <span class="input-group-btn">
-                        <button class="btn btn-default" type="submit">
-                            <i class="fa fa-plus"></i>
-                        </button>
-                    </span>
-                </div>
-            }*@
-
         </div>
         <div id="hh-manage" class="panel panel-default">
             <div class="panel-heading">
@@ -78,23 +40,7 @@
                         </span>
                     </div>
                 }
-
-
-                @*@using (Html.BeginForm("Invite", "Households"))
-                {
-                    @Html.AntiForgeryToken()
-
-                    <div class="form-horizontal">
-                        <input type="text" name="Email" placeholder="Invite New Member to Household" />
-                        <input type="submit" value="Invite" class="btn btn-default" />
-                    </div>
-                }*@
-
-
             </div>
-            @*<div class="panel-footer">
-                Panel Footer
-            </div>*@
         </div>
     </div>
         <div class="col-sm-8">
@@ -116,14 +62,17 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var transaction in Model.Accounts.SelectMany(a=>a.Transactions))
+                                @foreach (var transaction in Model.Accounts.SelectMany(a => a.Transactions))
                                 {
+                                    var color = transaction.Category.Type == "Expense" ? "red" : "black";
+                                    var amount = transaction.Category.Type == "Expense" ? "($" + @transaction.Amount + ")" : "$" + @transaction.Amount;
+                                    
                                     <tr>
                                         <td>@transaction.PostedDate.ToString("M/dd/yy")</td>
                                         <td>
                                             @transaction.Account.Name @*- @transaction.PostedBy.FirstName*@
                                         </td>
-                                        <td>$@transaction.Amount</td>
+                                        <td style="color:@color">@amount</td>
                                         <td>@transaction.Category.Name</td>
                                         <td>@transaction.Description</td>
                                     </tr>
@@ -144,7 +93,7 @@
     <div class="col-sm-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                Bar Chart Example
+                Proposed Budget vs. Actual Spending
             </div>
             <!-- /.panel-heading -->
             <div class="panel-body">

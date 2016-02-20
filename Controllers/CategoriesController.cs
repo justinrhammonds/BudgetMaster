@@ -25,29 +25,8 @@ namespace BudgetMaster.Controllers
         {
             var userHHID = Convert.ToInt32(User.Identity.GetHouseholdId());
             var categories = db.Categories.Where(c => c.HouseholdId == userHHID);
-            //var categories = db.Categories.Include(c => c.Household);
             return View(categories.ToList());
         }
-
-        //var userHHID = Convert.ToInt32(User.Identity.GetHouseholdId());
-        //var transactions = db.Transactions.Where(t => t.AccountId == t.Account.Id && t.Account.HouseholdId == userHHID);
-        //var model = transactions.OrderByDescending(d => d.PostedDate).ToList();
-        //    return View(model);
-
-        //// GET: Categories/Details/5
-        //public ActionResult Details(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-
-        //    if (category == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(category);
-        //}
 
         // GET: Categories/Create
         public ActionResult Create()

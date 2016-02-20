@@ -1,0 +1,28 @@
+﻿@model BudgetMaster.Models.CodeFirst.Account
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+@using (Html.BeginForm("Delete", "Accounts"))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>Delete Account</strong></div>
+        <div class="panel-body">
+            <div>
+                <strong>Account Name: </strong> @Model.Name 
+                <strong>Balance: </strong> $@Model.Balance
+            </div>
+            <hr />
+            <p>Are you sure you want to delete this account? By doing so, you will also lose any transactions associated with the account.</p>
+        </div>
+        <div class="panel-footer">
+            <div class="row">
+                <input class="btn btn-link col-xs-6" type="submit" value="Delete" />
+                <a class="btn btn-link col-xs-6" href=@Url.Action("Index","Accounts")>Cancel</a>
+            </div>
+        </div>
+    </div>
+}

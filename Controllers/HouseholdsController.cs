@@ -19,11 +19,8 @@ namespace BudgetMaster.Controllers
         // GET: Households/Details/5
         public ActionResult Index()
         {
-            //these two lines will go in every controller...
             var user = db.Users.Find(User.Identity.GetUserId());
-            Household household = db.Households.Include("Accounts").FirstOrDefault(h=>h.Id == user.HouseholdId);
-            ///////////////////////////////////////////////////////////
-
+            Household household = db.Households.Include("Accounts").FirstOrDefault(h => h.Id == user.HouseholdId);
             if (household == null)
             {
                 return HttpNotFound();
@@ -39,8 +36,6 @@ namespace BudgetMaster.Controllers
         }
 
         // POST: Households/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,Name")] Household household)
@@ -60,7 +55,6 @@ namespace BudgetMaster.Controllers
 
                     return RedirectToAction("Index", new { id = hh.Id });
                 }
-                //change to throw an error message up "You need to leave your current household before creating a new one."
                 return RedirectToAction("Index", "Households", new { id = user.HouseholdId });
             }
 
@@ -77,16 +71,13 @@ namespace BudgetMaster.Controllers
             {
                 Invite invite = new Invite();
                 var user = db.Users.Find(User.Identity.GetUserId());
-                //Household household = db.Households.Find(user.HouseholdId);
                 invite.HouseholdId = (int)user.HouseholdId;
-
                 invite.InvitedUser = Email;
                 var duplicates = db.Invites.Where(i => i.InvitedUser == Email);
                 foreach (var duplicate in duplicates)
                 {
                     db.Invites.Remove(duplicate);
                 }
-                
                 var Code = StringUtilities.RandomString(6);
                 invite.GeneratedCode = Code;
                 db.Invites.Add(invite);
@@ -114,15 +105,12 @@ namespace BudgetMaster.Controllers
 
         [HttpPost]
         // POST: Households/Join/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         public ActionResult Join(string Code)
         {
             if (ModelState.IsValid)
             {
                 var user = db.Users.Find(User.Identity.GetUserId());
                 var invitation = db.Invites.FirstOrDefault(i => i.GeneratedCode == Code && i.InvitedUser == user.Email);
-
                 if (invitation != null)
                 {
                     user.HouseholdId = invitation.HouseholdId;
@@ -130,11 +118,8 @@ namespace BudgetMaster.Controllers
                     db.SaveChanges();
                     return RedirectToAction("Index", "Households", new { id = user.HouseholdId });
                 }
-                
                 return RedirectToAction("Index", "Households"); 
-
             }
-
             return View();
         }
 
@@ -151,15 +136,11 @@ namespace BudgetMaster.Controllers
         {
             if (ModelState.IsValid)
             {
-
                 var user = db.Users.Find(User.Identity.GetUserId());
                 user.HouseholdId = null;
                 db.SaveChanges();
-
                 return RedirectToAction("Create", "Households");
-
             }
-
             return View();
         }
     }

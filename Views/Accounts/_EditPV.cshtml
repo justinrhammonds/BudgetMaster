@@ -1,0 +1,39 @@
+﻿@model BudgetMaster.Models.CodeFirst.Account
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+@using (Html.BeginForm("Edit", "Accounts"))
+{
+    @Html.AntiForgeryToken()
+    
+<div class="form-inline panel panel-default">
+    <div class="panel-heading">
+        <strong>Edit Account</strong>
+    </div>
+    <div class="panel-body row">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group col-xs-12">
+            <input type="hidden" name="Id" value="@Model.Id" />
+            <input type="hidden" name="HouseholdId" value="@Model.HouseholdId" />
+            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-xs-12">
+            <hr />
+            <strong>Balance: </strong>
+            $@Model.Balance
+        </div>
+
+    </div>
+    <div class="panel-footer">
+        <div class="row">
+            <input class="btn btn-link col-xs-6" type="submit" value="Save" />
+            <a class="btn btn-link col-xs-6" href=@Url.Action("Index","Accounts")>Cancel</a>
+        </div>
+    </div>
+
+</div>
+}
+

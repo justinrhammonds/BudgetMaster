@@ -25,25 +25,38 @@ namespace BudgetMaster
         {
             var userHHID = Convert.ToInt32(User.Identity.GetHouseholdId());
             var accounts = db.Accounts.Where(a => a.HouseholdId == userHHID);
-            //if (accounts.Count() == 0)
-            //{
-            //    return View();
-            //}
             var model = accounts.ToList();
             ViewBag.HouseholdId = userHHID;
             return View(model);
         }
 
+        // GET: Accounts/Details/5
+        public ActionResult Details(int? id)
+        {
+            Account account = db.Accounts.Find(id);
+            //var userHHID = Convert.ToInt32(User.Identity.GetHouseholdId());
+            var transactions = db.Transactions.Where(t => t.AccountId == account.Id).ToList();
+
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            if (account == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(account);
+        }
+
         // GET: Accounts/Create
-        public ActionResult Create()
+        public ActionResult _CreatePV()
         {
             ViewBag.HouseholdId = new SelectList(db.Households, "Id", "Name");
-            return View();
+            return PartialView();
         }
 
         // POST: Accounts/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,Name,Balance,HouseholdId")] Account account)
@@ -62,32 +75,27 @@ namespace BudgetMaster
         }
 
         // GET: Accounts/Edit/5
-        public ActionResult Edit(int? id)
+        public PartialViewResult _EditPV(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+            //if (id == null)
+            //{
+            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            //}
             Account account = db.Accounts.Find(id);
-            if (account == null)
-            {
-                return HttpNotFound();
-            }
-            //ViewBag.HouseholdId = new SelectList(db.Households, "Id", "Name", account.HouseholdId);
-            return View(account);
+            //if (account == null)
+            //{
+            //    return HttpNotFound();
+            //}
+            return PartialView(account);
         }
 
         // POST: Accounts/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,Name,Balance,HouseholdId")] Account account)
         {
             if (ModelState.IsValid)
             {
-                //var userHHID = Convert.ToInt32(User.Identity.GetHouseholdId());
-                //account.HouseholdId = userHHID;
                 db.Entry(account).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -97,18 +105,18 @@ namespace BudgetMaster
         }
 
         // GET: Accounts/Delete/5
-        public ActionResult Delete(int? id)
+        public PartialViewResult _DeletePV(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+            //if (id == null)
+            //{
+            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            //}
             Account account = db.Accounts.Find(id);
-            if (account == null)
-            {
-                return HttpNotFound();
-            }
-            return View(account);
+            //if (account == null)
+            //{
+            //    return HttpNotFound();
+            //}
+            return PartialView(account);
         }
 
         // POST: Accounts/Delete/5

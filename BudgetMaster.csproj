@@ -218,7 +218,6 @@
     <Compile Include="Controllers\BudgetItemsController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CategoriesController.cs" />
-    <Compile Include="Controllers\CategoryListsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\HouseholdsController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -255,18 +254,26 @@
     <Content Include="Content\bootstrap-social.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\budget-logo.svg" />
     <Content Include="Content\BudgetMasterLogo.svg" />
     <Content Include="Content\Colors.css" />
+    <Content Include="Content\cute-kitten.jpg" />
+    <Content Include="Content\dev-img\bootstrap.jpg" />
+    <Content Include="Content\dev-img\dotnetmvc4.jpg" />
+    <Content Include="Content\dev-img\htmlcssjs.jpg" />
+    <Content Include="Content\dev-img\jquery.png" />
+    <Content Include="Content\dev-img\linq.png" />
     <Content Include="Content\metisMenu.css" />
     <Content Include="Content\metisMenu.min.css" />
     <Content Include="Content\morris.css" />
     <Content Include="Content\sb-admin-2.css" />
     <Content Include="Content\Style.css" />
     <Content Include="Content\timeline.css" />
-    <Content Include="favicon-bm.ico" />
+    <Content Include="Content\wood-grid.jpg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="jh-favicon.ico" />
     <Content Include="Scripts\ai.0.15.0-build58334.js" />
     <Content Include="Scripts\ai.0.15.0-build58334.min.js" />
     <Content Include="Scripts\bootstrap-datepicker.js" />
@@ -404,7 +411,6 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Accounts\Create.cshtml" />
     <Content Include="Views\Accounts\Delete.cshtml" />
-    <Content Include="Views\Accounts\Details.cshtml" />
     <Content Include="Views\Accounts\Edit.cshtml" />
     <Content Include="Views\Accounts\Index.cshtml" />
     <Content Include="Views\BudgetItems\Create.cshtml" />
@@ -414,19 +420,12 @@
     <Content Include="Views\BudgetItems\Index.cshtml" />
     <Content Include="Views\Categories\Create.cshtml" />
     <Content Include="Views\Categories\Delete.cshtml" />
-    <Content Include="Views\Categories\Details.cshtml" />
     <Content Include="Views\Categories\Edit.cshtml" />
     <Content Include="Views\Categories\Index.cshtml" />
     <Content Include="Views\Households\Create.cshtml" />
     <Content Include="Views\Households\Index.cshtml" />
-    <Content Include="Views\CategoryLists\Create.cshtml" />
-    <Content Include="Views\CategoryLists\Delete.cshtml" />
-    <Content Include="Views\CategoryLists\Details.cshtml" />
-    <Content Include="Views\CategoryLists\Edit.cshtml" />
-    <Content Include="Views\CategoryLists\Index.cshtml" />
     <Content Include="Views\Transactions\Create.cshtml" />
     <Content Include="Views\Transactions\Delete.cshtml" />
-    <Content Include="Views\Transactions\Details.cshtml" />
     <Content Include="Views\Transactions\Edit.cshtml" />
     <Content Include="Views\Transactions\Index.cshtml" />
     <Content Include="Views\Shared\_StartLayout.cshtml" />
@@ -435,6 +434,13 @@
     <Content Include="Views\Shared\_HHPartial.cshtml" />
     <Content Include="Views\Manage\ManageDisplayName.cshtml" />
     <Content Include="Views\Households\_LeavePV.cshtml" />
+    <Content Include="Views\Accounts\_CreatePV.cshtml" />
+    <Content Include="Views\Accounts\_DeletePV.cshtml" />
+    <Content Include="Views\Accounts\_EditPV.cshtml" />
+    <Content Include="Views\Transactions\_CreatePV.cshtml" />
+    <Content Include="Views\Transactions\_EditPV.cshtml" />
+    <Content Include="Views\Transactions\_DeletePV.cshtml" />
+    <Content Include="Views\Accounts\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
