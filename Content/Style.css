@@ -15,6 +15,11 @@ h1,h2,h3,h4,h5,h6 {
     font-weight:700;
 }
 
+strong, th, .strong {
+    font-family: 'Montserrat', sans-serif !important;
+    font-weight:700 !important;
+}
+
 #start {
     height:800px;
     background-image: url('cute-kitten.jpg');
@@ -27,8 +32,15 @@ h1,h2,h3,h4,h5,h6 {
     margin-top: 150px;
 }
 
+.panel-body {
+    background-color: #f8f8f8 !important;
+}
+
 .panel-heading {
     padding: 15px;
+        font-family: 'Montserrat', sans-serif !important;
+    font-weight:700 !important;
+    background-color: #ececec !important;
 }
 
 .start-btn {
@@ -63,7 +75,12 @@ h1,h2,h3,h4,h5,h6 {
 }
 
 .start-panel .panel-heading {
-    background:#9CB98E;
+    background:#9CB98E !important;
+}
+
+.validation-padding {
+    padding: 0 0 10px 5px;
+    margin-top: -10px;
 }
 
 header {
@@ -99,12 +116,24 @@ nav {
 }
 
 .household-name {
-    padding:25px !important;
+    padding: 0 !important;
 }
 
 .editPV, .deletePV, .detailsView {
-    padding: 5px;
+    padding: 8px;
     background-color:transparent;
+    color:#9CB98E;
+}
+
+.detailsView {
+    position:relative;
+    top:5px;
+}
+
+.editPV:hover,
+.deletePV:hover,
+.detailsView:hover {
+    color: #597b48;
 }
 
 .editPV .fa, .deletePV .fa, .detailsView .fa {
@@ -117,13 +146,21 @@ nav {
 
 .flex-container {
     display:flex;
-
 }
 
 .flex-item {
     flex:1;
+    padding-top:20px;
     text-align:center;
     vertical-align:middle;
+    height:90px;
+    color: #fff;
+}
+
+.flex-item:hover {
+    color:#fff;
+    background:#4c693d;
+    text-decoration:none;
 }
 
 .flex-item i {

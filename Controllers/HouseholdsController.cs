@@ -21,6 +21,7 @@ namespace BudgetMaster.Controllers
         {
             var user = db.Users.Find(User.Identity.GetUserId());
             Household household = db.Households.Include("Accounts").FirstOrDefault(h => h.Id == user.HouseholdId);
+            ViewBag.Message = TempData["Message"];
             if (household == null)
             {
                 return HttpNotFound();
@@ -88,7 +89,7 @@ namespace BudgetMaster.Controllers
                 im.Destination = invite.InvitedUser;
                 im.Subject = "You're Invited to BudgetMaster";
                 es.SendAsync(im);
-                ViewBag.Message = "Your Message Was Sent Successfully.";
+                TempData["Message"] = "Your Message Was Sent Successfully.";
 
                 return RedirectToAction("Index", "Households");
             }

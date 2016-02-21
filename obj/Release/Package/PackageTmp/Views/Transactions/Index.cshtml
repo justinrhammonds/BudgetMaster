@@ -33,7 +33,10 @@
     </tr>
 
 @foreach (var item in Model) {
+    var color = item.Category.Type == "Expense" ? "red" : "black";
+    var amount = item.Category.Type == "Expense" ? "($" + @item.Amount + ")" : "$" + @item.Amount;
     <tr>
+
         <td>
             @Html.DisplayFor(modelItem => item.Account.Name)
         </td>
@@ -43,7 +46,7 @@
         <td>
             @item.PostedDate.ToString("M/d/yy")
         </td>
-        <td>@Html.DisplayFor(modelItem => item.Amount)
+        <td style="color:@color">@amount
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Reconciled)

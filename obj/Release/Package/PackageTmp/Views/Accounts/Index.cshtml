@@ -4,55 +4,58 @@
     ViewBag.Title = "Index";
 }
 
-<h3>Current Accounts</h3>
-@if (Model.Count() == 0)
-{
-    <p>There are currently no accounts created for your household.</p>
-}
-else
-{
-    <table class="table">
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Balance)
-            </th>
-        </tr>
+<div class="col-sm-8">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <strong>Manage Your Accounts</strong>
+        </div>
+        <!-- /.panel-heading -->
+        <div class="panel-body">
+            <div class="list-group">
+                @if (Model.Count() == 0)
+                {
+                    <p>Currently no accounts exist for your household. You can add a new account by submitting the form below.</p>
+                    <hr />
+                }
+                else
+                {
 
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Balance)
-                </td>
-                <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-                </td>
-            </tr>
-        }
-    </table>
-}
+                    foreach (var item in Model)
+                    {
+                        <p>
+                            <strong>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </strong>
+                            <span>
+                                Balance: 
+                                $@Html.DisplayFor(modelItem => item.Balance)
+                            </span>
+                            <span>
+                                <button class="btn editPV" data-id=@item.Id><i class="fa fa-pencil"></i></button>
+                                <button class="btn deletePV" data-id=@item.Id><i class="fa fa-trash"></i></button>
+                                <a class="detailsView" href=@Url.Action("Details", "Accounts", new { id=item.Id })><i class="fa fa-list-ul"></i></a>
+                            </span>
+                        </p>
+                    }
 
+                }
 
-@using (Html.BeginForm("Create", "Accounts"))
-{
-    @Html.AntiForgeryToken()
-    <div class="input-group custom-search-form form-inline">
-        <div class="form-group">
-            <input type="hidden" name="HouseholdId" value="@ViewBag.HouseholdId"/>
-            <input type="text" name="Name" class="form-control" placeholder="Account Name">
-            <input type="text" name="Balance" class="form-control" placeholder="Starting Balance">
-            <span class="input-group-btn">
-                <button class="btn btn-default" type="submit">
-                    <i class="fa fa-plus"></i>
-                </button>
-            </span>
+            </div>
         </div>
     </div>
+</div>
+<div id="hh-partial" class="col-sm-4">
+    @Html.Action("_CreatePV")
+</div>
+
+@section Scripts {
+    <script>
+        $(".editPV").click(function () {
+            $("#hh-partial").load('/Accounts/_EditPV/' + $(this).data('id'));
+        })
+        $(".deletePV").click(function () {
+            $("#hh-partial").load('/Accounts/_DeletePV/' + $(this).data('id'));
+        })
+    </script> 
 }
+

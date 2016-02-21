@@ -30,26 +30,26 @@
         <nav class="navbar navbar-default navbar-static-top" role="navigation">
             <div class="household-name">
                 <div class="flex-container">
-                    <div class="flex-item">
+                    <a class="flex-item" href="@Url.Action("Index","Households")">
                         <i class="fa fa-home"></i>
                         <p>View Dashboard</p>
-                    </div>
-                    <div class="flex-item">
+                    </a>
+                    <a class="flex-item" href="@Url.Action("Index","Accounts")">
                         <i class="fa fa-university"></i>
                         <p>Manage Accounts</p>
-                    </div>
-                    <div class="flex-item">
+                    </a>
+                    <a class="flex-item" href="@Url.Action("Index","Transactions")">
                         <i class="fa fa-money"></i>
                         <p>Incomes & Expenses</p>
-                    </div>
-                    <div class="flex-item">
+                    </a>
+                    <a class="flex-item" href="@Url.Action("Index","BudgetItems")">
                         <i class="fa fa-balance-scale"></i>
                         <p>Manage Budget</p>
-                    </div>
-                    <div class="flex-item">
+                    </a>
+                    <a class="flex-item" href="@Url.Action("Index","Households")">
                         <i class="fa fa-street-view"></i>
                         <p>User Profile</p>
-                    </div>
+                    </a>
                 </div>
                 @*<ul class="nav navbar-top-links navbar-right">
                     @Html.Partial("_LoginPartial")

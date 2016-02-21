@@ -8,7 +8,7 @@
     Layout = "~/Views/Shared/_StartLayout.cshtml";
 }
 <div class="row">
-    <div class="col-md-4 col-md-offset-4">
+    <div class="start-panel col-sm-7 col-sm-offset-1 col-md-4 col-md-offset-1">
         <div class="login-panel panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">@ViewBag.Title</h3>
@@ -29,6 +29,9 @@
                             @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Email", name = "Email", type = "email" })
                         </div>
                         <div class="form-group">
+                            <hr />
+                            <h6 class="validation-padding">Must be at least 6 characters,use lowercase, uppercase, numbers, and special characters.</h6>
+                            
                             @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Enter a Password", name = "Password", type = "password" })
                         </div>
                         <div class="form-group">

@@ -3,7 +3,7 @@
 @{
     ViewBag.Title = "Details";
 }
-
+<div class="text-success"><h4>@ViewBag.Message</h4></div>
 <div class="row">
     <div class="col-sm-4">
         <div class="panel panel-default">
@@ -11,6 +11,10 @@
                 Current Account Balances
             </div>
             <div class="panel-body">
+                @if (Model.Accounts.Count() == 0)
+                {
+                <p>You currently have no accounts created. <a href="@Url.Action("Index","Accounts")">Click here to create a new account.</a></p>
+                }
                 @foreach (var account in Model.Accounts)
                 {
                     <p>@account.Name: $@account.Balance</p>
@@ -31,8 +35,9 @@
                 @using (Html.BeginForm("Invite", "Households"))
                 {
                     @Html.AntiForgeryToken()
+                    <label class="strong" for="Email">Invite a New Member via Email:</label>
                     <div class="input-group custom-search-form">
-                        <input type="text" name="Email" class="form-control" placeholder="Invite Member...">
+                        <input type="text" name="Email" class="form-control" placeholder="inviteduser@domain.com">
                         <span class="input-group-btn">
                             <button class="btn btn-default" type="submit">
                                 <i class="fa fa-plus"></i>

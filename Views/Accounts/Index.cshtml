@@ -22,7 +22,6 @@
 
                     foreach (var item in Model)
                     {
-
                         <p>
                             <strong>
                                 @Html.DisplayFor(modelItem => item.Name)
@@ -34,10 +33,9 @@
                             <span>
                                 <button class="btn editPV" data-id=@item.Id><i class="fa fa-pencil"></i></button>
                                 <button class="btn deletePV" data-id=@item.Id><i class="fa fa-trash"></i></button>
-                                <a class="detailsView" href=@Url.Action("Details", "Accounts", new { id=item.Id })><i class="fa fa-search"></i></a>
+                                <a class="detailsView" href=@Url.Action("Details", "Accounts", new { id=item.Id })><i class="fa fa-list-ul"></i></a>
                             </span>
                         </p>
-
                     }
 
                 }
