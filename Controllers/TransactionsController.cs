@@ -51,8 +51,9 @@ namespace BudgetMaster.Controllers
             //returns a partial view containing a list of HH accounts and a list of HH categories (for dropdowns
             var userHHID = Convert.ToInt32(User.Identity.GetHouseholdId());
             var accounts = db.Accounts.Where(a => a.HouseholdId == userHHID);
+            var categories = db.Categories.Where(c => c.HouseholdId == userHHID);
             ViewBag.AccountId = new SelectList(accounts.ToList(), "Id", "Name");
-            ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Name");
+            ViewBag.CategoryId = new SelectList(categories.ToList(), "Id", "Name");
             return PartialView();
         }
 
