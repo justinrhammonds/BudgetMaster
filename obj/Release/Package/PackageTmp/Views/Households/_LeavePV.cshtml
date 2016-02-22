@@ -4,7 +4,8 @@
 <div class="panel-body">
     <form class="form-inline" action=@Url.Action("Leave", "Households") method="post">
         <div>
-            <p>Are you sure you would like to leave your current household? Upon leaving you will no longer have access to your information saved to this household.</p>
+            <p>Upon leaving, <span class="text-warning">you will no longer have access to your information</span> saved to this household.</p>
+            <p>Are you sure you would like to leave your current household?</p>
             <input type="submit" value="Yes, Leave" class="btn btn-default" />
         </div>
     </form>

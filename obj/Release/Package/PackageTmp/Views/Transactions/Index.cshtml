@@ -4,62 +4,58 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
-
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
+@* ViewBox for Create, Edit, Delete Partial Views  *@
+<div id="transactionPV">
+    @* GET Create Partial View *@
+    @Html.Action("_CreatePV") 
+</div>
 <table class="table">
-    <tr>
-        <th>
-            Account
-        </th>
-        <th>
-            Category
-        </th>
-        <th>
-            Date
-        </th>
-        <th>
-            Amount
-        </th>
-        <th>
-            Reconciled?
-        </th>
-        <th>
-            Description
-        </th>
-        <th></th>
-    </tr>
-
+    <thead>
+        <tr>        
+            <th>Account</th>
+            <th>Category</th>
+            <th>Date</th>
+            <th>Amount</th>
+            <th>Reconciled?</th>
+            <th>Description</th>
+            <th></th>
+        </tr>
+    </thead>
+@* USING THE TRANSACTION MODEL *@
 @foreach (var item in Model) {
-    var color = item.Category.Type == "Expense" ? "red" : "black";
-    var amount = item.Category.Type == "Expense" ? "($" + @item.Amount + ")" : "$" + @item.Amount;
-    <tr>
+    // Transactions that are of Category.Type == "Expense" will have class 'text-warning', and have a (-)
+    // Transactions that are of Category.Type == "Income" will have no additional class, and have a (+)
+    var textColor = item.Category.Type == "Expense" ? "text-warning" : "";
+    var amount = item.Category.Type == "Expense" ? "- $" + @item.Amount : "+ $" + @item.Amount;
+    <tbody>
+        <tr>
 
-        <td>
-            @Html.DisplayFor(modelItem => item.Account.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Category.Name)
-        </td>
-        <td>
-            @item.PostedDate.ToString("M/d/yy")
-        </td>
-        <td style="color:@color">@amount
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Reconciled)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Description)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
-    </tr>
+            <td>@Html.DisplayFor(modelItem => item.Account.Name)</td> @*REQ: transaction.Account.Name*@ 
+            <td>@Html.DisplayFor(modelItem => item.Category.Name)</td> @*REQ: transaction.Category.Name*@
+            <td>@item.PostedDate.ToString("M/d/yy")</td> @*REQ: transaction.PostedDate (1/2/16)*@
+            <td class="@textColor">@amount</td> @*REQ: transaction.Amount (formatted per Expense/Income)*@
+            <td>@Html.DisplayFor(modelItem => item.Reconciled)</td> @*REQ: transaction.Reconciled (bool)*@
+            <td>@Html.DisplayFor(modelItem => item.Description)</td> @*REQ: transaction.Account.Name*@
+            <td>
+                <span>
+                    @*REQ: on click, request made for EDIT PARTIAL VIEW matching the transaction.Id*@
+                    <button class="btn editPV" data-id=@item.Id><i class="fa fa-pencil"></i></button>
+                    @*REQ: on click, request made for DELETE PARTIAL VIEW matching the transaction.Id*@
+                    <button class="btn deletePV" data-id=@item.Id><i class="fa fa-trash"></i></button>
+                </span>
+            </td>
+        </tr>
+    </tbody>
 }
-
 </table>
+
+@section Scripts {
+    <script>
+        $(".editPV").click(function () {
+            $("#transactionPV").load('/Transactions/_EditPV/' + $(this).data('id'));
+        })
+        $(".deletePV").click(function () {
+            $("#transactionPV").load('/Transactions/_DeletePV/' + $(this).data('id'));
+        })
+    </script>
+}

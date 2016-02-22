@@ -5,7 +5,7 @@
 }
 <div class="text-success"><h4>@ViewBag.Message</h4></div>
 <div class="row">
-    <div class="col-sm-4">
+    <div class="col-sm-3">
         <div class="panel panel-default">
             <div class="panel-heading">
                 Current Account Balances
@@ -17,7 +17,7 @@
                 }
                 @foreach (var account in Model.Accounts)
                 {
-                    <p>@account.Name: $@account.Balance</p>
+                    <p>@account.Name:  $@account.Balance</p>
                 }
             </div>
         </div>
@@ -28,16 +28,16 @@
             <div class="panel-body">
                 @foreach (var user in Model.Users)
                 {
-                    <div>@user.FirstName @user.LastName  ( @user.Email )</div>
+                    <p>@user.FirstName @user.LastName</p>
                 }
                 <span id="leave-hh">[leave this household]</span>
                 <hr />
                 @using (Html.BeginForm("Invite", "Households"))
                 {
                     @Html.AntiForgeryToken()
-                    <label class="strong" for="Email">Invite a New Member via Email:</label>
+                    <label class="strong" for="Email">Invite a New Member:</label>
                     <div class="input-group custom-search-form">
-                        <input type="text" name="Email" class="form-control" placeholder="inviteduser@domain.com">
+                        <input type="text" name="Email" class="form-control" placeholder="invite@domain.com">
                         <span class="input-group-btn">
                             <button class="btn btn-default" type="submit">
                                 <i class="fa fa-plus"></i>
@@ -48,7 +48,7 @@
             </div>
         </div>
     </div>
-        <div class="col-sm-8">
+        <div class="col-sm-9">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     Recent Transactions
@@ -69,15 +69,15 @@
                             <tbody>
                                 @foreach (var transaction in Model.Accounts.SelectMany(a => a.Transactions))
                                 {
-                                    var color = transaction.Category.Type == "Expense" ? "red" : "black";
-                                    var amount = transaction.Category.Type == "Expense" ? "($" + @transaction.Amount + ")" : "$" + @transaction.Amount;
+                                    var textColor = transaction.Category.Type == "Expense" ? "text-warning" : "";
+                                    var amount = transaction.Category.Type == "Expense" ? "- $" + @transaction.Amount : "+ $" + @transaction.Amount;
                                     
                                     <tr>
                                         <td>@transaction.PostedDate.ToString("M/dd/yy")</td>
                                         <td>
                                             @transaction.Account.Name @*- @transaction.PostedBy.FirstName*@
                                         </td>
-                                        <td style="color:@color">@amount</td>
+                                        <td class="@textColor">@amount</td>
                                         <td>@transaction.Category.Name</td>
                                         <td>@transaction.Description</td>
                                     </tr>
@@ -98,7 +98,7 @@
     <div class="col-sm-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                Proposed Budget vs. Actual Spending
+                Budget vs. Actual Spending
             </div>
             <!-- /.panel-heading -->
             <div class="panel-body">

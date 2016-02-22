@@ -23,6 +23,7 @@ namespace BudgetMaster.Controllers
         // GET: Transactions
         public ActionResult Index()
         {
+            //returns a view with a list of transactions where the t's accountId matches the user's HHID
             var userHHID = Convert.ToInt32(User.Identity.GetHouseholdId());
             var transactions = db.Transactions.Where(t => t.AccountId == t.Account.Id && t.Account.HouseholdId == userHHID);
             var model = transactions.OrderByDescending(d => d.PostedDate).ToList();
@@ -45,13 +46,14 @@ namespace BudgetMaster.Controllers
         //}
 
         // GET: Transactions/Create
-        public ActionResult Create()
+        public PartialViewResult _CreatePV()
         {
+            //returns a partial view containing a list of HH accounts and a list of HH categories (for dropdowns
             var userHHID = Convert.ToInt32(User.Identity.GetHouseholdId());
             var accounts = db.Accounts.Where(a => a.HouseholdId == userHHID);
             ViewBag.AccountId = new SelectList(accounts.ToList(), "Id", "Name");
             ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Name");
-            return View();
+            return PartialView();
         }
 
         // POST: Transactions/Create
@@ -63,10 +65,13 @@ namespace BudgetMaster.Controllers
             {
                 var userId = User.Identity.GetUserId();
                 var account = db.Accounts.FirstOrDefault(a => a.Id == transaction.AccountId);
+                //set the PostedBy value in the model
                 transaction.PostedById = userId;
-                db.Transactions.Add(transaction);
+                db.Transactions.Add(transaction); //Add a new transaction record to model (db)
                 db.SaveChanges();
+                //fetch back the same transaction
                 transaction = db.Transactions.Include("Category").FirstOrDefault(t => t.Id == transaction.Id);
+                //update the balance based on the transaction.Category.Type
                 transaction.UpdateAccountBalance(userId);
                 return RedirectToAction("Index");
             }
@@ -77,20 +82,13 @@ namespace BudgetMaster.Controllers
         }
 
         // GET: Transactions/Edit/5
-        public ActionResult Edit(int? id)
+        public PartialViewResult _EditPV(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+            //returns a partial view (for this particular transaction) containing a list of HH accounts and a list of HH categories (for dropdowns
             Transaction transaction = db.Transactions.Find(id);
-            if (transaction == null)
-            {
-                return HttpNotFound();
-            }
             ViewBag.AccountId = new SelectList(db.Accounts, "Id", "Name", transaction.AccountId);
             ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Name", transaction.CategoryId);
-            return View(transaction);
+            return PartialView(transaction);
         }
 
         // POST: Transactions/Edit/5
@@ -103,11 +101,13 @@ namespace BudgetMaster.Controllers
                 var userId = User.Identity.GetUserId();
                 var account = db.Accounts.FirstOrDefault(a => a.Id == transaction.AccountId);
                 var OldTr = db.Transactions.AsNoTracking().FirstOrDefault(t => t.Id == transaction.Id);
-               
+                //create a record of the transaction and store it in the cookie
+                //then update (revert) account balance to it's original amount.
                 OldTr.ReverseAccountBalance(userId);
                
                 db.Entry(transaction).State = EntityState.Modified;
                 db.SaveChanges();
+                //fetch the reverted transaction amount, and update it further.
                 transaction = db.Transactions.Include("Category").FirstOrDefault(t => t.Id == transaction.Id);
                 transaction.UpdateAccountBalance(userId);
                 return RedirectToAction("Index");
@@ -118,18 +118,11 @@ namespace BudgetMaster.Controllers
         }
 
         // GET: Transactions/Delete/5
-        public ActionResult Delete(int? id)
+        public PartialViewResult _DeletePV(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+            //returns a partial view containing properties for this particular transaction
             Transaction transaction = db.Transactions.Find(id);
-            if (transaction == null)
-            {
-                return HttpNotFound();
-            }
-            return View(transaction);
+            return PartialView(transaction);
         }
 
         // POST: Transactions/Delete/5
@@ -137,6 +130,7 @@ namespace BudgetMaster.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
+            //fetch a transaction (by it's particular id), then update it's account balance, and finally remove the transaction from the model record.
             var userId = User.Identity.GetUserId();
             Transaction transaction = db.Transactions.Find(id);
             transaction.ReverseAccountBalance(userId);

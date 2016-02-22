@@ -441,6 +441,10 @@
     <Content Include="Views\Transactions\_EditPV.cshtml" />
     <Content Include="Views\Transactions\_DeletePV.cshtml" />
     <Content Include="Views\Accounts\Details.cshtml" />
+    <Content Include="Views\Manage\_ManageLoginsPV.cshtml" />
+    <Content Include="Views\Manage\_ManageDisplayNamePV.cshtml" />
+    <Content Include="Views\Manage\_ChangePasswordPV.cshtml" />
+    <Content Include="Views\Manage\_SetPasswordPV.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

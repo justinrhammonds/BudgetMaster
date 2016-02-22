@@ -20,6 +20,9 @@
 </head>
 <body>
     <header>
+        <div class="pull-right">
+            @Html.Partial("_LoginPartial")
+        </div>
         <div class="navbar-header">
             <a class="navbar-brand" href="index.html">
                 <img class="brand-logo" src="~/Content/budget-logo.svg" />
@@ -46,14 +49,11 @@
                         <i class="fa fa-balance-scale"></i>
                         <p>Manage Budget</p>
                     </a>
-                    <a class="flex-item" href="@Url.Action("Index","Households")">
+                    <a class="flex-item" href="@Url.Action("Index","Manage")">
                         <i class="fa fa-street-view"></i>
                         <p>User Profile</p>
                     </a>
                 </div>
-                @*<ul class="nav navbar-top-links navbar-right">
-                    @Html.Partial("_LoginPartial")
-                </ul>*@
             </div>
         </nav>
         <div class="container body-content">
@@ -75,6 +75,11 @@
             "responsive": true,
             "pageLength": 15
         });
+        //$('.datepicker').datepicker({
+        //    format: "mm/dd/yyyy",
+        //    maxViewMode: 1,
+        //    todayBtn: "linked"
+        //})
     </script>
     @RenderSection("scripts", required: false)
 </body>

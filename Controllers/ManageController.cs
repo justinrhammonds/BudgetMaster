@@ -78,6 +78,8 @@ namespace BudgetMaster.Controllers
             return View(model);
         }
 
+
+        //PARTIAL VIEW
         //GET: /Manage/ManageDisplayName
         [HttpGet]
         public ActionResult ManageDisplayName()
@@ -241,7 +243,7 @@ namespace BudgetMaster.Controllers
             return RedirectToAction("Index", new { Message = ManageMessageId.RemovePhoneSuccess });
         }
 
-        //
+        //PARTIAL VIEW
         // GET: /Manage/ChangePassword
         public ActionResult ChangePassword()
         {
@@ -250,8 +252,9 @@ namespace BudgetMaster.Controllers
             {
                 return View();
             }
+            ViewBag.errorMessage = "You currently have no password created for this site, enter a password for this site below.";
             return RedirectToAction("SetPassword", "Manage");
-            
+
         }
 
         //
@@ -310,7 +313,7 @@ namespace BudgetMaster.Controllers
             return View(model);
         }
 
-        //
+        //PARTIAL VIEW
         // GET: /Manage/ManageLogins
         public async Task<ActionResult> ManageLogins(ManageMessageId? message)
         {

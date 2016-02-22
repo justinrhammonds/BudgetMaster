@@ -21,6 +21,7 @@ namespace BudgetMaster.HelperExtensions
 
         private static ApplicationDbContext db = new ApplicationDbContext();
 
+        //returns the HHID of the current user (from cookie)
         public static string GetHouseholdId(this IIdentity user)
         {
             var ClaimUser = (ClaimsIdentity)user;
@@ -40,6 +41,7 @@ namespace BudgetMaster.HelperExtensions
     public static class CatExtension
     {
         private static ApplicationDbContext db = new ApplicationDbContext();
+        //populates a list of pre-defined categories from the CategoryList Model
         public static void PopulateCategories(this Household household)
         {
             var Source = db.CategoryLists.ToList();
@@ -64,6 +66,8 @@ namespace BudgetMaster.HelperExtensions
     {
         private static ApplicationDbContext db = new ApplicationDbContext();
 
+        // updates the account.Balance based on the transaction.Category.Type
+        // used in Transactions/Create and Transactions/Edit ActionResults
         public static void UpdateAccountBalance(this Transaction transaction, string userId)
         {
             var user = db.Users.FirstOrDefault(u => u.Id.Equals(userId));
@@ -82,6 +86,8 @@ namespace BudgetMaster.HelperExtensions
             db.SaveChanges();
         }
 
+        // updates (reverts) the account.Balance based on the transaction.Category.Type
+        // used in Transactions/Edit and Transactions/Delete ActionResults
         public static void ReverseAccountBalance(this Transaction transaction, string userId)
         {
             var user = db.Users.FirstOrDefault(u => u.Id.Equals(userId));
@@ -99,60 +105,6 @@ namespace BudgetMaster.HelperExtensions
 
             db.SaveChanges();
         }
-
-        //public static void UpdateAccountBalance(this Transaction transaction, string userId, Transaction OldTr)
-        //{
-        //    var user = db.Users.FirstOrDefault(u => u.Id.Equals(userId));
-        //    var userHHID = Convert.ToInt32(user.HouseholdId);
-        //    //var category = db.Categories.Find(userHHID);
-        //    var account = db.Accounts.FirstOrDefault(a => a.Id == transaction.AccountId);
-        //    OldTr = db.Transactions.AsNoTracking().FirstOrDefault(t => t.Id == transaction.Id);
-
-        //    if (OldTr.Category.Type == "Expense" && transaction.Category.Type == "Expense")
-        //    {
-        //        //SUBTRACT
-        //        account.Balance += OldTr.Amount;
-        //        account.Balance -= transaction.Amount;
-        //    }
-        //    else if (OldTr.Category.Type == "Income" && transaction.Category.Type == "Expense")
-        //    {
-        //        account.Balance -= OldTr.Amount;
-        //        account.Balance -= transaction.Amount;
-        //    }
-        //    else if (OldTr.Category.Type == "Expense" && transaction.Category.Type == "Income")
-        //    {
-        //        account.Balance += OldTr.Amount;
-        //        account.Balance += transaction.Amount;
-        //    }
-        //    else 
-        //    {
-        //        //ADD
-        //        account.Balance -= OldTr.Amount;
-        //        account.Balance += transaction.Amount;
-        //    }
-        //    db.SaveChanges();
-        //}
-
-        //public static void UpdateBalanceOnDelete(this Transaction transaction, string userId)
-        //{
-        //    var user = db.Users.Find(userId);
-        //    var userHHID = user.HouseholdId;
-        //    //var category = db.Categories.Find(userHHID);
-        //    var account = db.Accounts.FirstOrDefault(a => a.Id == transaction.AccountId);
-
-        //    if (transaction.Category.Type == "Expense")
-        //    {
-        //        //ADD
-        //        account.Balance += transaction.Amount;
-        //    }
-        //    else
-        //    {
-        //        //SUBTRACT
-        //        account.Balance -= transaction.Amount;
-        //    }
-        //    db.SaveChanges();
-        //    //return account.Balance;
-        //}
     }
 
 }

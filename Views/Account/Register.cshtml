@@ -1,4 +1,5 @@
-﻿@model BudgetMaster.Models.RegisterViewModel
+﻿@using BudgetMaster.Models
+@model BudgetMaster.Models.RegisterViewModel
 
 @{
     ViewBag.Title = "Register";
@@ -8,8 +9,8 @@
     Layout = "~/Views/Shared/_StartLayout.cshtml";
 }
 <div class="row">
-    <div class="start-panel col-sm-7 col-sm-offset-1 col-md-4 col-md-offset-1">
-        <div class="login-panel panel panel-default">
+    <div class="start-panel col-sm-7 col-sm-offset-1 col-md-5 col-md-offset-1">
+        <div id="register-panel" class="login-panel panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">@ViewBag.Title</h3>
             </div>
@@ -40,6 +41,12 @@
                         <input type="submit" class="btn btn-lg btn-success btn-block" value="Register" />
                     </fieldset>
             }
+            <hr />
+            <h6>Or create an account using an existing login.</h6>
+
+            <div id="socialLoginForm">
+                @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
+            </div>
             </div>
         </div>
     </div>
