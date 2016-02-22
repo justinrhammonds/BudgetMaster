@@ -70,6 +70,7 @@
     // AntiForgeryToken from the correct server, gets rejected. For more info, see 
     // http://www.devcurry.com/2013/01/what-is-antiforgerytoken-and-why-do-i.html
         @Html.AntiForgeryToken()
+        <input type="hidden" name="Id" value="@Model.Id" />
 
         <div class="form-actions no-color">
             <input type="submit" value="Delete" class="btn btn-default" /> |
