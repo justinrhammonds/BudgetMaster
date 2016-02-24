@@ -6,6 +6,9 @@ using BudgetMaster.Models.CodeFirst;
 using Microsoft.AspNet.Identity;
 using AspNetIdentity2.Controllers;
 using BudgetMaster.HelperExtensions;
+using System.Collections;
+using Newtonsoft.Json;
+using System;
 
 namespace BudgetMaster.Controllers
 {
@@ -21,12 +24,77 @@ namespace BudgetMaster.Controllers
         {
             var user = db.Users.Find(User.Identity.GetUserId());
             Household household = db.Households.Include("Accounts").FirstOrDefault(h => h.Id == user.HouseholdId);
+            var ReconciledBalance = household.Accounts.SelectMany(a => a.Transactions).Where(t => t.Reconciled == true).Select(m => m.Amount).Sum();
+            //RecBalVM recVM = new RecBalVM();
+            //recVM.Account = acct;
+            //recVM.RecBal;
+            //return View(recVM);
+
+            var accountList = from acc in household.Accounts
+                          let inc = (from tr in acc.Transactions
+                                     where (tr.Reconciled == true && tr.Category.Type == "Income")
+                                     select tr.Amount).Sum()
+                          let exp = (from tr in acc.Transactions
+                                     where (tr.Reconciled == true && tr.Category.Type == "Expense")
+                                     select tr.Amount).Sum()
+                          select new RecBalVM()
+                          {
+                              Account = acc,
+                              RecBal = inc - exp
+                          };
+
+            DashboardVM dashboardVM = new DashboardVM()
+            {
+                Household = household,
+                RecBalVM = accountList.ToList()
+            };
+
+            //ViewBag.ReconciledBalance = accountList;
             ViewBag.Message = TempData["Message"];
             if (household == null)
             {
                 return HttpNotFound();
             }
-            return View(household);
+
+            return View(dashboardVM);
+        }
+
+        [HttpGet]
+        // GET: Households/GetChart
+        public ActionResult GetChart()
+        {
+            var hh = db.Households.Find(User.Identity.GetHouseholdId());
+            var trans = db.Transactions.Where(t => t.Account.HouseholdId == hh.Id);
+            var catBarList = (from cat in hh.Categories
+                              let sumBud = (from bud in hh.BudgetItems
+                                            select bud.Amount
+                                            ).DefaultIfEmpty().Sum()
+                              let sumAct = (from tran in trans
+                                            where 
+                                            tran.PostedDate.Year == DateTime.Now.Year &&
+                                            tran.PostedDate.Month == DateTime.Now.Month 
+                                            select tran.Amount).DefaultIfEmpty().Sum()
+                              select new
+                              {
+                                  category = cat.Name,
+                                  budgeted = sumBud,
+                                  actual = sumAct
+                              }).ToArray();
+
+            return Content(JsonConvert.SerializeObject(catBarList), "application/json");
+
+            //var accountList = (from acc in household.Accounts
+            //                   let inc = (from tr in acc.Transactions
+            //                              where (tr.Reconciled == true && tr.Category.Type == "Income")
+            //                              select tr.Amount).Sum()
+            //                   let exp = (from tr in acc.Transactions
+            //                              where (tr.Reconciled == true && tr.Category.Type == "Expense")
+            //                              select tr.Amount).Sum()
+            //                   select new RecBalVM()
+            //                   {
+            //                       Account = acc,
+            //                       RecBal = inc - exp
+            //                   }).ToArray();
         }
 
         [HttpGet]

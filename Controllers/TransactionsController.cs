@@ -46,15 +46,23 @@ namespace BudgetMaster.Controllers
         //}
 
         // GET: Transactions/Create
-        public PartialViewResult _CreatePV()
+        public PartialViewResult _CreatePV(int? id) 
         {
             //returns a partial view containing a list of HH accounts and a list of HH categories (for dropdowns
             var userHHID = Convert.ToInt32(User.Identity.GetHouseholdId());
             var accounts = db.Accounts.Where(a => a.HouseholdId == userHHID);
             var categories = db.Categories.Where(c => c.HouseholdId == userHHID);
+            Transaction tr = new Transaction();
+            tr.AccountId = 0;
+            if (id != null)
+            {
+                TempData["Redirect"] = "AccountDetails";
+                ViewBag.Account = id;
+                tr.AccountId = (int)id;
+            }
             ViewBag.AccountId = new SelectList(accounts.ToList(), "Id", "Name");
             ViewBag.CategoryId = new SelectList(categories.ToList(), "Id", "Name");
-            return PartialView();
+            return PartialView(tr);
         }
 
         // POST: Transactions/Create
@@ -66,6 +74,7 @@ namespace BudgetMaster.Controllers
             {
                 var userId = User.Identity.GetUserId();
                 var account = db.Accounts.FirstOrDefault(a => a.Id == transaction.AccountId);
+                //var OldAccId = db.Accounts.AsNoTracking().FirstOrDefault(a => a.Id == transaction.AccountId);//????
                 //set the PostedBy value in the model
                 transaction.PostedById = userId;
                 db.Transactions.Add(transaction); //Add a new transaction record to model (db)
@@ -74,7 +83,7 @@ namespace BudgetMaster.Controllers
                 transaction = db.Transactions.Include("Category").FirstOrDefault(t => t.Id == transaction.Id);
                 //update the balance based on the transaction.Category.Type
                 transaction.UpdateAccountBalance(userId);
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", "Accounts", new { id = account.Id });
             }
 
             ViewBag.AccountId = new SelectList(db.Accounts, "Id", "Name", transaction.AccountId);
@@ -86,9 +95,10 @@ namespace BudgetMaster.Controllers
         public PartialViewResult _EditPV(int? id)
         {
             //returns a partial view (for this particular transaction) containing a list of HH accounts and a list of HH categories (for dropdowns
+            var userHHID = Convert.ToInt32(User.Identity.GetHouseholdId());
+            var categories = db.Categories.Where(c => c.HouseholdId == userHHID);
             Transaction transaction = db.Transactions.Find(id);
-            ViewBag.AccountId = new SelectList(db.Accounts, "Id", "Name", transaction.AccountId);
-            ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Name", transaction.CategoryId);
+            ViewBag.CategoryId = new SelectList(categories.ToList(), "Id", "Name", transaction.CategoryId);
             return PartialView(transaction);
         }
 

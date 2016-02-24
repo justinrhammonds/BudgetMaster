@@ -10,6 +10,7 @@ using BudgetMaster.Models;
 using BudgetMaster.Models.CodeFirst;
 using AspNetIdentity2.Controllers;
 using BudgetMaster.HelperExtensions;
+using Microsoft.AspNet.Identity;
 
 namespace BudgetMaster
 {
@@ -46,6 +47,20 @@ namespace BudgetMaster
                 return HttpNotFound();
             }
 
+            var ReconciledTransactions = transactions.Where(t => t.Reconciled == true);
+            decimal ReconciledBalance = 0;
+            foreach (var t in ReconciledTransactions)
+            {
+                if (t.Category.Type == "Expense")
+                {
+                    ReconciledBalance -= t.Amount;
+                } else
+                {
+                    ReconciledBalance += t.Amount;
+                }
+            }
+            ViewBag.ReconciledBalance = ReconciledBalance;
+
             return View(account);
         }
 
@@ -64,9 +79,23 @@ namespace BudgetMaster
             if (ModelState.IsValid)
             {
                 var userHHID = Convert.ToInt32(User.Identity.GetHouseholdId());
+                var house = db.Households.Find(userHHID);
                 account.HouseholdId = userHHID;
                 db.Accounts.Add(account);
                 db.SaveChanges();
+                Transaction transaction = new Transaction()
+                {
+                    PostedDate = DateTimeOffset.Now,
+                    Amount = account.Balance,
+                    Reconciled = true,
+                    Description = "Initial Deposit",
+                    CategoryId = house.Categories.FirstOrDefault(c=>c.Name == "Miscellaneous").Id,
+                    PostedById = User.Identity.GetUserId(),
+                    AccountId = account.Id
+                };
+                db.Transactions.Add(transaction);
+                db.SaveChanges();
+
                 return RedirectToAction("Index", "Accounts");
             }
 

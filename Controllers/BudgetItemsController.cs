@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using BudgetMaster.Models;
 using BudgetMaster.Models.CodeFirst;
 using AspNetIdentity2.Controllers;
+using BudgetMaster.HelperExtensions;
 
 namespace BudgetMaster
 {
@@ -21,8 +22,10 @@ namespace BudgetMaster
         // GET: BudgetItems
         public ActionResult Index()
         {
-            var budgetItems = db.BudgetItems.Include(b => b.Category).Include(b => b.Household);
-            return View(budgetItems.ToList());
+            var userHHID = Convert.ToInt32(User.Identity.GetHouseholdId());
+            var budgetItems = db.BudgetItems.Where(t => t.HouseholdId == userHHID);
+            var model = budgetItems.OrderByDescending(b => b.Amount).ToList();
+            return View(model);
         }
 
         // GET: BudgetItems/Details/5
@@ -41,20 +44,23 @@ namespace BudgetMaster
         //}
 
         // GET: BudgetItems/Create
-        public ActionResult Create()
+        public PartialViewResult _CreatePV()
         {
-            ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Name");
-            ViewBag.HouseholdId = new SelectList(db.Households, "Id", "Name");
-            return View();
+            var userHHID = Convert.ToInt32(User.Identity.GetHouseholdId());
+            var categories = db.Categories.Where(c => c.HouseholdId == userHHID);
+            ViewBag.CategoryId = new SelectList(categories.ToList(), "Id", "Name");
+            return PartialView();
         }
 
         // POST: BudgetItems/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,Amount,Frequency,CategoryId,HouseholdId")] BudgetItem budgetItem)
+        public ActionResult Create([Bind(Include = "Id,Name,Amount,CategoryId,HouseholdId")] BudgetItem budgetItem)
         {
             if (ModelState.IsValid)
             {
+                var userHHID = Convert.ToInt32(User.Identity.GetHouseholdId());
+                budgetItem.HouseholdId = userHHID;
                 db.BudgetItems.Add(budgetItem);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -66,20 +72,13 @@ namespace BudgetMaster
         }
 
         // GET: BudgetItems/Edit/5
-        public ActionResult Edit(int? id)
+        public PartialViewResult _EditPV(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+            var userHHID = Convert.ToInt32(User.Identity.GetHouseholdId());
+            var categories = db.Categories.Where(c => c.HouseholdId == userHHID);
             BudgetItem budgetItem = db.BudgetItems.Find(id);
-            if (budgetItem == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Name", budgetItem.CategoryId);
-            ViewBag.HouseholdId = new SelectList(db.Households, "Id", "Name", budgetItem.HouseholdId);
-            return View(budgetItem);
+            ViewBag.CategoryId = new SelectList(categories.ToList(), "Id", "Name", budgetItem.CategoryId);
+            return PartialView(budgetItem);
         }
 
         // POST: BudgetItems/Edit/5
@@ -94,23 +93,14 @@ namespace BudgetMaster
                 return RedirectToAction("Index");
             }
             ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Name", budgetItem.CategoryId);
-            ViewBag.HouseholdId = new SelectList(db.Households, "Id", "Name", budgetItem.HouseholdId);
             return View(budgetItem);
         }
 
         // GET: BudgetItems/Delete/5
-        public ActionResult Delete(int? id)
+        public PartialViewResult _DeletePV(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
             BudgetItem budgetItem = db.BudgetItems.Find(id);
-            if (budgetItem == null)
-            {
-                return HttpNotFound();
-            }
-            return View(budgetItem);
+            return PartialView(budgetItem);
         }
 
         // POST: BudgetItems/Delete/5
@@ -134,3 +124,4 @@ namespace BudgetMaster
         }
     }
 }
+

@@ -53,9 +53,9 @@
 
     </dl>
 
-    @using (Html.BeginForm()) {
+    @using (Html.BeginForm("Delete","BudgetItems")) {
         @Html.AntiForgeryToken()
-
+        @Html.HiddenFor(model => model.Id)
         <div class="form-actions no-color">
             <input type="submit" value="Delete" class="btn btn-default" /> |
             @Html.ActionLink("Back to List", "Index")

@@ -29,10 +29,10 @@ namespace BudgetMaster.Controllers
         }
 
         // GET: Categories/Create
-        public ActionResult Create()
+        public PartialViewResult _CreatePV()
         {
             ViewBag.HouseholdId = new SelectList(db.Households, "Id", "Name");
-            return View();
+            return PartialView();
         }
 
         // POST: Categories/Create
@@ -54,19 +54,11 @@ namespace BudgetMaster.Controllers
         }
 
         // GET: Categories/Edit/5
-        public ActionResult Edit(int? id)
+        public PartialViewResult _EditPV(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
             Category category = db.Categories.Find(id);
-            if (category == null)
-            {
-                return HttpNotFound();
-            }
             ViewBag.HouseholdId = new SelectList(db.Households, "Id", "Name", category.HouseholdId);
-            return View(category);
+            return PartialView(category);
         }
 
         // POST: Categories/Edit/5
@@ -85,18 +77,10 @@ namespace BudgetMaster.Controllers
         }
 
         // GET: Categories/Delete/5
-        public ActionResult Delete(int? id)
+        public PartialViewResult _DeletePV(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
             Category category = db.Categories.Find(id);
-            if (category == null)
-            {
-                return HttpNotFound();
-            }
-            return View(category);
+            return PartialView(category);
         }
 
         // POST: Categories/Delete/5

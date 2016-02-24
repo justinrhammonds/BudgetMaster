@@ -105,6 +105,20 @@ namespace BudgetMaster.HelperExtensions
 
             db.SaveChanges();
         }
+
+        public static decimal GetBalance(this decimal amount, string type)
+        {
+            decimal Balance = 0;
+            if (type == "Expense")
+            {
+                Balance -= amount;
+            }
+            else
+            {
+                Balance += amount;
+            }
+            return Balance;
+        }
     }
 
 }

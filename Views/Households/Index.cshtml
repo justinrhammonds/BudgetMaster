@@ -1,4 +1,4 @@
-﻿@model BudgetMaster.Models.CodeFirst.Household
+﻿@model BudgetMaster.Models.DashboardVM
 
 @{
     ViewBag.Title = "Details";
@@ -11,13 +11,14 @@
                 Current Account Balances
             </div>
             <div class="panel-body">
-                @if (Model.Accounts.Count() == 0)
+                @if (Model.Household.Accounts.Count() == 0)
                 {
                 <p>You currently have no accounts created. <a href="@Url.Action("Index","Accounts")">Click here to create a new account.</a></p>
                 }
-                @foreach (var account in Model.Accounts)
+                @foreach (var account in Model.RecBalVM)
                 {
-                    <p>@account.Name:  $@account.Balance</p>
+                    <div>@account.Account.Name: $@account.Account.Balance</div>  
+                    <div>(Reconciled Balance: $@account.RecBal)</div>
                 }
             </div>
         </div>
@@ -26,7 +27,7 @@
                 Household Members
             </div>
             <div class="panel-body">
-                @foreach (var user in Model.Users)
+                @foreach (var user in Model.Household.Users)
                 {
                     <p>@user.FirstName @user.LastName</p>
                 }
@@ -67,7 +68,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var transaction in Model.Accounts.SelectMany(a => a.Transactions))
+                                @foreach (var transaction in Model.Household.Accounts.SelectMany(a => a.Transactions))
                                 {
                                     var textColor = transaction.Category.Type == "Expense" ? "text-warning" : "";
                                     var amount = transaction.Category.Type == "Expense" ? "- $" + @transaction.Amount : "+ $" + @transaction.Amount;
@@ -116,5 +117,18 @@
         $("#leave-hh").click(function () {
             $("#hh-manage").load("Households/_LeavePV");
         })
+
+        $.post('@Url.Action("GetChart","Households")').then(function (response) {
+            new Morris.Bar({
+                element: 'morris-bar-chart',
+                data: response,
+                xkey: 'category',
+                ykeys: ['budgeted', 'actual'],
+                labels: ['Budgeted', 'Actual'],
+                resize: true
+            });
+        });
+
+
     </script>
 }

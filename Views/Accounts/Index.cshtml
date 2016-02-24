@@ -19,25 +19,28 @@
                 }
                 else
                 {
+                    <table>
+                        <tr>
+                            <th>Account Name</th>
+                            <th>Current Balance</th>
+                            <th>Details/Edit/Delete</th>
+                        </tr>
 
-                    foreach (var item in Model)
-                    {
-                        <p>
-                            <strong>
-                                @Html.DisplayFor(modelItem => item.Name)
-                            </strong>
-                            <span>
-                                Balance: 
-                                $@Html.DisplayFor(modelItem => item.Balance)
-                            </span>
-                            <span>
+
+                        @foreach (var item in Model) {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                            <td>$@Html.DisplayFor(modelItem => item.Balance)</td>
+                            <td>
+                                <a class="detailsView" href=@Url.Action("Details", "Accounts", new { id = item.Id })><i class="fa fa-list-ul"></i></a>
                                 <button class="btn editPV" data-id=@item.Id><i class="fa fa-pencil"></i></button>
                                 <button class="btn deletePV" data-id=@item.Id><i class="fa fa-trash"></i></button>
-                                <a class="detailsView" href=@Url.Action("Details", "Accounts", new { id=item.Id })><i class="fa fa-list-ul"></i></a>
-                            </span>
-                        </p>
-                    }
 
+                            </td>
+                        </tr>
+                         }
+
+                    </table>
                 }
 
             </div>

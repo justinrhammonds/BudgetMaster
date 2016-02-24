@@ -8,6 +8,7 @@ using System.Web.Mvc;
 namespace BudgetMaster.Controllers
 {
     [RequireHttps]
+    [AllowAnonymous]
     public class HomeController : ApplicationBaseController
     {
         public ActionResult Index()

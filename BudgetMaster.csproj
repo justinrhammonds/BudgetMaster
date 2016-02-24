@@ -235,8 +235,10 @@
     <Compile Include="Models\CodeFirst\Household.cs" />
     <Compile Include="Models\CodeFirst\Invite.cs" />
     <Compile Include="Models\CodeFirst\Transaction.cs" />
+    <Compile Include="Models\DashboardVM.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\RecBalVM.cs" />
     <Compile Include="Models\StringUtilities.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -445,6 +447,12 @@
     <Content Include="Views\Manage\_ManageDisplayNamePV.cshtml" />
     <Content Include="Views\Manage\_ChangePasswordPV.cshtml" />
     <Content Include="Views\Manage\_SetPasswordPV.cshtml" />
+    <Content Include="Views\BudgetItems\_CreatePV.cshtml" />
+    <Content Include="Views\BudgetItems\_DeletePV.cshtml" />
+    <Content Include="Views\BudgetItems\_EditPV.cshtml" />
+    <Content Include="Views\Categories\_CreatePV.cshtml" />
+    <Content Include="Views\Categories\_DeletePV.cshtml" />
+    <Content Include="Views\Categories\_EditPV.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
