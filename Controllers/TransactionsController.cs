@@ -50,19 +50,20 @@ namespace BudgetMaster.Controllers
         {
             //returns a partial view containing a list of HH accounts and a list of HH categories (for dropdowns
             var userHHID = Convert.ToInt32(User.Identity.GetHouseholdId());
-            var accounts = db.Accounts.Where(a => a.HouseholdId == userHHID);
-            var categories = db.Categories.Where(c => c.HouseholdId == userHHID);
-            Transaction tr = new Transaction();
-            tr.AccountId = 0;
-            if (id != null)
-            {
-                TempData["Redirect"] = "AccountDetails";
-                ViewBag.Account = id;
-                tr.AccountId = (int)id;
-            }
+            var accounts = db.Accounts.Where(a => a.HouseholdId == userHHID && a.IsDeleted == false);
+            var categories = db.Categories.Where(c => c.HouseholdId == userHHID && c.IsDeleted == false);
+            //Transaction tr = new Transaction();
+            //tr.Amount = 
+            //tr.AccountId = 0;
+            //if (id != null)
+            //{
+            //    TempData["Redirect"] = "AccountDetails";
+            //    ViewBag.Account = id;
+            //    tr.AccountId = (int)id;
+            //}
             ViewBag.AccountId = new SelectList(accounts.ToList(), "Id", "Name");
             ViewBag.CategoryId = new SelectList(categories.ToList(), "Id", "Name");
-            return PartialView(tr);
+            return PartialView(/*tr*/);
         }
 
         // POST: Transactions/Create
@@ -96,7 +97,7 @@ namespace BudgetMaster.Controllers
         {
             //returns a partial view (for this particular transaction) containing a list of HH accounts and a list of HH categories (for dropdowns
             var userHHID = Convert.ToInt32(User.Identity.GetHouseholdId());
-            var categories = db.Categories.Where(c => c.HouseholdId == userHHID);
+            var categories = db.Categories.Where(c => c.HouseholdId == userHHID && c.IsDeleted == false);
             Transaction transaction = db.Transactions.Find(id);
             ViewBag.CategoryId = new SelectList(categories.ToList(), "Id", "Name", transaction.CategoryId);
             return PartialView(transaction);

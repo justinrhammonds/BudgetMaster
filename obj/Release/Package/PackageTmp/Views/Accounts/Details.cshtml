@@ -5,9 +5,13 @@
 }
 
 <div class="col-xs-12">
+    <div id="transactionPV"></div>
     <div class="panel panel-default">
         <div class="panel-heading">
-            @Model.Name<span class="pull-right"><em>Balance: $@Model.Balance</em></span>
+            <span>@Model.Name</span><em>Balance: $@Model.Balance</em> <span>@ViewBag.ReconciledBalance</span>
+            <div class="pull-right">
+                <button class="btn createPV" data-id=@Model.Id>Create New Transaction</button>
+            </div>
         </div>
 
         <div class="panel-body">
@@ -20,7 +24,7 @@
                             <th>Category</th>
                             <th>Posted By</th>
                             <th>Amount</th>
-
+                            <th>Edit/Delete</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -32,8 +36,16 @@
                                 <td>@transaction.PostedDate.ToString("M/dd/yy")</td>
                                 <td>@transaction.Description</td>
                                 <td>@transaction.Category.Name</td>
-                                <td>@transaction.PostedBy.FirstName</td>
+                                @*<td>@transaction.PostedBy.FirstName</td>*@
                                 <td style="color:@color">@amount</td>
+                                <td>
+                                    <span>
+                                        @*REQ: on click, request made for EDIT PARTIAL VIEW matching the transaction.Id*@
+                                        <button class="btn editPV" data-id=@transaction.Id><i class="fa fa-pencil"></i></button>
+                                        @*REQ: on click, request made for DELETE PARTIAL VIEW matching the transaction.Id*@
+                                        <button class="btn deletePV" data-id=@transaction.Id><i class="fa fa-trash"></i></button>
+                                    </span>
+                                </td>
                             </tr>
                         }
                     </tbody>
@@ -42,4 +54,26 @@
         </div>
     </div>
 </div>
+@section Scripts {
+    <script>
+        $(".createPV").click(function () {
+            $("#transactionPV").load('/Transactions/_CreatePV/' + $(this).data('id'));
+            
+            //will it work to run the code from below right here, in the same code block?
+        });
+        //$("#transactionPV").load(function () {
+        //    $("#_CreateDropDown").hide();
+        //});
+        //$("#_CreateDropDown").on("load", function () { //should this be on load or ready?
+        //    $("#_CreateDropDown").hide(); //hide the dropdown field
+        //});
+        //on load of transactionPV, hide dropdown for _CreatePV - (AccountId)
+        $(".editPV").click(function () {
+            $("#transactionPV").load('/Transactions/_EditPV/' + $(this).data('id'));
+        });
+        $(".deletePV").click(function () {
+            $("#transactionPV").load('/Transactions/_DeletePV/' + $(this).data('id'));
+        });
+    </script>
+}
 

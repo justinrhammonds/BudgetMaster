@@ -48,7 +48,7 @@
         </div>
         <div class="row">
             <div class="form-group col-sm-4">
-                @Html.LabelFor(model => model.CategoryId, "CategoryId", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.ActionLink("Need a Different Category?","Index","Categories",null, new { @class="strong" })
                 <div>
                     @* On view, DropDownList is populated by _CreatePV PartialViewResult in Transactions controller. On submit, post to transactions.CategoryId property in Transactions Model *@
                     @Html.DropDownList("CategoryId", null,"--Select a Category--", htmlAttributes: new { @class = "form-control" })
@@ -57,12 +57,19 @@
             </div>
 
             <div class="form-group col-sm-4">
-                @Html.LabelFor(model => model.AccountId, "AccountId", htmlAttributes: new { @class = "control-label col-md-2" })
-                <div>
-                    @* On view, DropDownList is populated by _CreatePV PartialViewResult in Transactions controller. On submit, post to transactions.AccountId property in Transactions Model *@
-                    @Html.DropDownList("AccountId", null,"--Select an Account--", htmlAttributes: new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.AccountId, "", new { @class = "text-danger" })
-                </div>
+                @if (Model.AccountId == 0)
+                {
+                    @Html.LabelFor(model => model.AccountId, "AccountId", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div>
+                        @* On view, DropDownList is populated by _CreatePV PartialViewResult in Transactions controller. On submit, post to transactions.AccountId property in Transactions Model *@
+                        @Html.DropDownList("AccountId", null, "--Select an Account--", htmlAttributes: new { @class = "form-control"@*, @id="_CreateDropDown"*@ })
+                        @Html.ValidationMessageFor(model => model.AccountId, "", new { @class = "text-danger" })
+                    </div>
+                }
+                else
+                {
+                    <input type="hidden" name="AccountId" value="@Model.AccountId" />
+                }
             </div>
         </div>
 

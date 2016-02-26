@@ -6,8 +6,13 @@ using System.Web;
 
 namespace BudgetMaster.Models.CodeFirst
 {
-    public class Category   
+    public class Category
     {
+        public Category()
+        {
+            this.Transactions = new HashSet<Transaction>();
+            this.BudgetItems = new HashSet<BudgetItem>();
+        }
 
         public int Id { get; set; }
         [Required]
@@ -15,7 +20,10 @@ namespace BudgetMaster.Models.CodeFirst
         [Required]
         public string Type { get; set; }
         public int? HouseholdId { get; set; }
+        public bool IsDeleted { get; set; }
 
         public virtual Household Household { get; set; }
+        public virtual ICollection<Transaction> Transactions { get; set; }
+        public virtual ICollection<BudgetItem> BudgetItems { get; set; }
     }
 }

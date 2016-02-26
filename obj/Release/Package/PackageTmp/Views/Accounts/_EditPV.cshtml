@@ -17,6 +17,7 @@
         <div class="form-group col-xs-12">
             <input type="hidden" name="Id" value="@Model.Id" />
             <input type="hidden" name="HouseholdId" value="@Model.HouseholdId" />
+            <input type="hidden" name="Balance" value="@Model.Balance" />
             @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
             @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
         </div>

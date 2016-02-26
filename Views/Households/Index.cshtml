@@ -1,9 +1,9 @@
 ﻿@model BudgetMaster.Models.DashboardVM
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Index";
 }
-<div class="text-success"><h4>@ViewBag.Message</h4></div>
+
 <div class="row">
     <div class="col-sm-3">
         <div class="panel panel-default">
@@ -22,32 +22,7 @@
                 }
             </div>
         </div>
-        <div id="hh-manage" class="panel panel-default">
-            <div class="panel-heading">
-                Household Members
-            </div>
-            <div class="panel-body">
-                @foreach (var user in Model.Household.Users)
-                {
-                    <p>@user.FirstName @user.LastName</p>
-                }
-                <span id="leave-hh">[leave this household]</span>
-                <hr />
-                @using (Html.BeginForm("Invite", "Households"))
-                {
-                    @Html.AntiForgeryToken()
-                    <label class="strong" for="Email">Invite a New Member:</label>
-                    <div class="input-group custom-search-form">
-                        <input type="text" name="Email" class="form-control" placeholder="invite@domain.com">
-                        <span class="input-group-btn">
-                            <button class="btn btn-default" type="submit">
-                                <i class="fa fa-plus"></i>
-                            </button>
-                        </span>
-                    </div>
-                }
-            </div>
-        </div>
+        
     </div>
         <div class="col-sm-9">
             <div class="panel panel-default">
@@ -99,7 +74,7 @@
     <div class="col-sm-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                Budget vs. Actual Spending
+                Monthly Budget vs. Monthly Expenses
             </div>
             <!-- /.panel-heading -->
             <div class="panel-body">
@@ -110,25 +85,34 @@
         <!-- /.panel -->
     </div>
 </div>
+<div id="morris-donut-chart"></div>
 
 @section Scripts {
     <script>
 
-        $("#leave-hh").click(function () {
-            $("#hh-manage").load("Households/_LeavePV");
-        })
-
-        $.post('@Url.Action("GetChart","Households")').then(function (response) {
+        $.post('@Url.Action("GetCharts","Households")').then(function (response) {
             new Morris.Bar({
                 element: 'morris-bar-chart',
-                data: response,
+                data: response.carBarList,
                 xkey: 'category',
                 ykeys: ['budgeted', 'actual'],
                 labels: ['Budgeted', 'Actual'],
+                resize: true,
+                xLabelMargin: 2,
+                gridTextColor: '#555',
+                barColors: ['#331c16', '#2d5a2d'],
+                xLabelAngle: 45,
+                gridTextFamily: 'Montserrat',
+                gridTextSize: 10
+            });
+
+            new Morris.Donut({
+                element: 'morris-donut-chart',
+                data: response.donutList,
+                formatter: function (y, data) { return '$' + y },
                 resize: true
             });
         });
-
 
     </script>
 }

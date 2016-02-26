@@ -24,7 +24,7 @@ namespace BudgetMaster.Controllers
         public ActionResult Index()
         {
             var userHHID = Convert.ToInt32(User.Identity.GetHouseholdId());
-            var categories = db.Categories.Where(c => c.HouseholdId == userHHID);
+            var categories = db.Categories.Where(c => c.HouseholdId == userHHID && c.IsDeleted == false);
             return View(categories.ToList());
         }
 
@@ -89,7 +89,8 @@ namespace BudgetMaster.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Category category = db.Categories.Find(id);
-            db.Categories.Remove(category);
+            category.IsDeleted = true;
+            //db.Categories.Remove(category);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

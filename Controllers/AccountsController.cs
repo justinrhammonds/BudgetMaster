@@ -25,7 +25,7 @@ namespace BudgetMaster
         public ActionResult Index()
         {
             var userHHID = Convert.ToInt32(User.Identity.GetHouseholdId());
-            var accounts = db.Accounts.Where(a => a.HouseholdId == userHHID);
+            var accounts = db.Accounts.Where(a => a.HouseholdId == userHHID && a.IsDeleted == false);
             var model = accounts.ToList();
             ViewBag.HouseholdId = userHHID;
             return View(model);
@@ -89,7 +89,7 @@ namespace BudgetMaster
                     Amount = account.Balance,
                     Reconciled = true,
                     Description = "Initial Deposit",
-                    CategoryId = house.Categories.FirstOrDefault(c=>c.Name == "Miscellaneous").Id,
+                    CategoryId = house.Categories.FirstOrDefault(c=>c.Name == "Misc. Income").Id,
                     PostedById = User.Identity.GetUserId(),
                     AccountId = account.Id
                 };
@@ -154,7 +154,8 @@ namespace BudgetMaster
         public ActionResult DeleteConfirmed(int id)
         {
             Account account = db.Accounts.Find(id);
-            db.Accounts.Remove(account);
+            account.IsDeleted = true;
+            //db.Accounts.Remove(account);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

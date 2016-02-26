@@ -47,7 +47,7 @@ namespace BudgetMaster
         public PartialViewResult _CreatePV()
         {
             var userHHID = Convert.ToInt32(User.Identity.GetHouseholdId());
-            var categories = db.Categories.Where(c => c.HouseholdId == userHHID);
+            var categories = db.Categories.Where(c => c.HouseholdId == userHHID && c.IsDeleted == false);
             ViewBag.CategoryId = new SelectList(categories.ToList(), "Id", "Name");
             return PartialView();
         }
@@ -75,7 +75,7 @@ namespace BudgetMaster
         public PartialViewResult _EditPV(int? id)
         {
             var userHHID = Convert.ToInt32(User.Identity.GetHouseholdId());
-            var categories = db.Categories.Where(c => c.HouseholdId == userHHID);
+            var categories = db.Categories.Where(c => c.HouseholdId == userHHID && c.IsDeleted == false);
             BudgetItem budgetItem = db.BudgetItems.Find(id);
             ViewBag.CategoryId = new SelectList(categories.ToList(), "Id", "Name", budgetItem.CategoryId);
             return PartialView(budgetItem);

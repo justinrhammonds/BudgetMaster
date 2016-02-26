@@ -17,6 +17,7 @@ namespace BudgetMaster.Models.CodeFirst
         [Required]
         public string Name { get; set; }
         public decimal Balance { get; set; }
+        public bool IsDeleted { get; set; }
 
         public int HouseholdId { get; set; }
 

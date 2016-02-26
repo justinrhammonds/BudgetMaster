@@ -55,6 +55,13 @@ strong, th, .strong {
     margin-top: 0;
 }
 
+#morris-bar-chart {
+    height:400px;
+}
+
+#morris-donut-chart {
+    height:300px;
+}
 
 .panel-body {
     background-color: #f8f8f8 !important;

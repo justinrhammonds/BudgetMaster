@@ -77,7 +77,6 @@ c:\users\justin\documents\visual studio 2015\Projects\BudgetMaster\BudgetMaster\
 c:\users\justin\documents\visual studio 2015\Projects\BudgetMaster\BudgetMaster\bin\Microsoft.Owin.Security.Google.xml
 c:\users\justin\documents\visual studio 2015\Projects\BudgetMaster\BudgetMaster\bin\Microsoft.Owin.Security.Twitter.xml
 c:\users\justin\documents\visual studio 2015\Projects\BudgetMaster\BudgetMaster\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
-c:\users\justin\documents\visual studio 2015\Projects\BudgetMaster\BudgetMaster\obj\Debug\BudgetMaster.csprojResolveAssemblyReference.cache
 c:\users\justin\documents\visual studio 2015\Projects\BudgetMaster\BudgetMaster\obj\Debug\BudgetMaster.dll
 c:\users\justin\documents\visual studio 2015\Projects\BudgetMaster\BudgetMaster\obj\Debug\BudgetMaster.pdb
 C:\Users\Justin\documents\visual studio 2015\Projects\BudgetMaster\BudgetMaster\bin\SendGrid.dll
@@ -85,3 +84,4 @@ C:\Users\Justin\documents\visual studio 2015\Projects\BudgetMaster\BudgetMaster\
 C:\Users\Justin\documents\visual studio 2015\Projects\BudgetMaster\BudgetMaster\bin\SendGridMail.dll
 C:\Users\Justin\documents\visual studio 2015\Projects\BudgetMaster\BudgetMaster\bin\System.Net.Http.Formatting.dll
 C:\Users\Justin\documents\visual studio 2015\Projects\BudgetMaster\BudgetMaster\bin\System.Net.Http.Formatting.xml
+C:\Users\Justin\documents\visual studio 2015\Projects\BudgetMaster\BudgetMaster\obj\Debug\BudgetMaster.csprojResolveAssemblyReference.cache

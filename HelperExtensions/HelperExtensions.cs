@@ -7,13 +7,19 @@ using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Web;
-using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
+using System.Threading.Tasks;
 
 namespace BudgetMaster.HelperExtensions
 {
 
-    public class HelperExtensions
+    public static class HelperExtensions
     {
+        public static async Task RefreshAuthentication(this HttpContextBase context, ApplicationUser user)
+        {
+            context.GetOwinContext().Authentication.SignOut();
+            await context.GetOwinContext().Get<ApplicationSignInManager>().SignInAsync(user, isPersistent: false, rememberBrowser: false);
+        }
     }
 
     public static class HHIDExtension
@@ -36,6 +42,12 @@ namespace BudgetMaster.HelperExtensions
             }
         }
 
+        public static bool IsInHousehold(this IIdentity user)
+        {
+            var cUser = (ClaimsIdentity)user;
+            var hid = cUser.Claims.FirstOrDefault(c => c.Type == "HouseholdId");
+            return (hid != null && !string.IsNullOrWhiteSpace(hid.Value));
+        }
     }
 
     public static class CatExtension

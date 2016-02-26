@@ -9,6 +9,7 @@ using BudgetMaster.HelperExtensions;
 using System.Collections;
 using Newtonsoft.Json;
 using System;
+using System.Threading.Tasks;
 
 namespace BudgetMaster.Controllers
 {
@@ -18,60 +19,68 @@ namespace BudgetMaster.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
+
         [HttpGet]
-        // GET: Households/Details/5
+        // GET: Households/Index/5
         public ActionResult Index()
         {
             var user = db.Users.Find(User.Identity.GetUserId());
             Household household = db.Households.Include("Accounts").FirstOrDefault(h => h.Id == user.HouseholdId);
-            var ReconciledBalance = household.Accounts.SelectMany(a => a.Transactions).Where(t => t.Reconciled == true).Select(m => m.Amount).Sum();
-            //RecBalVM recVM = new RecBalVM();
-            //recVM.Account = acct;
-            //recVM.RecBal;
-            //return View(recVM);
 
-            var accountList = from acc in household.Accounts
-                          let inc = (from tr in acc.Transactions
-                                     where (tr.Reconciled == true && tr.Category.Type == "Income")
-                                     select tr.Amount).Sum()
-                          let exp = (from tr in acc.Transactions
-                                     where (tr.Reconciled == true && tr.Category.Type == "Expense")
-                                     select tr.Amount).Sum()
-                          select new RecBalVM()
-                          {
-                              Account = acc,
-                              RecBal = inc - exp
-                          };
 
-            DashboardVM dashboardVM = new DashboardVM()
+            if (household != null)
             {
-                Household = household,
-                RecBalVM = accountList.ToList()
-            };
+                var ReconciledBalance = household.Accounts.SelectMany(a => a.Transactions).Where(t => t.Reconciled == true).Select(m => m.Amount).Sum();
 
-            //ViewBag.ReconciledBalance = accountList;
-            ViewBag.Message = TempData["Message"];
-            if (household == null)
-            {
-                return HttpNotFound();
+                var accountList = from acc in household.Accounts
+                                  let inc = (from tr in acc.Transactions
+                                             where (tr.Reconciled == true && tr.Category.Type == "Income")
+                                             select tr.Amount).Sum()
+                                  let exp = (from tr in acc.Transactions
+                                             where (tr.Reconciled == true && tr.Category.Type == "Expense")
+                                             select tr.Amount).Sum()
+                                  select new RecBalVM()
+                                  {
+                                      Account = acc,
+                                      RecBal = inc - exp
+                                  };
+
+                DashboardVM dashboardVM = new DashboardVM()
+                {
+                    Household = household,
+                    RecBalVM = accountList.ToList()
+                };
+
+                ViewBag.Message = TempData["Message"];
+
+                return View(dashboardVM);
             }
 
-            return View(dashboardVM);
+            return RedirectToAction("Create", "Households");
+
         }
 
-        [HttpGet]
-        // GET: Households/GetChart
-        public ActionResult GetChart()
+        //GET: Households/Manage
+        public ActionResult Manage()
         {
-            var hh = db.Households.Find(User.Identity.GetHouseholdId());
-            var trans = db.Transactions.Where(t => t.Account.HouseholdId == hh.Id);
+            return View();
+        }
+
+        
+        // GET: Households/GetCharts
+        public ActionResult GetCharts()
+        {
+            var id = User.Identity.GetHouseholdId();
+            var hhid = Convert.ToInt32(id);
+            var hh = db.Households.Find(hhid);
+
             var catBarList = (from cat in hh.Categories
-                              let sumBud = (from bud in hh.BudgetItems
+                              where cat.Type == "Expense" && cat.IsDeleted == false
+                              let sumBud = (from bud in cat.BudgetItems
                                             select bud.Amount
                                             ).DefaultIfEmpty().Sum()
-                              let sumAct = (from tran in trans
-                                            where 
-                                            tran.PostedDate.Year == DateTime.Now.Year &&
+                              let sumAct = (from tran in cat.Transactions
+                                            where tran.PostedDate.Year == DateTime.Now.Year &&
                                             tran.PostedDate.Month == DateTime.Now.Month 
                                             select tran.Amount).DefaultIfEmpty().Sum()
                               select new
@@ -81,23 +90,30 @@ namespace BudgetMaster.Controllers
                                   actual = sumAct
                               }).ToArray();
 
-            return Content(JsonConvert.SerializeObject(catBarList), "application/json");
+            var inc = db.Transactions.Where(t => t.Account.HouseholdId == hh.Id &&
+                                            t.Category.Type == "Income" &&
+                                            t.PostedDate.Year == DateTime.Now.Year &&
+                                            t.PostedDate.Month == DateTime.Now.Month)
+                                            .Select(t => t.Amount).DefaultIfEmpty().Sum();
+            var exp = db.Transactions.Where(t => t.Account.HouseholdId == hh.Id &&
+                                            t.Category.Type == "Expense" &&
+                                            t.PostedDate.Year == DateTime.Now.Year &&
+                                            t.PostedDate.Month == DateTime.Now.Month)
+                                            .Select(t => t.Amount).DefaultIfEmpty().Sum();
 
-            //var accountList = (from acc in household.Accounts
-            //                   let inc = (from tr in acc.Transactions
-            //                              where (tr.Reconciled == true && tr.Category.Type == "Income")
-            //                              select tr.Amount).Sum()
-            //                   let exp = (from tr in acc.Transactions
-            //                              where (tr.Reconciled == true && tr.Category.Type == "Expense")
-            //                              select tr.Amount).Sum()
-            //                   select new RecBalVM()
-            //                   {
-            //                       Account = acc,
-            //                       RecBal = inc - exp
-            //                   }).ToArray();
+            var donutList = new[] {  new { label = "Income", value = (int)inc },
+                                new { label = "Expenses", value = (int)exp } };
+            var data = new
+            {
+                donutList = donutList,
+                carBarList = catBarList
+            };
+
+            return Content(JsonConvert.SerializeObject(data), "application/json");
         }
 
         [HttpGet]
+
         // GET: Households/Create
         public ActionResult Create()
         {
@@ -107,7 +123,7 @@ namespace BudgetMaster.Controllers
         // POST: Households/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name")] Household household)
+        public async Task<ActionResult> Create([Bind(Include = "Id,Name")] Household household)
         {
             if (ModelState.IsValid)
             {
@@ -117,12 +133,13 @@ namespace BudgetMaster.Controllers
                     db.Households.Add(household);
                     db.SaveChanges();
                     var hh = db.Households.FirstOrDefault(h => h.Name == household.Name);
-                    user = db.Users.Find(User.Identity.GetUserId());
+                    //user = db.Users.Find(User.Identity.GetUserId());
                     user.HouseholdId = hh.Id;
                     household.PopulateCategories();
                     db.SaveChanges();
 
-                    return RedirectToAction("Index", new { id = hh.Id });
+                    await ControllerContext.HttpContext.RefreshAuthentication(user);
+                    return RedirectToAction("Index");
                 }
                 return RedirectToAction("Index", "Households", new { id = user.HouseholdId });
             }
@@ -173,8 +190,8 @@ namespace BudgetMaster.Controllers
         }
 
         [HttpPost]
-        // POST: Households/Join/5
-        public ActionResult Join(string Code)
+        [AuthorizeHouseholdRequired]
+        public async Task<ActionResult> Join(string Code)
         {
             if (ModelState.IsValid)
             {
@@ -185,8 +202,10 @@ namespace BudgetMaster.Controllers
                     user.HouseholdId = invitation.HouseholdId;
                     db.Invites.Remove(invitation);
                     db.SaveChanges();
+                    await ControllerContext.HttpContext.RefreshAuthentication(user);
                     return RedirectToAction("Index", "Households", new { id = user.HouseholdId });
                 }
+                
                 return RedirectToAction("Index", "Households"); 
             }
             return View();
@@ -199,15 +218,19 @@ namespace BudgetMaster.Controllers
             return PartialView();
         }
 
-        [HttpPost]
         // POST: Households/Leave
-        public ActionResult Leave()
+        [HttpPost]
+        [AuthorizeHouseholdRequired]
+        public async Task<ActionResult> Leave()
         {
             if (ModelState.IsValid)
             {
                 var user = db.Users.Find(User.Identity.GetUserId());
                 user.HouseholdId = null;
                 db.SaveChanges();
+
+                await ControllerContext.HttpContext.RefreshAuthentication(user);
+
                 return RedirectToAction("Create", "Households");
             }
             return View();
