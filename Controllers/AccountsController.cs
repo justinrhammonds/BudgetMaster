@@ -22,30 +22,30 @@ namespace BudgetMaster
 
         // GET: Accounts
         [Authorize]
-        public ActionResult Index()
+        public PartialViewResult _AccIndexPV()
         {
             var userHHID = Convert.ToInt32(User.Identity.GetHouseholdId());
             var accounts = db.Accounts.Where(a => a.HouseholdId == userHHID && a.IsDeleted == false);
             var model = accounts.ToList();
             ViewBag.HouseholdId = userHHID;
-            return View(model);
+            return PartialView(model);
         }
 
         // GET: Accounts/Details/5
-        public ActionResult Details(int? id)
+        public PartialViewResult _AccDetailsPV(int? id)
         {
             Account account = db.Accounts.Find(id);
             //var userHHID = Convert.ToInt32(User.Identity.GetHouseholdId());
             var transactions = db.Transactions.Where(t => t.AccountId == account.Id).ToList();
 
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            if (account == null)
-            {
-                return HttpNotFound();
-            }
+            //if (id == null)
+            //{
+            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            //}
+            //if (account == null)
+            //{
+            //    return HttpNotFound();
+            //}
 
             var ReconciledTransactions = transactions.Where(t => t.Reconciled == true);
             decimal ReconciledBalance = 0;
@@ -61,11 +61,11 @@ namespace BudgetMaster
             }
             ViewBag.ReconciledBalance = ReconciledBalance;
 
-            return View(account);
+            return PartialView(account);
         }
 
         // GET: Accounts/Create
-        public ActionResult _CreatePV()
+        public PartialViewResult _CreatePV()
         {
             ViewBag.HouseholdId = new SelectList(db.Households, "Id", "Name");
             return PartialView();
@@ -96,7 +96,7 @@ namespace BudgetMaster
                 db.Transactions.Add(transaction);
                 db.SaveChanges();
 
-                return RedirectToAction("Index", "Accounts");
+                return RedirectToAction("Index", "Transactions");
             }
 
             ViewBag.HouseholdId = new SelectList(db.Households, "Id", "Name", account.HouseholdId);
@@ -127,7 +127,7 @@ namespace BudgetMaster
             {
                 db.Entry(account).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Transactions");
             }
             ViewBag.HouseholdId = new SelectList(db.Households, "Id", "Name", account.HouseholdId);
             return View(account);
@@ -157,7 +157,7 @@ namespace BudgetMaster
             account.IsDeleted = true;
             //db.Accounts.Remove(account);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "Transactions");
         }
 
         protected override void Dispose(bool disposing)

@@ -1,0 +1,53 @@
+﻿@model IEnumerable<BudgetMaster.Models.CodeFirst.Account>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="col-sm-8">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <strong>Manage Your Accounts</strong>
+        </div>
+        <!-- /.panel-heading -->
+        <div class="panel-body">
+            <div class="list-group">
+                @if (Model.Count() == 0)
+                {
+                    <p>Currently no accounts exist for your household. You can add a new account by submitting the form below.</p>
+                    <hr />
+                }
+                else
+                {
+                    <table class="table table-responsive">
+                        <tr>
+                            <th>Account Name</th>
+                            <th>Current Balance</th>
+                            <th>Details/Edit/Delete</th>
+                        </tr>
+
+
+                        @foreach (var item in Model) {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                            <td>$@Html.DisplayFor(modelItem => item.Balance)</td>
+                            <td>
+                                <button class="btn AccDetailsPV" data-id=@item.Id><i class="fa fa-list-ul"></i></button>
+                                <button class="btn editAccPV" data-id=@item.Id><i class="fa fa-pencil"></i></button>
+                                <button class="btn deleteAccPV" data-id=@item.Id><i class="fa fa-trash"></i></button>
+
+                            </td>
+                        </tr>
+                        }
+
+                    </table>
+                }
+
+            </div>
+        </div>
+    </div>
+</div>
+<div id="hh-partial" class="col-sm-4">
+    @Html.Action("_CreatePV", "Accounts")
+</div>
+

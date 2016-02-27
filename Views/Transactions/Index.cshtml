@@ -7,72 +7,105 @@
 @* ViewBox for Create, Edit, Delete Partial Views  *@
 
 <div class="col-xs-12">
-    <div id="transactionPV">
-        @* GET Create Partial View *@
-        @*@Html.Action("_CreatePV")*@
-    </div>
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <div>
-                <button class="btn createPV" @*data-id=@Model.Id*@>Create New Transaction</button>
-            </div>
+    <div class="container panel panel-default">
+        <div class="row panel-heading">
+            <div class="col-sm-6"><h4>Existing Accounts</h4></div>
         </div>
-        <div class="panel-body">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Account</th>
-                        <th>Category</th>
-                        <th>Date</th>
-                        <th>Amount</th>
-                        <th>Reconciled?</th>
-                        <th>Description</th>
-                        <th>Edit/Delete</th>
-                    </tr>
-                </thead>
-                @* USING THE TRANSACTION MODEL *@
-                @foreach (var item in Model)
-                {
-                    // Transactions that are of Category.Type == "Expense" will have class 'text-warning', and have a (-)
-                    // Transactions that are of Category.Type == "Income" will have no additional class, and have a (+)
-                    var textColor = item.Category.Type == "Expense" ? "text-warning" : "";
-                    var amount = item.Category.Type == "Expense" ? "- $" + @item.Amount : "+ $" + @item.Amount;
-                    <tbody>
+        <div id="smallPV" class="row panel-body">
+            @Html.Action("_AccIndexPV", "Accounts")
+        </div>
+    </div>
+    <div id="midPV"></div>
+    <div class="container panel panel-default">
+        <div class="row panel-heading">
+            <div class="col-sm-8"><h4 id="Acc">Recent Transactions</h4></div>
+            <div id="createTranPV" class="btn btn-success btn-lg col-sm-4 pull-right">Create New Transaction</div>
+        </div>
+        <div id="mainPV" class="row panel-body">
+            <div class="col-xs-12">
+                <table id="DTable" class="table">
+                    <thead>
                         <tr>
-
-                            <td>@Html.DisplayFor(modelItem => item.Account.Name)</td> @*REQ: transaction.Account.Name*@
-                            <td>@Html.DisplayFor(modelItem => item.Category.Name)</td> @*REQ: transaction.Category.Name*@
-                            <td>@item.PostedDate.ToString("M/d/yy")</td> @*REQ: transaction.PostedDate (1/2/16)*@
-                            <td class="@textColor">@amount</td> @*REQ: transaction.Amount (formatted per Expense/Income)*@
-                            <td>@Html.DisplayFor(modelItem => item.Reconciled)</td> @*REQ: transaction.Reconciled (bool)*@
-                            <td>@Html.DisplayFor(modelItem => item.Description)</td> @*REQ: transaction.Account.Name*@
-                            <td>
-                                <span>
-                                    @*REQ: on click, request made for EDIT PARTIAL VIEW matching the transaction.Id*@
-                                    <button class="btn editPV" data-id=@item.Id><i class="fa fa-pencil"></i></button>
-                                    @*REQ: on click, request made for DELETE PARTIAL VIEW matching the transaction.Id*@
-                                    <button class="btn deletePV" data-id=@item.Id><i class="fa fa-trash"></i></button>
-                                </span>
-                            </td>
+                            <th style="display:none">Date</th>
+                            <th>Description</th>
+                            <th>Amount</th>
+                            <th>Account</th>
+                            <th>Category</th>
+                            <th>Reconciled?</th>
+                            <th>Edit/Delete</th>
                         </tr>
-                    </tbody>
-                }
-            </table>
+                    </thead>
+                    @* USING THE TRANSACTION MODEL *@
+                    @foreach (var item in Model)
+                    {
+                        // Transactions that are of Category.Type == "Expense" will have class 'text-warning', and have a (-)
+                        // Transactions that are of Category.Type == "Income" will have no additional class, and have a (+)
+                        var disabledColor = item.Account.IsDeleted == true ? "disabled-color" : "";
+                        var textColor = item.Category.Type == "Expense" ? "text-warning" : "";
+                        var amount = item.Category.Type == "Expense" ? "- $" + @item.Amount : "+ $" + @item.Amount;
+                        <tbody>
+                            <tr class="@disabledColor">
+                                <td style="display:none">@item.PostedDate.ToString("M/d/yy")</td> @*REQ: transaction.PostedDate (1/2/16)*@
+                                <td>@Html.DisplayFor(modelItem => item.Description)</td> @*REQ: transaction.Account.Name*@
+                                <td class="@textColor">@amount</td> @*REQ: transaction.Amount (formatted per Expense/Income)*@
+                                <td>@Html.DisplayFor(modelItem => item.Account.Name)</td> @*REQ: transaction.Account.Name*@
+                                <td>@Html.DisplayFor(modelItem => item.Category.Name)</td> @*REQ: transaction.Category.Name*@
+                                <td>@Html.DisplayFor(modelItem => item.Reconciled)</td> @*REQ: transaction.Reconciled (bool)*@
+                                <td>
+                                    <span>
+                                        @*REQ: on click, request made for EDIT PARTIAL VIEW matching the transaction.Id*@
+                                        <button class="btn editTranPV" data-id=@item.Id><i class="fa fa-pencil"></i></button>
+                                        @*REQ: on click, request made for DELETE PARTIAL VIEW matching the transaction.Id*@
+                                        <button class="btn deleteTranPV" data-id=@item.Id><i class="fa fa-trash"></i></button>
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    }
+                </table>
+            </div>
         </div>
     </div>
 </div>
 
+@section Scripts {
+    <script>
 
-            @section Scripts {
-                <script>
-                    $(".createPV").click(function () {
-                        $("#transactionPV").load('/Transactions/_CreatePV/');
-                    })
-                    $(".editPV").click(function () {
-                        $("#transactionPV").load('/Transactions/_EditPV/' + $(this).data('id'));
-                    })
-                    $(".deletePV").click(function () {
-                        $("#transactionPV").load('/Transactions/_DeletePV/' + $(this).data('id'));
-                    })
-                </script>
-            }
+        $('#DTable').DataTable({
+            "lengthChange": false,
+            responsive: true
+            //columns: [
+            //    { responsivePriority: 6 },
+            //    { responsivePriority: 5 },
+            //    { responsivePriority: 4 },
+            //    { responsivePriority: 3 },
+            //    { responsivePriority: 2 },
+            //    { responsivePriority: 1 }
+            //]
+        });
+
+        $("#createTranPV").click(function () {
+            $("#midPV").load('/Transactions/_CreatePV/');
+        })
+        $(".editTranPV").click(function () {
+            $("#midPV").load('/Transactions/_EditPV/' + $(this).data('id'));
+        })
+        $(".deleteTranPV").click(function () {
+            $("#midPV").load('/Transactions/_DeletePV/' + $(this).data('id'));
+        })
+        //ACCOUNTS
+        $("#createAccPV").click(function () {
+            $("#midPV").load('/Accounts/_CreatePV/');
+        })
+        $(".editAccPV").click(function () {
+            $("#hh-partial").load('/Accounts/_EditPV/' + $(this).data('id'));
+        })
+        $(".deleteAccPV").click(function () {
+            $("#hh-partial").load('/Accounts/_DeletePV/' + $(this).data('id'));
+        })
+        $(".AccDetailsPV").click(function () {
+            $("#DTable").load('/Accounts/_AccDetailsPV/' + $(this).data('id'));
+            $('#DTable').DataTable();
+        })
+    </script>
+}

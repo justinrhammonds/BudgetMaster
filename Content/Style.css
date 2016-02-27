@@ -15,6 +15,14 @@ h1,h2,h3,h4,h5,h6 {
     font-weight:700;
 }
 
+td {
+    padding: 16px 8px !important;
+}
+
+td button {
+    padding:0 10px !important;
+}
+
 .login-partial * {
     padding: 5px 8px;
     font-family: 'Montserrat', sans-serif !important;
@@ -150,25 +158,28 @@ nav {
     padding: 0 !important;
 }
 
-.editPV, .deletePV, .detailsView {
+.editAccPV, 
+.deleteAccPV, 
+.AccDetailsPV,
+.editTranPV, 
+.deleteTranPV {
     padding: 8px;
     background-color:transparent;
     color:#9CB98E;
+    font-size: 1.5em;
 }
 
-.detailsView {
-    position:relative;
-    top:5px;
-}
-
-.editPV:hover,
-.deletePV:hover,
-.detailsView:hover {
+.editAccPV:hover,
+.deleteAccPV:hover,
+.AccDetailsPV:hover,
+.editTranPV:hover,
+.deleteTranPV:hover {
     color: #597b48;
 }
 
-.editPV .fa, .deletePV .fa, .detailsView .fa {
-    font-size:1.5em;
+.AccDetailsPV {
+    position:relative;
+    font-size: 1.5em;
 }
 
 .panel, .btn, .input-group input {
@@ -231,6 +242,15 @@ nav {
 .developer-section img {
     border: 20px solid #4c693d;
     padding:0;
+}
+
+.disabled-color {
+    font-style:italic;
+    color:#aaa;
+}
+
+.btn-footer {
+    padding:0 15px;
 }
 
 @media (min-width: 768px) {

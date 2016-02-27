@@ -92,11 +92,13 @@ namespace BudgetMaster.Controllers
 
             var inc = db.Transactions.Where(t => t.Account.HouseholdId == hh.Id &&
                                             t.Category.Type == "Income" &&
+                                            t.Account.IsDeleted == false &&
                                             t.PostedDate.Year == DateTime.Now.Year &&
                                             t.PostedDate.Month == DateTime.Now.Month)
                                             .Select(t => t.Amount).DefaultIfEmpty().Sum();
             var exp = db.Transactions.Where(t => t.Account.HouseholdId == hh.Id &&
                                             t.Category.Type == "Expense" &&
+                                            t.Account.IsDeleted == false &&
                                             t.PostedDate.Year == DateTime.Now.Year &&
                                             t.PostedDate.Month == DateTime.Now.Month)
                                             .Select(t => t.Amount).DefaultIfEmpty().Sum();

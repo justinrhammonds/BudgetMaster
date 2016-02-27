@@ -15,7 +15,7 @@
                 {
                 <p>You currently have no accounts created. <a href="@Url.Action("Index","Accounts")">Click here to create a new account.</a></p>
                 }
-                @foreach (var account in Model.RecBalVM)
+                @foreach (var account in (Model.RecBalVM).Where(a => a.Account.IsDeleted == false))
                 {
                     <div>@account.Account.Name: $@account.Account.Balance</div>  
                     <div>(Reconciled Balance: $@account.RecBal)</div>
@@ -31,8 +31,7 @@
                 </div>
                 <!-- /.panel-heading -->
                 <div class="panel-body">
-                    <div class="table-responsive">
-                        <table class="table table-hover">
+                        <table id="DTable" class="table table-responsive table-hover">
                             <thead>
                                 <tr>
                                     <th>Date</th>
@@ -43,12 +42,13 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var transaction in Model.Household.Accounts.SelectMany(a => a.Transactions))
+                                @foreach (var transaction in Model.Household.Accounts.SelectMany(a => a.Transactions).Take(10).OrderByDescending(t => t.PostedDate))
                                 {
+                                    var disabledColor = transaction.Account.IsDeleted == true ? "disabled-color" : "";
                                     var textColor = transaction.Category.Type == "Expense" ? "text-warning" : "";
                                     var amount = transaction.Category.Type == "Expense" ? "- $" + @transaction.Amount : "+ $" + @transaction.Amount;
                                     
-                                    <tr>
+                                    <tr class="@disabledColor">
                                         <td>@transaction.PostedDate.ToString("M/dd/yy")</td>
                                         <td>
                                             @transaction.Account.Name @*- @transaction.PostedBy.FirstName*@
@@ -61,7 +61,6 @@
 
                             </tbody>
                         </table>
-                    </div>
                     <!-- /.table-responsive -->
                 </div>
                 <!-- /.panel-body -->
@@ -89,7 +88,7 @@
 
 @section Scripts {
     <script>
-
+        $('#DTable').DataTable();
         $.post('@Url.Action("GetCharts","Households")').then(function (response) {
             new Morris.Bar({
                 element: 'morris-bar-chart',
