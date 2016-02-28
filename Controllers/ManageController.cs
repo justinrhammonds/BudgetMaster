@@ -80,12 +80,12 @@ namespace BudgetMaster.Controllers
 
 
         //PARTIAL VIEW
-        //GET: /Manage/ManageDisplayName
+        //GET: /Manage/_ManageDisplayNamePV
         [HttpGet]
-        public ActionResult ManageDisplayName()
+        public PartialViewResult _ManageDisplayNamePV()
         {
             ApplicationUser user = db.Users.Find(User.Identity.GetUserId());
-            return View(user);
+            return PartialView(user);
         }
 
         // POST: Manage/ManageDisplayName
@@ -244,17 +244,17 @@ namespace BudgetMaster.Controllers
         }
 
         //PARTIAL VIEW
-        // GET: /Manage/ChangePassword
-        public ActionResult ChangePassword()
+        // GET: /Manage/_ChangePasswordPV
+        public PartialViewResult _ChangePasswordPV()
         {
             var user = db.Users.Find(User.Identity.GetUserId());
             if (user.PasswordHash != null)
             {
-                return View();
+                return PartialView();
             }
-            ViewBag.errorMessage = "You currently have no password created for this site, enter a password for this site below.";
-            return RedirectToAction("SetPassword", "Manage");
-
+            //ViewBag.errorMessage = "You currently have no password created for this site, enter a password for this site below.";
+            //return RedirectToAction("SetPassword", "Manage");
+            return PartialView();
         }
 
         //
@@ -283,9 +283,9 @@ namespace BudgetMaster.Controllers
 
         //
         // GET: /Manage/SetPassword
-        public ActionResult SetPassword()
+        public PartialViewResult _SetPasswordPV()
         {
-            return View();
+            return PartialView();
         }
 
         //
@@ -315,7 +315,7 @@ namespace BudgetMaster.Controllers
 
         //PARTIAL VIEW
         // GET: /Manage/ManageLogins
-        public async Task<ActionResult> ManageLogins(ManageMessageId? message)
+        public async Task<PartialViewResult> _ManageLoginsPV(ManageMessageId? message)
         {
             ViewBag.StatusMessage =
                 message == ManageMessageId.RemoveLoginSuccess ? "The external login was removed."
@@ -324,12 +324,12 @@ namespace BudgetMaster.Controllers
             var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
             if (user == null)
             {
-                return View("Error");
+                return PartialView("Error");
             }
             var userLogins = await UserManager.GetLoginsAsync(User.Identity.GetUserId());
             var otherLogins = AuthenticationManager.GetExternalAuthenticationTypes().Where(auth => userLogins.All(ul => auth.AuthenticationType != ul.LoginProvider)).ToList();
             ViewBag.ShowRemoveButton = user.PasswordHash != null || userLogins.Count > 1;
-            return View(new ManageLoginsViewModel
+            return PartialView(new ManageLoginsViewModel
             {
                 CurrentLogins = userLogins,
                 OtherLogins = otherLogins

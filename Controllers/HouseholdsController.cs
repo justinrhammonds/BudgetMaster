@@ -63,7 +63,9 @@ namespace BudgetMaster.Controllers
         //GET: Households/Manage
         public ActionResult Manage()
         {
-            return View();
+            var user = db.Users.Find(User.Identity.GetUserId());
+            Household household = db.Households.Include("Accounts").FirstOrDefault(h => h.Id == user.HouseholdId);
+            return View(household);
         }
 
         

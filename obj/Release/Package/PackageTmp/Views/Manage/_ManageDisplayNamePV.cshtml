@@ -3,8 +3,6 @@
     ViewBag.Title = "ManageDisplayName";
 }
 
-<h2>ManageDisplayName</h2>
-
 @*@using (Html.BeginForm("ManageDisplayName", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
     @Html.AntiForgeryToken()
@@ -30,17 +28,30 @@
     </div>
 }*@
 
-<form action="@Url.Action("ManageDisplayName","Manage")" method="post">
-    @Html.AntiForgeryToken()
-    <div class="form-group">
-        <input type="hidden" class="form-control" name="Id" value="@Model.Id" />
-        <label for="FirstName">First Name:</label>
-        <input class="form-control" name="FirstName" value="@Model.FirstName" />
-        <label for="LastName">Last Name:</label>
-        <input class="form-control" name="LastName" value="@Model.LastName" />
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h4>Change Your Display Name</h4>
     </div>
-    <input type="submit" value="Submit Changes" class="btn btn-default" />
-</form>
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
+    <div class="panel-body">
+        @using (Html.BeginForm("ManageDisplayName", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="Id" value="@Model.Id" />
+            <div class="col-xs-12">
+                <label class="strong" for="FirstName">First Name:</label>
+                <input class="form-control" name="FirstName" value="@Model.FirstName" />
+            </div>
+            <div class="col-xs-12 x-pad-top">
+                <label class="strong" for="LastName">Last Name:</label>
+                <input class="form-control" name="LastName" value="@Model.LastName" />
+            </div>
+            <hr />
+            <div class="col-xs-12">
+                <div class="pull-right">
+                    <input type="submit" value="Change Display Name" class="btn btn-success" />
+                    @Html.ActionLink("Cancel", "Index", "Manage", new { @class = "btn btn-success" })
+                </div>
+            </div>
+        }
+    </div>
+</div>

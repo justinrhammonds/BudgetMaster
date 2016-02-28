@@ -273,10 +273,10 @@
     <Content Include="Content\Style.css" />
     <Content Include="Content\timeline.css" />
     <Content Include="Content\wood-grid.jpg" />
+    <Content Include="favicon-bm.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="jh-favicon.ico" />
     <Content Include="Scripts\ai.0.15.0-build58334.js" />
     <Content Include="Scripts\ai.0.15.0-build58334.min.js" />
     <Content Include="Scripts\bootstrap-datepicker.js" />

@@ -3,87 +3,69 @@
     ViewBag.Title = "Manage";
 }
 
-<h2>@ViewBag.Title.</h2>
-
-<p class="text-success">@ViewBag.StatusMessage</p>
-<div>
-    <h4>Change your account settings</h4>
-    <hr />
-    <p>@Html.ActionLink("Manage", "ManageDisplayName", "Manage")</p>
-
-    @*<input type="text" name="FName"/>
-        <input type="text" name="LName" />*@
-
-    <dl class="dl-horizontal">
-        <dt>Password:</dt>
-        <dd>
-            [
-            @if (Model.HasPassword)
-            {
-                @Html.ActionLink("Change your password", "ChangePassword")
-            }
-            else
-            {
-                @Html.ActionLink("Create", "SetPassword")
-            }
-            ]
-        </dd>
-        <dt>External Logins:</dt>
-        <dd>
-            @Model.Logins.Count [
-            @Html.ActionLink("Manage", "ManageLogins") ]
-        </dd>
-        @*
-            Phone Numbers can used as a second factor of verification in a two-factor authentication system.
-
-             See <a href="http://go.microsoft.com/fwlink/?LinkId=403804">this article</a>
-                for details on setting up this ASP.NET application to support two-factor authentication using SMS.
-
-             Uncomment the following block after you have set up two-factor authentication
-        *@
-        @*
-            <dt>Phone Number:</dt>
-            <dd>
-                @(Model.PhoneNumber ?? "None") [
-                @if (Model.PhoneNumber != null)
-                {
-                    @Html.ActionLink("Change", "AddPhoneNumber")
-                    @: &nbsp;|&nbsp;
-                    @Html.ActionLink("Remove", "RemovePhoneNumber")
-                }
-                else
-                {
-                    @Html.ActionLink("Add", "AddPhoneNumber")
-                }
-                ]
-            </dd>
-        *@
-        <dt>Two-Factor Authentication:</dt>
-        <dd>
-            <p>
-                There are no two-factor authentication providers configured. See <a href="http://go.microsoft.com/fwlink/?LinkId=403804">this article</a>
-                for details on setting up this ASP.NET application to support two-factor authentication.
-            </p>
-            @*@if (Model.TwoFactor)
-                {
-                    using (Html.BeginForm("DisableTwoFactorAuthentication", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-                    {
-                        @Html.AntiForgeryToken()
-                        <text>Enabled
-                        <input type="submit" value="Disable" class="btn btn-link" />
-                        </text>
-                    }
-                }
-                else
-                {
-                    using (Html.BeginForm("EnableTwoFactorAuthentication", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-                    {
-                        @Html.AntiForgeryToken()
-                        <text>Disabled
-                        <input type="submit" value="Enable" class="btn btn-link" />
-                        </text>
-                    }
-                }*@
-        </dd>
-    </dl>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <div class="col-xs-12 x-pad-left"><h3>Manage Your User Profile</h3></div>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-sm-5">
+                <div class="custom-btn-group">
+                    <div class="col-xs-12">
+                        <button type="button" id="ManageDNamePV" class="btn btn-lg btn-success">Change Your Display Name</button>
+                    </div>
+                    <div class="col-xs-12">
+                        @if (Model.HasPassword)
+                        {
+                            <button type="button" id="ChangePWPV" class="btn btn-lg btn-success">Change Your Password</button>
+                        }
+                        else
+                        {
+                            <button type="button" id="SetPWPV" class="btn btn-lg btn-success">Set Your Password</button>
+                        }
+                    </div>
+                    <div class="col-xs-12">
+                        <button type="button" id="ManageLoginsPV" class="btn btn-lg btn-success">Manage External Logins</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-5 col-sm-offset-1" id="managePV">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4>Manage Your User Profile</h4>
+                    </div>
+                    <div class="panel-body">
+                        <div class="col-xs-12">
+                            <h5>Hi there! Here you can easily change your user profile information with BudgetMaestro.</h5>
+                            <hr />
+                            <p>If you created your account using a Facebook Login or Twitter Login, you can still create a password at any time, enabling you to login directly through BudgetMaestro. Click any one of the links to the left to get started. </p>
+                        </div>
+                        <div class="col-xs-12">
+                            <hr />
+                            <div class="pull-right">
+                                @Html.ActionLink("Return to Your Dashboard", "Index", "Households", null, new { @class = "btn btn-success" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+@section Scripts {
+<script>
+    $("#ManageDNamePV").click(function () {
+    $("#managePV").load('/Manage/_ManageDisplayNamePV/');
+    })
+    $("#ChangePWPV").click(function () {
+        $("#managePV").load('/Manage/_ChangePasswordPV/');
+    })
+    $("#SetPWPV").click(function () {
+        $("#managePV").load('/Manage/_SetPasswordPV/');
+    })
+    $("#ManageLoginsPV").click(function () {
+        $("#managePV").load('/Manage/_ManageLoginsPV/');
+    })
+</script>
+}

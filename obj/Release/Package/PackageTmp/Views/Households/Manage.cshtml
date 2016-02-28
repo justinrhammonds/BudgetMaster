@@ -3,26 +3,39 @@
     ViewBag.Title = "Manage";
 }
 
-@*<div class="panel-heading leaveModal" data-toggle="modal" data-target="#leaveModal">*@
-
-<h2>Manage</h2>
-<div class="text-success"><h4>@ViewBag.Message</h4></div>
-
-<div id="hh-manage" class="panel panel-default">
+<div class="col-sm-8">
+    <div class="panel panel-default">
         <div class="panel-heading">
-            Household Members
+            <h4>Current Group Members</h4>
         </div>
+        <!-- /.panel-heading -->
         <div class="panel-body">
-            @foreach (var user in Model.Users)
-            {
-                <p>@user.FirstName @user.LastName</p>
-            }
-            <span id="leave-hh">[leave this household]</span>
-            <hr />
+            <div class="text-success"><h4>@ViewBag.Message</h4></div>
+            <div class="list-group">
+                    @foreach (var user in Model.Users)
+                    {
+                        <div class="col-sm-11 col-sm-offset-1">
+                            <h4>Member Name: @Html.DisplayFor(modelUser => user.FirstName)</h4>
+                            <h5>Email: <span class="normal-text">@Html.DisplayFor(modelUser => user.Email)</span></h5>
+                            <hr />
+                        </div>
+                    }
+                <hr />
+                <div class="col-sm-11 col-sm-offset-1"><h4><a href="" class="leaveModal" data-toggle="modal" data-target="#leaveModal">Leave this group and create or join a new one</a></h4></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="hh-manage" class="col-sm-4">  
+    <div class="panel panel-default">
+        <div class="panel-heading">Invite Someone to Join Your Group</div>
+        <div class="panel-body">
             @using (Html.BeginForm("Invite", "Households"))
             {
                 @Html.AntiForgeryToken()
-                <label class="strong" for="Email">Invite a New Member:</label>
+                <p>Use the form below to invite someone into your group. Submitting the form will email that person an invite code to join your group once they are a registered user.</p>
+                <hr />
+                <label class="strong" for="Email">Enter the person's email you wish to invite:</label>
                 <div class="input-group custom-search-form">
                     <input type="text" name="Email" class="form-control" placeholder="invite@domain.com">
                     <span class="input-group-btn">
@@ -34,12 +47,29 @@
             }
         </div>
     </div>
+</div>
 
-@section Scripts {
-    <script>
-        $("#leave-hh").click(function () {
-            $("#hh-manage").load("Households/_LeavePV");
-        });
-    </script>
-}
+
+@* LEAVE HH MODAL *@
+<div id="leaveModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="panel-title">Leave This Household?</h4>
+            </div>
+            <div class="panel-body">
+                <form action=@Url.Action("Leave", "Households") method="post">
+                    <div>
+                        <p>Upon leaving, <span class="text-warning">you will no longer have access to your information</span> saved to this household.</p>
+                        <p>Are you sure you would like to leave your current household?</p>
+                        <input type="submit" value="Yes, Leave" class="btn btn-success" />
+                        <input type="button" value="No, Cancel" class="btn btn-success" data-dismiss="modal" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 
