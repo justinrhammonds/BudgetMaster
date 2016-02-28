@@ -5,14 +5,28 @@
 body {
     font-family: 'Questrial', sans-serif;
     font-size:1.4em;
-    position:relative;
+    /*position:relative;*/
     background-color:#9CB98E !important;
     line-height:1.8em !important;
+}
+
+.small {
+    font-family: Questrial, sans-serif;
+    font-size:80%;
+    font-weight: 400;
 }
 
 h1,h2,h3,h4,h5,h6 {
     font-family: 'Montserrat', sans-serif;
     font-weight:700;
+}
+
+td {
+    padding: 16px 8px !important;
+}
+
+td button {
+    padding:0 10px !important;
 }
 
 .login-partial * {
@@ -150,25 +164,34 @@ nav {
     padding: 0 !important;
 }
 
-.editPV, .deletePV, .detailsView {
+.editAccPV, 
+.deleteAccPV, 
+.editPV, 
+.deletePV,
+.AccDetailsPV,
+.editTranPV, 
+.deleteTranPV,
+.deleteBiPV {
     padding: 8px;
     background-color:transparent;
     color:#9CB98E;
-}
-
-.detailsView {
-    position:relative;
-    top:5px;
+    font-size: 1.5em;
 }
 
 .editPV:hover,
 .deletePV:hover,
-.detailsView:hover {
+.editAccPV:hover,
+.deleteAccPV:hover,
+.AccDetailsPV:hover,
+.editTranPV:hover,
+.deleteTranPV:hover,
+.deleteBiPV:hover {
     color: #597b48;
 }
 
-.editPV .fa, .deletePV .fa, .detailsView .fa {
-    font-size:1.5em;
+.AccDetailsPV {
+    position:relative;
+    font-size: 1.5em;
 }
 
 .panel, .btn, .input-group input {
@@ -233,6 +256,22 @@ nav {
     padding:0;
 }
 
+.disabled-color {
+    font-style:italic;
+    color:#aaa;
+}
+
+.btn-footer {
+    padding:0 15px;
+}
+
+.modal .modal-dialog {
+    z-index:3 !important;
+}
+.modal .panel {
+    z-index:100 !important;
+}
+
 @media (min-width: 768px) {
     .sidebar {
         margin-top:64px !important;
@@ -242,12 +281,12 @@ nav {
         padding:0 30px;
     }
     #page-wrapper {
-        margin: 0 10% 0 10% !important;
+        margin: -90px 10% 40px 10% !important;
         border-left:0px !important;
         z-index:1000 !important;
         overflow:visible !important;
-        position:relative;
-        bottom:90px;
+        /*position:relative;
+        bottom:90px;*/
         padding:0 !important;
 -webkit-box-shadow: 0px 2px 10px 0px rgba(0,0,0,1);
 -moz-box-shadow: 0px 2px 10px 0px rgba(0,0,0,1);

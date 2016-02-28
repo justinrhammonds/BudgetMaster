@@ -1,4 +1,4 @@
-﻿@model BudgetMaster.Models.CodeFirst.Transaction
+﻿@model BudgetMaster.Models.CodeFirst.BudgetItem
 
 @{
     ViewBag.Title = "Delete";
@@ -8,18 +8,18 @@
     <div class="panel panel-default">
         <div class="panel-heading">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="panel-title">Delete This Transaction?</h4>
+            <h4 class="panel-title">Delete This Budget Item?</h4>
         </div>
         <div class="panel-body">
-            @using (Html.BeginForm("Delete", "Transactions"))
+            @using (Html.BeginForm("Delete", "BudgetItems"))
             {
                 @Html.AntiForgeryToken()
                 @Html.HiddenFor(model => model.Id)
 
                 <div class="col-xs-12">
-                    <p><strong>"@Model.Description"</strong> posted as an @Model.Category.Type on @Model.PostedDate.ToString("MM/dd/yyyy") for "$@Model.Amount"?</p>
-                    <p>Account: "@Model.Account.Name"</p>
-                    <p>Category: "@Model.Category.Name"</p>
+                    <p>Are you sure you want to delete this budget item?</p>
+                    <hr />
+                    <p><strong>"@Model.Name"</strong> listed as an @Model.Category.Type in the @Model.Category.Name category for  "$@Model.Amount" per month?</p>
                 </div>
                 <hr />
                 <div class="col-xs-12 pull-right">

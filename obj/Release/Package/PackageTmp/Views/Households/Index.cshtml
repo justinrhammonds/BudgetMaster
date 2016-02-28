@@ -1,12 +1,12 @@
 ﻿@model BudgetMaster.Models.DashboardVM
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Index";
 }
-<div class="text-success"><h4>@ViewBag.Message</h4></div>
 <div class="row">
     <div class="col-sm-3">
         <div class="panel panel-default">
+            @*<div class="panel-heading leaveModal" data-toggle="modal" data-target="#leaveModal">*@
             <div class="panel-heading">
                 Current Account Balances
             </div>
@@ -15,49 +15,23 @@
                 {
                 <p>You currently have no accounts created. <a href="@Url.Action("Index","Accounts")">Click here to create a new account.</a></p>
                 }
-                @foreach (var account in Model.RecBalVM)
+                @foreach (var account in (Model.RecBalVM).Where(a => a.Account.IsDeleted == false))
                 {
                     <div>@account.Account.Name: $@account.Account.Balance</div>  
                     <div>(Reconciled Balance: $@account.RecBal)</div>
                 }
             </div>
-        </div>
-        <div id="hh-manage" class="panel panel-default">
-            <div class="panel-heading">
-                Household Members
-            </div>
-            <div class="panel-body">
-                @foreach (var user in Model.Household.Users)
-                {
-                    <p>@user.FirstName @user.LastName</p>
-                }
-                <span id="leave-hh">[leave this household]</span>
-                <hr />
-                @using (Html.BeginForm("Invite", "Households"))
-                {
-                    @Html.AntiForgeryToken()
-                    <label class="strong" for="Email">Invite a New Member:</label>
-                    <div class="input-group custom-search-form">
-                        <input type="text" name="Email" class="form-control" placeholder="invite@domain.com">
-                        <span class="input-group-btn">
-                            <button class="btn btn-default" type="submit">
-                                <i class="fa fa-plus"></i>
-                            </button>
-                        </span>
-                    </div>
-                }
-            </div>
-        </div>
+        </div>   
     </div>
         <div class="col-sm-9">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    Recent Transactions
+                    <h4>Recent Transactions</h4>
+                    <div class="small disabled-color"> * italicized transactions are from accounts that have been removed.</div>
                 </div>
                 <!-- /.panel-heading -->
                 <div class="panel-body">
-                    <div class="table-responsive">
-                        <table class="table table-hover">
+                        <table id="DTable" class="table table-responsive table-hover">
                             <thead>
                                 <tr>
                                     <th>Date</th>
@@ -68,12 +42,13 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var transaction in Model.Household.Accounts.SelectMany(a => a.Transactions))
+                                @foreach (var transaction in Model.Household.Accounts.SelectMany(a => a.Transactions).Take(10).OrderByDescending(t => t.PostedDate))
                                 {
+                                    var disabledColor = transaction.Account.IsDeleted == true ? "disabled-color" : "";
                                     var textColor = transaction.Category.Type == "Expense" ? "text-warning" : "";
                                     var amount = transaction.Category.Type == "Expense" ? "- $" + @transaction.Amount : "+ $" + @transaction.Amount;
                                     
-                                    <tr>
+                                    <tr class="@disabledColor">
                                         <td>@transaction.PostedDate.ToString("M/dd/yy")</td>
                                         <td>
                                             @transaction.Account.Name @*- @transaction.PostedBy.FirstName*@
@@ -86,7 +61,6 @@
 
                             </tbody>
                         </table>
-                    </div>
                     <!-- /.table-responsive -->
                 </div>
                 <!-- /.panel-body -->
@@ -99,7 +73,7 @@
     <div class="col-sm-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                Budget vs. Actual Spending
+                Monthly Budget vs. Monthly Expenses
             </div>
             <!-- /.panel-heading -->
             <div class="panel-body">
@@ -114,11 +88,13 @@
 
 @section Scripts {
     <script>
-
-        $("#leave-hh").click(function () {
-            $("#hh-manage").load("Households/_LeavePV");
+        //$(".leaveModal").click(function () {
+        //    $("#partialModal").load('/Households/_LeavePV/' + $(this).data('id'));
+        //})
+        $('#DTable').DataTable({
+            "lengthChange": false,
+            responsive: true
         });
-
         $.post('@Url.Action("GetCharts","Households")').then(function (response) {
             new Morris.Bar({
                 element: 'morris-bar-chart',

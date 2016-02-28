@@ -3,18 +3,7 @@
 @{
     ViewBag.Title = "Details";
 }
-<thead>
-    <tr>
-        <th>Date</th>
-        <th>Description</th>
-        <th>Amount</th>
-        <th>Account</th>
-        <th>Category</th>
-        <th>Reconciled?</th>
-        <th>Edit/Delete</th>
-    </tr>
-</thead>
-<tbody>
+
     @foreach (var transaction in Model.Transactions)
     {
         var disabledColor = transaction.Account.IsDeleted == true ? "disabled-color" : "";
@@ -39,19 +28,4 @@
     }
 
 
-    @section Scripts {
-        <script>
-            $(".createPV").click(function () {
-                $("#transactionPV").load('/Transactions/_CreatePV/' + $(this).data('id'));
-
-            });
-
-            $(".editPV").click(function () {
-                $("#transactionPV").load('/Transactions/_EditPV/' + $(this).data('id'));
-            });
-            $(".deletePV").click(function () {
-                $("#transactionPV").load('/Transactions/_DeletePV/' + $(this).data('id'));
-            });
-        </script>
-    }
 

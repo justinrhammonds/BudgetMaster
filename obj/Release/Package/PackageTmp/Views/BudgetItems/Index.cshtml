@@ -5,70 +5,52 @@
 }
 
 <div class="col-xs-12">
+    <div id="deleteBiModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
     <div id="budgetItemPV"></div>
     <div class="panel panel-default">
-        <div class="panel-heading">
-            <div>
-                <button class="btn createPV">Create New Budget Item</button>
-            </div>
+        <div class="container panel-heading">
+            <div class="col-sm-8"><h4>Your Monthly Budget</h4></div>
+            <div id="createPV" class="btn btn-success btn-lg col-sm-4 pull-right">Create New Budget Item</div>
         </div>
         <div class="panel-body">
             <table class="table">
                 <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Category.Name)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Household.Name)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Name)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Amount)
-                    </th>
-                    <th></th>
+                    <th>Budget Item</th>
+                    <th>Amount</th>
+                    <th>Category</th>
+                    <th>Type</th>
+                    <th>Edit/Delete</th>
                 </tr>
-
                 @foreach (var item in Model)
-            {
+                {
                     <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Category.Name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Household.Name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Amount)
-                        </td>
+                        <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Amount)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Category.Name)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Category.Type)</td>
                         <td>
                             <span>
                                 <button class="btn editPV" data-id=@item.Id><i class="fa fa-pencil"></i></button>
-                                <button class="btn deletePV" data-id=@item.Id><i class="fa fa-trash"></i></button>
+                                <button class="btn deleteBiPV" data-id=@item.Id data-toggle="modal" data-target="#deleteBiModal"><i class="fa fa-trash"></i></button>
                             </span>
                         </td>
                     </tr>
                 }
-
             </table>
         </div>
-        </div>
     </div>
+</div>
 
-        @section Scripts {
-            <script>
-                $(".createPV").click(function () {
-                    $("#budgetItemPV").load('/BudgetItems/_CreatePV/');
-                })
-                $(".editPV").click(function () {
-                    $("#budgetItemPV").load('/BudgetItems/_EditPV/' + $(this).data('id'));
-                })
-                $(".deletePV").click(function () {
-                    $("#budgetItemPV").load('/BudgetItems/_DeletePV/' + $(this).data('id'));
-                })
-            </script>
-        }
+    @section Scripts {
+        <script>
+            $("#createPV").click(function () {
+                $("#budgetItemPV").load('/BudgetItems/_CreatePV/');
+            })
+            $(".editPV").click(function () {
+                $("#budgetItemPV").load('/BudgetItems/_EditPV/' + $(this).data('id'));
+            })
+            $(".deleteBiPV").click(function () {
+                $("#deleteBiModal").load('/BudgetItems/_DeleteBiPV/' + $(this).data('id'));
+            })
+        </script>
+    }

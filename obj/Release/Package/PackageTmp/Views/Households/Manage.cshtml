@@ -1,0 +1,43 @@
+﻿@model BudgetMaster.Models.CodeFirst.Household
+@{
+    ViewBag.Title = "Manage";
+}
+
+<h2>Manage</h2>
+<div class="text-success"><h4>@ViewBag.Message</h4></div>
+
+<div id="hh-manage" class="panel panel-default">
+        <div class="panel-heading">
+            Household Members
+        </div>
+        <div class="panel-body">
+            @foreach (var user in Model.Users)
+            {
+                <p>@user.FirstName @user.LastName</p>
+            }
+            <span id="leave-hh">[leave this household]</span>
+            <hr />
+            @using (Html.BeginForm("Invite", "Households"))
+            {
+                @Html.AntiForgeryToken()
+                <label class="strong" for="Email">Invite a New Member:</label>
+                <div class="input-group custom-search-form">
+                    <input type="text" name="Email" class="form-control" placeholder="invite@domain.com">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="submit">
+                            <i class="fa fa-plus"></i>
+                        </button>
+                    </span>
+                </div>
+            }
+        </div>
+    </div>
+
+@section Scripts {
+    <script>
+        $("#leave-hh").click(function () {
+            $("#hh-manage").load("Households/_LeavePV");
+        });
+    </script>
+}
+

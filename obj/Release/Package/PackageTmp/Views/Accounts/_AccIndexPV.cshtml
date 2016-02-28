@@ -23,20 +23,18 @@
                         <tr>
                             <th>Account Name</th>
                             <th>Current Balance</th>
-                            <th>Details/Edit/Delete</th>
+                            <th>Edit/Delete</th>
                         </tr>
-
 
                         @foreach (var item in Model)
                         {
+                        
                             <tr>
                                 <td>@Html.DisplayFor(modelItem => item.Name)</td>
                                 <td>$@Html.DisplayFor(modelItem => item.Balance)</td>
                                 <td>
-                                    <button class="btn AccDetailsPV" data-id=@item.Id><i class="fa fa-list-ul"></i></button>
                                     <button class="btn editAccPV" data-id=@item.Id><i class="fa fa-pencil"></i></button>
-                                    <button class="btn deleteAccPV" data-id=@item.Id><i class="fa fa-trash"></i></button>
-
+                                    <button class="btn deleteAccPV" data-id=@item.Id  data-toggle="modal" data-target="#deleteAccModal"><i class="fa fa-trash"></i></button>
                                 </td>
                             </tr>
                         }
@@ -48,23 +46,7 @@
         </div>
     </div>
 </div>
-<div id="acc-partial" class="col-sm-4">
+<div id="hh-partial" class="col-sm-4">
     @Html.Action("_CreatePV", "Accounts")
 </div>
-<div id="details-partial">
-</div>
-
-@section Scripts {
-    <script>
-        $(".editAccPV").click(function () {
-            $("#acc-partial").load('/Accounts/_EditPV/' + $(this).data('id'));
-        })
-        $(".deleteAccPV").click(function () {
-            $("#acc-partial").load('/Accounts/_DeletePV/' + $(this).data('id'));
-        })
-        $(".AccDetailsPV").click(function () {
-            $("#details-partial").load('/Accounts/_AccDetailsPV/' + $(this).data('id'));
-        })
-    </script> 
-}
 
