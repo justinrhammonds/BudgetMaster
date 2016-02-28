@@ -23,21 +23,20 @@
                         <tr>
                             <th>Account Name</th>
                             <th>Current Balance</th>
-                            <th>Details/Edit/Delete</th>
+                            <th>Edit/Delete</th>
                         </tr>
 
-
-                        @foreach (var item in Model) {
-                        <tr>
-                            <td>@Html.DisplayFor(modelItem => item.Name)</td>
-                            <td>$@Html.DisplayFor(modelItem => item.Balance)</td>
-                            <td>
-                                <button class="btn AccDetailsPV" data-id=@item.Id><i class="fa fa-list-ul"></i></button>
-                                <button class="btn editAccPV" data-id=@item.Id><i class="fa fa-pencil"></i></button>
-                                <button class="btn deleteAccPV" data-id=@item.Id><i class="fa fa-trash"></i></button>
-
-                            </td>
-                        </tr>
+                        @foreach (var item in Model)
+                        {
+                        
+                            <tr>
+                                <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                                <td>$@Html.DisplayFor(modelItem => item.Balance)</td>
+                                <td>
+                                    <button class="btn editAccPV" data-id=@item.Id><i class="fa fa-pencil"></i></button>
+                                    <button class="btn deleteAccPV" data-id=@item.Id  data-toggle="modal" data-target="#deleteAccModal"><i class="fa fa-trash"></i></button>
+                                </td>
+                            </tr>
                         }
 
                     </table>

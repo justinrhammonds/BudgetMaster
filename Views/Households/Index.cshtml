@@ -3,10 +3,10 @@
 @{
     ViewBag.Title = "Index";
 }
-
 <div class="row">
     <div class="col-sm-3">
         <div class="panel panel-default">
+            @*<div class="panel-heading leaveModal" data-toggle="modal" data-target="#leaveModal">*@
             <div class="panel-heading">
                 Current Account Balances
             </div>
@@ -21,13 +21,13 @@
                     <div>(Reconciled Balance: $@account.RecBal)</div>
                 }
             </div>
-        </div>
-        
+        </div>   
     </div>
         <div class="col-sm-9">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    Recent Transactions
+                    <h4>Recent Transactions</h4>
+                    <div class="small disabled-color"> * italicized transactions are from accounts that have been removed.</div>
                 </div>
                 <!-- /.panel-heading -->
                 <div class="panel-body">
@@ -88,7 +88,13 @@
 
 @section Scripts {
     <script>
-        $('#DTable').DataTable();
+        //$(".leaveModal").click(function () {
+        //    $("#partialModal").load('/Households/_LeavePV/' + $(this).data('id'));
+        //})
+        $('#DTable').DataTable({
+            "lengthChange": false,
+            responsive: true
+        });
         $.post('@Url.Action("GetCharts","Households")').then(function (response) {
             new Morris.Bar({
                 element: 'morris-bar-chart',

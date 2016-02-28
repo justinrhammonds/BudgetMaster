@@ -5,7 +5,8 @@
 }
 
 @* ViewBox for Create, Edit, Delete Partial Views  *@
-
+<div id="deleteTranModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+<div id="deleteAccModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
 <div class="col-xs-12">
     <div class="container panel panel-default">
         <div class="row panel-heading">
@@ -18,7 +19,10 @@
     <div id="midPV"></div>
     <div class="container panel panel-default">
         <div class="row panel-heading">
-            <div class="col-sm-8"><h4 id="Acc">Recent Transactions</h4></div>
+            <div class="col-sm-8">
+                <h4>View All Transactions</h4>
+                <div class="small disabled-color"> * italicized transactions are from accounts that have been removed.</div>
+        </div>
             <div id="createTranPV" class="btn btn-success btn-lg col-sm-4 pull-right">Create New Transaction</div>
         </div>
         <div id="mainPV" class="row panel-body">
@@ -26,7 +30,7 @@
                 <table id="DTable" class="table">
                     <thead>
                         <tr>
-                            <th style="display:none">Date</th>
+                            <th>Date</th>
                             <th>Description</th>
                             <th>Amount</th>
                             <th>Account</th>
@@ -35,17 +39,15 @@
                             <th>Edit/Delete</th>
                         </tr>
                     </thead>
-                    @* USING THE TRANSACTION MODEL *@
-                    @foreach (var item in Model)
-                    {
-                        // Transactions that are of Category.Type == "Expense" will have class 'text-warning', and have a (-)
-                        // Transactions that are of Category.Type == "Income" will have no additional class, and have a (+)
-                        var disabledColor = item.Account.IsDeleted == true ? "disabled-color" : "";
-                        var textColor = item.Category.Type == "Expense" ? "text-warning" : "";
-                        var amount = item.Category.Type == "Expense" ? "- $" + @item.Amount : "+ $" + @item.Amount;
-                        <tbody>
+                    <tbody id="accDetailsPV">
+                        @* USING THE TRANSACTION MODEL *@
+                        @foreach (var item in Model)
+                        {
+                            var disabledColor = item.Account.IsDeleted == true ? "disabled-color" : "";
+                            var textColor = item.Category.Type == "Expense" ? "text-warning" : "";
+                            var amount = item.Category.Type == "Expense" ? "- $" + @item.Amount : "+ $" + @item.Amount;
                             <tr class="@disabledColor">
-                                <td style="display:none">@item.PostedDate.ToString("M/d/yy")</td> @*REQ: transaction.PostedDate (1/2/16)*@
+                                <td>@item.PostedDate.ToString("M/d/yy")</td> @*REQ: transaction.PostedDate (1/2/16)*@
                                 <td>@Html.DisplayFor(modelItem => item.Description)</td> @*REQ: transaction.Account.Name*@
                                 <td class="@textColor">@amount</td> @*REQ: transaction.Amount (formatted per Expense/Income)*@
                                 <td>@Html.DisplayFor(modelItem => item.Account.Name)</td> @*REQ: transaction.Account.Name*@
@@ -56,12 +58,13 @@
                                         @*REQ: on click, request made for EDIT PARTIAL VIEW matching the transaction.Id*@
                                         <button class="btn editTranPV" data-id=@item.Id><i class="fa fa-pencil"></i></button>
                                         @*REQ: on click, request made for DELETE PARTIAL VIEW matching the transaction.Id*@
-                                        <button class="btn deleteTranPV" data-id=@item.Id><i class="fa fa-trash"></i></button>
+                                        <button class="btn deleteTranPV" data-id=@item.Id  data-toggle="modal" data-target="#deleteTranModal"><i class="fa fa-trash"></i></button>
                                     </span>
                                 </td>
                             </tr>
-                        </tbody>
-                    }
+
+                        }
+                    </tbody>
                 </table>
             </div>
         </div>
@@ -74,14 +77,6 @@
         $('#DTable').DataTable({
             "lengthChange": false,
             responsive: true
-            //columns: [
-            //    { responsivePriority: 6 },
-            //    { responsivePriority: 5 },
-            //    { responsivePriority: 4 },
-            //    { responsivePriority: 3 },
-            //    { responsivePriority: 2 },
-            //    { responsivePriority: 1 }
-            //]
         });
 
         $("#createTranPV").click(function () {
@@ -91,7 +86,7 @@
             $("#midPV").load('/Transactions/_EditPV/' + $(this).data('id'));
         })
         $(".deleteTranPV").click(function () {
-            $("#midPV").load('/Transactions/_DeletePV/' + $(this).data('id'));
+            $("#deleteTranModal").load('/Transactions/_DeleteTranPV/' + $(this).data('id'));
         })
         //ACCOUNTS
         $("#createAccPV").click(function () {
@@ -101,11 +96,15 @@
             $("#hh-partial").load('/Accounts/_EditPV/' + $(this).data('id'));
         })
         $(".deleteAccPV").click(function () {
-            $("#hh-partial").load('/Accounts/_DeletePV/' + $(this).data('id'));
+            $("#deleteAccModal").load('/Accounts/_DeleteAccPV/' + $(this).data('id'));
         })
-        $(".AccDetailsPV").click(function () {
-            $("#DTable").load('/Accounts/_AccDetailsPV/' + $(this).data('id'));
-            $('#DTable').DataTable();
+        //DATEPICKER
+        $('#date-input').datepicker({
+        format: 'mm/dd/yyyy',
+        maxViewMode: 1,
+        todayBtn: true,
+        todayHighlight: true,
+        autoclose: true
         })
     </script>
 }

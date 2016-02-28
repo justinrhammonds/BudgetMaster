@@ -130,7 +130,7 @@ namespace BudgetMaster.Controllers
         }
 
         // GET: Transactions/Delete/5
-        public PartialViewResult _DeletePV(int? id)
+        public PartialViewResult _DeleteTranPV(int? id)
         {
             //returns a partial view containing properties for this particular transaction
             Transaction transaction = db.Transactions.Find(id);

@@ -16,6 +16,8 @@
     <link href="~/Content/bootstrap-social.css" rel="stylesheet" />
     <link href="~/Content/bootstrap-datepicker3.css" rel="stylesheet" />
     <link href="https://cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
+    <link href="https://cdn.datatables.net/buttons/1.1.2/css/buttons.dataTables.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.datatables.net/responsive/2.0.2/css/responsive.dataTables.min.css" rel="stylesheet" type="text/css" />
     
 </head>
 <body>
@@ -35,23 +37,19 @@
                 <div class="flex-container">
                     <a class="flex-item" href="@Url.Action("Index","Households")">
                         <i class="fa fa-home"></i>
-                        <p>View Dashboard</p>
-                    </a>
-                    <a class="flex-item" href="@Url.Action("Index","Accounts")">
-                        <i class="fa fa-university"></i>
-                        <p>Manage Accounts</p>
+                        <p>View Your Dashboard</p>
                     </a>
                     <a class="flex-item" href="@Url.Action("Index","Transactions")">
                         <i class="fa fa-money"></i>
-                        <p>Incomes & Expenses</p>
+                        <p>Accounts & Transactions</p>
                     </a>
                     <a class="flex-item" href="@Url.Action("Index","BudgetItems")">
                         <i class="fa fa-balance-scale"></i>
-                        <p>Manage Budget</p>
+                        <p>Manage Your Budget</p>
                     </a>
                     <a class="flex-item" href="@Url.Action("Index","Manage")">
-                        <i class="fa fa-street-view"></i>
-                        <p>User Profile</p>
+                        <i class="fa fa-users"></i>
+                        <p>Manage Your Group</p>
                     </a>
                 </div>
             </div>
@@ -61,15 +59,41 @@
         </div>
     </div>
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    <script src="~/Scripts/jquery.easing.compatibility.js"></script>
-    <script src="~/Scripts/metisMenu.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
-    <script src="~/Scripts/sb-admin-2.js"></script>
-    <script src="~/Scripts/bootstrap-datepicker.min.js"></script>
-    <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
-    @RenderSection("scripts", required: false)
+    @* LEAVE HH MODAL *@
+    <div id="leaveModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="panel-title">Leave This Household?</h4>
+                </div>
+                <div class="panel-body">
+                    <form action=@Url.Action("Leave", "Households") method="post">
+                        <div>
+                            <p>Upon leaving, <span class="text-warning">you will no longer have access to your information</span> saved to this household.</p>
+                            <p>Are you sure you would like to leave your current household?</p>
+                            <input type="submit" value="Yes, Leave" class="btn btn-success" />
+                            <input type="button" value="No, Cancel" class="btn btn-success" data-dismiss="modal" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/bootstrap")
+        <script src="~/Scripts/jquery.easing.compatibility.js"></script>
+        <script src="~/Scripts/metisMenu.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
+        <script src="~/Scripts/sb-admin-2.js"></script>
+        <script src="~/Scripts/bootstrap-datepicker.min.js"></script>
+        <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
+        <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/1.1.2/js/buttons.print.min.js"></script>
+        <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/responsive/2.0.2/js/dataTables.responsive.min.js"></script>
+        <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
+        <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
+        @RenderSection("scripts", required: false)
 </body>
 </html>

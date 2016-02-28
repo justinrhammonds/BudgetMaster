@@ -27,6 +27,7 @@ namespace BudgetMaster
             var userHHID = Convert.ToInt32(User.Identity.GetHouseholdId());
             var accounts = db.Accounts.Where(a => a.HouseholdId == userHHID && a.IsDeleted == false);
             var model = accounts.ToList();
+
             ViewBag.HouseholdId = userHHID;
             return PartialView(model);
         }
@@ -54,7 +55,8 @@ namespace BudgetMaster
                 if (t.Category.Type == "Expense")
                 {
                     ReconciledBalance -= t.Amount;
-                } else
+                }
+                else
                 {
                     ReconciledBalance += t.Amount;
                 }
@@ -89,7 +91,7 @@ namespace BudgetMaster
                     Amount = account.Balance,
                     Reconciled = true,
                     Description = "Initial Deposit",
-                    CategoryId = house.Categories.FirstOrDefault(c=>c.Name == "Misc. Income").Id,
+                    CategoryId = house.Categories.FirstOrDefault(c => c.Name == "Misc. Income").Id,
                     PostedById = User.Identity.GetUserId(),
                     AccountId = account.Id
                 };
@@ -134,7 +136,7 @@ namespace BudgetMaster
         }
 
         // GET: Accounts/Delete/5
-        public PartialViewResult _DeletePV(int? id)
+        public PartialViewResult _DeleteAccPV(int? id)
         {
             //if (id == null)
             //{

@@ -17,6 +17,8 @@
                 @Html.HiddenFor(model => model.Id)
 
                 <div class="col-xs-12">
+                    <p>Are you sure you want to delete this transaction?</p>
+                    <hr />
                     <p><strong>"@Model.Description"</strong> posted as an @Model.Category.Type on @Model.PostedDate.ToString("MM/dd/yyyy") for "$@Model.Amount"?</p>
                     <p>Account: "@Model.Account.Name"</p>
                     <p>Category: "@Model.Category.Name"</p>
@@ -31,4 +33,5 @@
         </div>
     </div>
 </div>
+
 

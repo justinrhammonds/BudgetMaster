@@ -28,21 +28,6 @@ namespace BudgetMaster
             return View(model);
         }
 
-        // GET: BudgetItems/Details/5
-        //public ActionResult Details(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    BudgetItem budgetItem = db.BudgetItems.Find(id);
-        //    if (budgetItem == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(budgetItem);
-        //}
-
         // GET: BudgetItems/Create
         public PartialViewResult _CreatePV()
         {
@@ -97,7 +82,7 @@ namespace BudgetMaster
         }
 
         // GET: BudgetItems/Delete/5
-        public PartialViewResult _DeletePV(int? id)
+        public PartialViewResult _DeleteBiPV(int? id)
         {
             BudgetItem budgetItem = db.BudgetItems.Find(id);
             return PartialView(budgetItem);

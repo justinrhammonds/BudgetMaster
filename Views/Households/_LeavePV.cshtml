@@ -1,14 +1,19 @@
-﻿<div class="panel-heading">
-    Leave Current Household?
-</div>
-<div class="panel-body">
-    <form class="form-inline" action=@Url.Action("Leave", "Households") method="post">
-        <div>
-            <p>Upon leaving, <span class="text-warning">you will no longer have access to your information</span> saved to this household.</p>
-            <p>Are you sure you would like to leave your current household?</p>
-            <input type="submit" value="Yes, Leave" class="btn btn-default" />
+﻿<div class="modal-dialog">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="panel-title">Leave This Household?</h4>
         </div>
-    </form>
+        <div class="panel-body">
+            <form action=@Url.Action("Leave", "Households") method="post">
+                <div>
+                    <p>Upon leaving, <span class="text-warning">you will no longer have access to your information</span> saved to this household.</p>
+                    <p>Are you sure you would like to leave your current household?</p>
+                    <input type="submit" value="Yes, Leave" class="btn btn-success" />
+                    <input type="button" value="No, Cancel" class="btn btn-success" data-dismiss="modal" />
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
-
 

@@ -3,77 +3,55 @@
 @{
     ViewBag.Title = "Details";
 }
+<thead>
+    <tr>
+        <th>Date</th>
+        <th>Description</th>
+        <th>Amount</th>
+        <th>Account</th>
+        <th>Category</th>
+        <th>Reconciled?</th>
+        <th>Edit/Delete</th>
+    </tr>
+</thead>
+<tbody>
+    @foreach (var transaction in Model.Transactions)
+    {
+        var disabledColor = transaction.Account.IsDeleted == true ? "disabled-color" : "";
+        var textColor = transaction.Category.Type == "Expense" ? "text-warning" : "";
+        var amount = transaction.Category.Type == "Expense" ? "- $" + @transaction.Amount : "+ $" + @transaction.Amount;
+        <tr class="@disabledColor">
+            <td>@transaction.PostedDate.ToString("M/dd/yy")</td>
+            <td>@transaction.Description</td>
+            <td class="@textColor">@amount</td>
+            <td>@transaction.Account.Name</td>
+            <td>@transaction.Category.Name</td>
+            <td>@Html.DisplayFor(modelItem => transaction.Reconciled)</td>
+            <td>
+                <span>
+                    @*REQ: on click, request made for EDIT PARTIAL VIEW matching the transaction.Id*@
+                    <button class="btn editTranPV" data-id=@transaction.Id><i class="fa fa-pencil"></i></button>
+                    @*REQ: on click, request made for DELETE PARTIAL VIEW matching the transaction.Id*@
+                    <button class="btn deleteTranPV" data-id=@transaction.Id><i class="fa fa-trash"></i></button>
+                </span>
+            </td>
+        </tr>
+    }
 
-<div class="col-xs-12">
-    <div id="transactionPV"></div>
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <span>@Model.Name</span><em>Balance: $@Model.Balance</em> <span>@ViewBag.ReconciledBalance</span>
-            <div class="pull-right">
-                <button class="btn createPV" data-id=@Model.Id>Create New Transaction</button>
-            </div>
-        </div>
 
-        <div class="panel-body">
-            <div class="table-responsive">
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Description</th>
-                            <th>Category</th>
-                            <th>Posted By</th>
-                            <th>Amount</th>
-                            <th>Edit/Delete</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var transaction in Model.Transactions)
-                        {
-                            var color = transaction.Category.Type == "Expense" ? "red" : "black";
-                            var amount = transaction.Category.Type == "Expense" ? "($" + @transaction.Amount + ")" : "$" + @transaction.Amount;
-                            <tr>
-                                <td>@transaction.PostedDate.ToString("M/dd/yy")</td>
-                                <td>@transaction.Description</td>
-                                <td>@transaction.Category.Name</td>
-                                @*<td>@transaction.PostedBy.FirstName</td>*@
-                                <td style="color:@color">@amount</td>
-                                <td>
-                                    <span>
-                                        @*REQ: on click, request made for EDIT PARTIAL VIEW matching the transaction.Id*@
-                                        <button class="btn editPV" data-id=@transaction.Id><i class="fa fa-pencil"></i></button>
-                                        @*REQ: on click, request made for DELETE PARTIAL VIEW matching the transaction.Id*@
-                                        <button class="btn deletePV" data-id=@transaction.Id><i class="fa fa-trash"></i></button>
-                                    </span>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
-@section Scripts {
-    <script>
-        $(".createPV").click(function () {
-            $("#transactionPV").load('/Transactions/_CreatePV/' + $(this).data('id'));
-            
-            //will it work to run the code from below right here, in the same code block?
-        });
-        //$("#transactionPV").load(function () {
-        //    $("#_CreateDropDown").hide();
-        //});
-        //$("#_CreateDropDown").on("load", function () { //should this be on load or ready?
-        //    $("#_CreateDropDown").hide(); //hide the dropdown field
-        //});
-        //on load of transactionPV, hide dropdown for _CreatePV - (AccountId)
-        $(".editPV").click(function () {
-            $("#transactionPV").load('/Transactions/_EditPV/' + $(this).data('id'));
-        });
-        $(".deletePV").click(function () {
-            $("#transactionPV").load('/Transactions/_DeletePV/' + $(this).data('id'));
-        });
-    </script>
-}
+    @section Scripts {
+        <script>
+            $(".createPV").click(function () {
+                $("#transactionPV").load('/Transactions/_CreatePV/' + $(this).data('id'));
+
+            });
+
+            $(".editPV").click(function () {
+                $("#transactionPV").load('/Transactions/_EditPV/' + $(this).data('id'));
+            });
+            $(".deletePV").click(function () {
+                $("#transactionPV").load('/Transactions/_DeletePV/' + $(this).data('id'));
+            });
+        </script>
+    }
 
