@@ -453,7 +453,7 @@
     <Content Include="Views\BudgetItems\_DeleteBiPV.cshtml" />
     <Content Include="Views\BudgetItems\_EditPV.cshtml" />
     <Content Include="Views\Categories\_CreatePV.cshtml" />
-    <Content Include="Views\Categories\_DeletePV.cshtml" />
+    <Content Include="Views\Categories\_DeleteCatPV.cshtml" />
     <Content Include="Views\Categories\_EditPV.cshtml" />
     <Content Include="Views\Shared\Info.cshtml" />
     <Content Include="Views\Households\Manage.cshtml" />

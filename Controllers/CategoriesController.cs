@@ -77,7 +77,7 @@ namespace BudgetMaster.Controllers
         }
 
         // GET: Categories/Delete/5
-        public PartialViewResult _DeletePV(int? id)
+        public PartialViewResult _DeleteCatPV(int? id)
         {
             Category category = db.Categories.Find(id);
             return PartialView(category);

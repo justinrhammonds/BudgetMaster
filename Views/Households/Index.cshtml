@@ -4,76 +4,43 @@
     ViewBag.Title = "Index";
 }
 <div class="row">
-    <div class="col-sm-3">
+    <div class="col-sm-7">
         <div class="panel panel-default">
-            @*<div class="panel-heading leaveModal" data-toggle="modal" data-target="#leaveModal">*@
             <div class="panel-heading">
-                Current Account Balances
+                <h4>Current Account Balances</h4>
             </div>
             <div class="panel-body">
                 @if (Model.Household.Accounts.Count() == 0)
                 {
-                <p>You currently have no accounts created. <a href="@Url.Action("Index","Accounts")">Click here to create a new account.</a></p>
+                    <h4>You currently have no accounts created. <a href="@Url.Action("Index","Transactions")">Click here to create a new account.</a></h4>
                 }
                 @foreach (var account in (Model.RecBalVM).Where(a => a.Account.IsDeleted == false))
                 {
-                    <div>@account.Account.Name: $@account.Account.Balance</div>  
-                    <div>(Reconciled Balance: $@account.RecBal)</div>
+                <div class="col-sm-11 col-sm-offset-1">                    
+                    <h4>@account.Account.Name: <span class="normal-text">$@account.Account.Balance</span></h4>
+                    <h5>Reconciled Balance: <span class="normal-text">$@account.RecBal</span></h5>
+                    <hr />
+                </div>
                 }
             </div>
-        </div>   
-    </div>
-        <div class="col-sm-9">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4>Recent Transactions</h4>
-                    <div class="small disabled-color"> * italicized transactions are from accounts that have been removed.</div>
-                </div>
-                <!-- /.panel-heading -->
-                <div class="panel-body">
-                        <table id="DTable" class="table table-responsive table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Date</th>
-                                    <th>Account</th>
-                                    <th>Total</th>
-                                    <th>Category</th>
-                                    <th>Description</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var transaction in Model.Household.Accounts.SelectMany(a => a.Transactions).Take(10).OrderByDescending(t => t.PostedDate))
-                                {
-                                    var disabledColor = transaction.Account.IsDeleted == true ? "disabled-color" : "";
-                                    var textColor = transaction.Category.Type == "Expense" ? "text-warning" : "";
-                                    var amount = transaction.Category.Type == "Expense" ? "- $" + @transaction.Amount : "+ $" + @transaction.Amount;
-                                    
-                                    <tr class="@disabledColor">
-                                        <td>@transaction.PostedDate.ToString("M/dd/yy")</td>
-                                        <td>
-                                            @transaction.Account.Name @*- @transaction.PostedBy.FirstName*@
-                                        </td>
-                                        <td class="@textColor">@amount</td>
-                                        <td>@transaction.Category.Name</td>
-                                        <td>@transaction.Description</td>
-                                    </tr>
-                                }
-
-                            </tbody>
-                        </table>
-                    <!-- /.table-responsive -->
-                </div>
-                <!-- /.panel-body -->
-            </div>
-            <!-- /.panel -->
         </div>
-    <hr />
+    </div>
+    <div class="col-sm-5">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4>This Month's Income vs. Expenses</h4>
+            </div>
+            <div class="panel-body">
+                <div id="morris-donut-chart"></div>
+            </div>
+        </div>
+    </div>
 </div>
 <div class="row">
     <div class="col-sm-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                Monthly Budget vs. Monthly Expenses
+                <h4>Monthly Budget vs. Monthly Expenses</h4>
             </div>
             <!-- /.panel-heading -->
             <div class="panel-body">
@@ -83,14 +50,55 @@
         </div>
         <!-- /.panel -->
     </div>
+</div>  
+<div class="row">
+    <div class="col-xs-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4>Recent Transactions</h4>
+                <div class="small disabled-color"> * italicized transactions are from accounts that have been removed.</div>
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                <table id="DTable" class="table table-responsive table-hover">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Account</th>
+                            <th>Total</th>
+                            <th>Category</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var transaction in Model.Household.Accounts.SelectMany(a => a.Transactions).Take(10).OrderByDescending(t => t.PostedDate))
+                        {
+                            var disabledColor = transaction.Account.IsDeleted == true ? "disabled-color" : "";
+                            var textColor = transaction.Category.Type == "Expense" ? "text-warning" : "";
+                            var amount = transaction.Category.Type == "Expense" ? "- $" + @transaction.Amount : "+ $" + @transaction.Amount;
+
+                            <tr class="@disabledColor">
+                                <td>@transaction.PostedDate.ToString("M/dd/yy")</td>
+                                <td>
+                                    @transaction.Account.Name
+                                </td>
+                                <td class="@textColor">@amount</td>
+                                <td>@transaction.Category.Name</td>
+                                <td>@transaction.Description</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <!-- /.table-responsive -->
+            </div>
+            <!-- /.panel-body -->
+        </div>
+        <!-- /.panel -->
+    </div>
 </div>
-<div id="morris-donut-chart"></div>
 
 @section Scripts {
     <script>
-        //$(".leaveModal").click(function () {
-        //    $("#partialModal").load('/Households/_LeavePV/' + $(this).data('id'));
-        //})
         $('#DTable').DataTable({
             "lengthChange": false,
             responsive: true
@@ -114,6 +122,7 @@
             new Morris.Donut({
                 element: 'morris-donut-chart',
                 data: response.donutList,
+                colors: ['#331c16', '#ae5e49'],
                 formatter: function (y, data) { return '$' + y },
                 resize: true
             });
