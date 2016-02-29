@@ -29,6 +29,7 @@ namespace BudgetMaster.Controllers
 
             if (household == null)
             {
+                TempData["FirstCreateOrJoin"] = "To Get Started, You Must First Create or Join a Group.";
                 return RedirectToAction("Create", "Households");
             }
             var userHHID = Convert.ToInt32(User.Identity.GetHouseholdId());

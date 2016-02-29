@@ -12,7 +12,7 @@
     <div class="start-panel col-sm-7 col-sm-offset-1 col-md-5 col-md-offset-1">
         <div id="register-panel" class="login-panel panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">@ViewBag.Title</h3>
+                <p><span class="panel-title">@ViewBag.Title</span> <a class="small pull-right" href="@Url.Action("Login","Account")">(or click here to login)</a></p>
             </div>
             <div class="panel-body">
             @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @role = "form" }))
@@ -20,18 +20,17 @@
                 @Html.AntiForgeryToken()
                 @Html.ValidationSummary("", new { @class = "text-danger" })
                     <fieldset>
-                        <div class="form-group">
+                        <div class="form-group col-sm-6">
                             @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control", placeholder = "First Name", name = "FirstName" })
                         </div>
-                        <div class="form-group">
+                        <div class="form-group col-sm-6">
                             @Html.TextBoxFor(m => m.LastName, new { @class = "form-control", placeholder = "Last Name", name = "LastName" })
                         </div>
-                        <div class="form-group">
+                        <div class="form-group x-pad-all">
                             @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Email", name = "Email", type = "email" })
                         </div>
                         <div class="form-group">
-                            <hr />
-                            <h6 class="validation-padding">Must be at least 6 characters,use lowercase, uppercase, numbers, and special characters.</h6>
+                            <h6  style="padding-left:15px;" class="validation-padding">Password must be at least 6 characters,use lowercase, uppercase, numbers, and special characters.</h6>
                             
                             @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Enter a Password", name = "Password", type = "password" })
                         </div>

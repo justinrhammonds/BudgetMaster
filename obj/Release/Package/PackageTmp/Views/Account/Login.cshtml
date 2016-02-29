@@ -12,7 +12,7 @@
             <div class="start-panel col-sm-7 col-sm-offset-1 col-md-5 col-md-offset-1">
                 <div class="login-panel panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title">@ViewBag.Title</h3>
+                        <p><span class="panel-title">@ViewBag.Title</span> <a class="small pull-right" href="@Url.Action("Register","Account")">(or click here to register)</a></p>
                     </div>
                     <div class="panel-body">
                     @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @role = "form" }))

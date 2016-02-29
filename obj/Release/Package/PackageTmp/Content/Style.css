@@ -5,7 +5,6 @@
 body {
     font-family: 'Questrial', sans-serif;
     font-size:1.4em;
-    /*position:relative;*/
     background-color:#9CB98E !important;
     line-height:1.8em !important;
 }
@@ -20,7 +19,6 @@ a:focus,
 a:active {
     color:inherit;
 }
-
 
 input,
 select,
@@ -140,6 +138,10 @@ strong, th, .strong {
 
 .x-pad {
     padding-right:25px;
+}
+
+.x-pad-all {
+    padding:15px;
 }
 
 .x-pad-left {
@@ -358,6 +360,10 @@ box-shadow: 0px 2px 10px 0px rgba(0,0,0,1);
 .panel-heading {
     margin-top:20px;
     background: #c7dbbd !important;
+}
+
+.panel {
+    background-color:transparent !important;
 }
 
 .body-content,

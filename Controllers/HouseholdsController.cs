@@ -48,7 +48,7 @@ namespace BudgetMaster.Controllers
 
                 return View(dashboardVM);
             }
-
+            TempData["FirstCreateOrJoin"] = "To Get Started, You Must First Create or Join a Group.";
             return RedirectToAction("Create", "Households");
         }
 
@@ -60,6 +60,7 @@ namespace BudgetMaster.Controllers
 
             if (household == null)
             {
+                TempData["FirstCreateOrJoin"] = "To Get Started, You Must First Create or Join a Group.";
                 return RedirectToAction("Create");
             }
 
@@ -118,6 +119,7 @@ namespace BudgetMaster.Controllers
         // GET: Households/Create
         public ActionResult Create()
         {
+            ViewBag.FirstCreateOrJoin = TempData["FirstCreateOrJoin"];
             return View();
         }
 
