@@ -2,11 +2,6 @@
     width:100%;
 }
 
-a:focus,
-a:active {
-    color:inherit;
-}
-
 body {
     font-family: 'Questrial', sans-serif;
     font-size:1.4em;
@@ -14,6 +9,18 @@ body {
     background-color:#9CB98E !important;
     line-height:1.8em !important;
 }
+
+h1,h2,h3,h4,h5,h6 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight:700;
+    line-height: 2em !important;
+}
+
+a:focus,
+a:active {
+    color:inherit;
+}
+
 
 input,
 select,
@@ -25,12 +32,6 @@ select,
     font-family: Questrial, sans-serif;
     font-size:80%;
     font-weight: 400;
-}
-
-h1,h2,h3,h4,h5,h6 {
-    font-family: 'Montserrat', sans-serif;
-    font-weight:700;
-    line-height: 2em !important;
 }
 
 #concerned-kitty {
