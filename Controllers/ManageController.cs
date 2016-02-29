@@ -58,7 +58,6 @@ namespace BudgetMaster.Controllers
         public async Task<ActionResult> Index(ManageMessageId? message)
         {
 
-
             ViewBag.StatusMessage =
                 message == ManageMessageId.ChangePasswordSuccess ? "Your password has been changed."
                 : message == ManageMessageId.SetPasswordSuccess ? "Your password has been set."
@@ -80,7 +79,6 @@ namespace BudgetMaster.Controllers
             };
             return View(model);
         }
-
 
         //PARTIAL VIEW
         //GET: /Manage/_ManageDisplayNamePV
@@ -108,8 +106,6 @@ namespace BudgetMaster.Controllers
             }
             return View(user);
         }
-
-
 
         // POST: /Manage/RemoveLogin
         [HttpPost]

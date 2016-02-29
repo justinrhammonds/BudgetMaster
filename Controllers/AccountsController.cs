@@ -36,17 +36,7 @@ namespace BudgetMaster
         public PartialViewResult _AccDetailsPV(int? id)
         {
             Account account = db.Accounts.Find(id);
-            //var userHHID = Convert.ToInt32(User.Identity.GetHouseholdId());
             var transactions = db.Transactions.Where(t => t.AccountId == account.Id).ToList();
-
-            //if (id == null)
-            //{
-            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            //}
-            //if (account == null)
-            //{
-            //    return HttpNotFound();
-            //}
 
             var ReconciledTransactions = transactions.Where(t => t.Reconciled == true);
             decimal ReconciledBalance = 0;
@@ -108,15 +98,7 @@ namespace BudgetMaster
         // GET: Accounts/Edit/5
         public PartialViewResult _EditPV(int? id)
         {
-            //if (id == null)
-            //{
-            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            //}
             Account account = db.Accounts.Find(id);
-            //if (account == null)
-            //{
-            //    return HttpNotFound();
-            //}
             return PartialView(account);
         }
 
@@ -138,15 +120,7 @@ namespace BudgetMaster
         // GET: Accounts/Delete/5
         public PartialViewResult _DeleteAccPV(int? id)
         {
-            //if (id == null)
-            //{
-            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            //}
             Account account = db.Accounts.Find(id);
-            //if (account == null)
-            //{
-            //    return HttpNotFound();
-            //}
             return PartialView(account);
         }
 
@@ -157,7 +131,6 @@ namespace BudgetMaster
         {
             Account account = db.Accounts.Find(id);
             account.IsDeleted = true;
-            //db.Accounts.Remove(account);
             db.SaveChanges();
             return RedirectToAction("Index", "Transactions");
         }

@@ -97,7 +97,6 @@ namespace BudgetMaster.Controllers
         {
             Category category = db.Categories.Find(id);
             category.IsDeleted = true;
-            //db.Categories.Remove(category);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

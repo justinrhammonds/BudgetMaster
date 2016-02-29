@@ -25,12 +25,9 @@ namespace BudgetMaster.Controllers
         {
             var user = db.Users.Find(User.Identity.GetUserId());
             Household household = db.Households.Include("Accounts").FirstOrDefault(h => h.Id == user.HouseholdId);
-
-
             if (household != null)
             {
                 var ReconciledBalance = household.Accounts.SelectMany(a => a.Transactions).Where(t => t.Reconciled == true).Select(m => m.Amount).Sum();
-
                 var accountList = from acc in household.Accounts
                                   let inc = (from tr in acc.Transactions
                                              where (tr.Reconciled == true && tr.Category.Type == "Income")
@@ -43,20 +40,16 @@ namespace BudgetMaster.Controllers
                                       Account = acc,
                                       RecBal = inc - exp
                                   };
-
                 DashboardVM dashboardVM = new DashboardVM()
                 {
                     Household = household,
                     RecBalVM = accountList.ToList()
                 };
 
-                
-
                 return View(dashboardVM);
             }
 
             return RedirectToAction("Create", "Households");
-
         }
 
         //GET: Households/Manage
@@ -141,7 +134,6 @@ namespace BudgetMaster.Controllers
                     db.Households.Add(household);
                     db.SaveChanges();
                     var hh = db.Households.FirstOrDefault(h => h.Name == household.Name);
-                    //user = db.Users.Find(User.Identity.GetUserId());
                     user.HouseholdId = hh.Id;
                     household.PopulateCategories();
                     db.SaveChanges();
@@ -169,14 +161,17 @@ namespace BudgetMaster.Controllers
                 invite.HouseholdId = (int)user.HouseholdId;
                 invite.InvitedUser = Email;
                 var duplicates = db.Invites.Where(i => i.InvitedUser == Email);
+
                 foreach (var duplicate in duplicates)
                 {
                     db.Invites.Remove(duplicate);
                 }
+
                 var Code = StringUtilities.RandomString(6);
                 invite.GeneratedCode = Code;
                 db.Invites.Add(invite);
                 db.SaveChanges();
+
                 EmailService es = new EmailService();
                 var im = new IdentityMessage();
                 im.Body = "You've been invited to join a group by " + user.FirstName + " " + user.LastName + ". Visit https://jhammonds-budgetmaster.azurewebsites.net to register. Once registered, enter the following code to join: " + Code + "";
@@ -184,7 +179,6 @@ namespace BudgetMaster.Controllers
                 im.Subject = "You're Invited to BudgetMaestro";
                 es.SendAsync(im);
                 TempData["MessageSuccess"] = "Your Message Was Sent Successfully.";
-                //ViewBag.MessageSuccess = "Your Message Was Sent Successfully.";
                 return RedirectToAction("Manage", "Households");
             }
 
