@@ -84,3 +84,4 @@ C:\Users\Justin\documents\visual studio 2015\Projects\BudgetMaster\BudgetMaster\
 C:\Users\Justin\documents\visual studio 2015\Projects\BudgetMaster\BudgetMaster\bin\SendGridMail.dll
 C:\Users\Justin\documents\visual studio 2015\Projects\BudgetMaster\BudgetMaster\bin\System.Net.Http.Formatting.dll
 C:\Users\Justin\documents\visual studio 2015\Projects\BudgetMaster\BudgetMaster\bin\System.Net.Http.Formatting.xml
+C:\Users\Justin\documents\visual studio 2015\Projects\BudgetMaster\BudgetMaster\obj\Debug\BudgetMaster.csprojResolveAssemblyReference.cache
