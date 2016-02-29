@@ -56,7 +56,8 @@
             </div>
             <div class="form-group col-sm-3">
                 <div class="checkbox">
-                    <input type="checkbox" name="Reconciled" checked />
+                    @Html.CheckBoxFor(model => model.Reconciled, new { @checked = "checked" })
+                    @*<input type="checkbox" name="Reconciled" checked />*@
                     <label for="Reconciled">Is this transaction reconciled?</label>
                     @Html.ValidationMessageFor(model => model.Reconciled, "", new { @class = "text-danger" })
                 </div>

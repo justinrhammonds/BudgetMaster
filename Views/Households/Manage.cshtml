@@ -10,7 +10,6 @@
         </div>
         <!-- /.panel-heading -->
         <div class="panel-body">
-            <div class="text-success"><h4>@ViewBag.Message</h4></div>
             <div class="list-group">
                     @foreach (var user in Model.Users)
                     {
@@ -35,6 +34,7 @@
                 @Html.AntiForgeryToken()
                 <p>Use the form below to invite someone into your group. Submitting the form will email that person an invite code to join your group once they are a registered user.</p>
                 <hr />
+                <div class="text-success"><h5>@ViewBag.MessageSuccess</h5></div>
                 <label class="strong" for="Email">Enter the person's email you wish to invite:</label>
                 <div class="input-group custom-search-form">
                     <input type="text" name="Email" class="form-control" placeholder="invite@domain.com">

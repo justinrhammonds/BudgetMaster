@@ -260,6 +260,7 @@
     <Content Include="Content\budget-logo.svg" />
     <Content Include="Content\BudgetMasterLogo.svg" />
     <Content Include="Content\Colors.css" />
+    <Content Include="Content\concerned-kitty.jpg" />
     <Content Include="Content\cute-kitten.jpg" />
     <Content Include="Content\dev-img\bootstrap.jpg" />
     <Content Include="Content\dev-img\dotnetmvc4.jpg" />
@@ -428,9 +429,6 @@
     <Content Include="Views\Categories\Index.cshtml" />
     <Content Include="Views\Households\Create.cshtml" />
     <Content Include="Views\Households\Index.cshtml" />
-    <Content Include="Views\Transactions\Create.cshtml" />
-    <Content Include="Views\Transactions\Delete.cshtml" />
-    <Content Include="Views\Transactions\Edit.cshtml" />
     <Content Include="Views\Transactions\Index.cshtml" />
     <Content Include="Views\Shared\_StartLayout.cshtml" />
     <Content Include="Views\Account\ResendEmailConfirmation.cshtml" />

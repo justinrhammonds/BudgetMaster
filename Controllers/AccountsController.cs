@@ -15,7 +15,7 @@ using Microsoft.AspNet.Identity;
 namespace BudgetMaster
 {
     [RequireHttps]
-    [Authorize]
+    [AuthorizeHouseholdRequired]
     public class AccountsController : ApplicationBaseController
     {
         private ApplicationDbContext db = new ApplicationDbContext();

@@ -15,7 +15,7 @@ using Microsoft.AspNet.Identity;
 namespace BudgetMaster.Controllers
 {
     [RequireHttps]
-    [Authorize]
+    [AuthorizeHouseholdRequired]
     public class TransactionsController : ApplicationBaseController
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -23,27 +23,19 @@ namespace BudgetMaster.Controllers
         // GET: Transactions
         public ActionResult Index()
         {
-            //returns a view with a list of transactions where the t's accountId matches the user's HHID
+
+            var user = db.Users.Find(User.Identity.GetUserId());
+            Household household = db.Households.Include("Accounts").FirstOrDefault(h => h.Id == user.HouseholdId);
+
+            if (household == null)
+            {
+                return RedirectToAction("Create", "Households");
+            }
             var userHHID = Convert.ToInt32(User.Identity.GetHouseholdId());
             var transactions = db.Transactions.Where(t => t.AccountId == t.Account.Id && t.Account.HouseholdId == userHHID);
             var model = transactions.OrderByDescending(d => d.PostedDate).ToList();
             return View(model);
         }
-
-        //// GET: Transactions/Details/5
-        //public ActionResult Details(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    Transaction transaction = db.Transactions.Find(id);
-        //    if (transaction == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(transaction);
-        //}
 
         // GET: Transactions/Create
         public PartialViewResult _CreatePV(int? id) 
@@ -61,6 +53,7 @@ namespace BudgetMaster.Controllers
             //    ViewBag.Account = id;
             //    tr.AccountId = (int)id;
             //}
+            
             ViewBag.AccountId = new SelectList(accounts.ToList(), "Id", "Name");
             ViewBag.CategoryId = new SelectList(categories.ToList(), "Id", "Name");
             return PartialView(/*tr*/);
@@ -84,7 +77,7 @@ namespace BudgetMaster.Controllers
                 transaction = db.Transactions.Include("Category").FirstOrDefault(t => t.Id == transaction.Id);
                 //update the balance based on the transaction.Category.Type
                 transaction.UpdateAccountBalance(userId);
-                return RedirectToAction("Details", "Accounts", new { id = account.Id });
+                return RedirectToAction("Index", "Transactions", new { id = account.Id });
             }
 
             ViewBag.AccountId = new SelectList(db.Accounts, "Id", "Name", transaction.AccountId);

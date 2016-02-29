@@ -10,11 +10,12 @@ using BudgetMaster.Models;
 using BudgetMaster.Models.CodeFirst;
 using AspNetIdentity2.Controllers;
 using BudgetMaster.HelperExtensions;
+using Microsoft.AspNet.Identity;
 
 namespace BudgetMaster
 {
     [RequireHttps]
-    [Authorize]
+    [AuthorizeHouseholdRequired]
     public class BudgetItemsController : ApplicationBaseController
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -22,6 +23,13 @@ namespace BudgetMaster
         // GET: BudgetItems
         public ActionResult Index()
         {
+            var user = db.Users.Find(User.Identity.GetUserId());
+            Household household = db.Households.Include("Accounts").FirstOrDefault(h => h.Id == user.HouseholdId);
+
+            if (household == null)
+            {
+                return RedirectToAction("Create", "Households");
+            }
             var userHHID = Convert.ToInt32(User.Identity.GetHouseholdId());
             var budgetItems = db.BudgetItems.Where(t => t.HouseholdId == userHHID);
             var model = budgetItems.OrderByDescending(b => b.Amount).ToList();

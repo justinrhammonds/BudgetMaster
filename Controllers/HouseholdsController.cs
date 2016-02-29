@@ -20,7 +20,6 @@ namespace BudgetMaster.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
 
-        [HttpGet]
         // GET: Households/Index/5
         public ActionResult Index()
         {
@@ -51,7 +50,7 @@ namespace BudgetMaster.Controllers
                     RecBalVM = accountList.ToList()
                 };
 
-                ViewBag.Message = TempData["Message"];
+                
 
                 return View(dashboardVM);
             }
@@ -65,6 +64,13 @@ namespace BudgetMaster.Controllers
         {
             var user = db.Users.Find(User.Identity.GetUserId());
             Household household = db.Households.Include("Accounts").FirstOrDefault(h => h.Id == user.HouseholdId);
+
+            if (household == null)
+            {
+                return RedirectToAction("Create");
+            }
+
+            ViewBag.MessageSuccess = TempData["MessageSuccess"];
             return View(household);
         }
 
@@ -116,8 +122,6 @@ namespace BudgetMaster.Controllers
             return Content(JsonConvert.SerializeObject(data), "application/json");
         }
 
-        [HttpGet]
-
         // GET: Households/Create
         public ActionResult Create()
         {
@@ -153,6 +157,7 @@ namespace BudgetMaster.Controllers
 
         // POST: Households/Invite
         [HttpPost]
+        [AuthorizeHouseholdRequired]
         [ValidateAntiForgeryToken]
         public ActionResult Invite(string Email)
         {
@@ -174,19 +179,18 @@ namespace BudgetMaster.Controllers
                 db.SaveChanges();
                 EmailService es = new EmailService();
                 var im = new IdentityMessage();
-                im.Body = "You've been invited to join a household by " + user.FirstName + " " + user.LastName + ". Visit https://jhammonds-budgetmaster.azurewebsites.net to register. Once registered, enter the following code to join: " + Code + "";
+                im.Body = "You've been invited to join a group by " + user.FirstName + " " + user.LastName + ". Visit https://jhammonds-budgetmaster.azurewebsites.net to register. Once registered, enter the following code to join: " + Code + "";
                 im.Destination = invite.InvitedUser;
-                im.Subject = "You're Invited to BudgetMaster";
+                im.Subject = "You're Invited to BudgetMaestro";
                 es.SendAsync(im);
-                TempData["Message"] = "Your Message Was Sent Successfully.";
-
-                return RedirectToAction("Index", "Households");
+                TempData["MessageSuccess"] = "Your Message Was Sent Successfully.";
+                //ViewBag.MessageSuccess = "Your Message Was Sent Successfully.";
+                return RedirectToAction("Manage", "Households");
             }
 
             return View();
         }
 
-        [HttpGet]
         // GET: Households/Join/5
         public ActionResult Join()
         {
@@ -194,7 +198,6 @@ namespace BudgetMaster.Controllers
         }
 
         [HttpPost]
-        [AuthorizeHouseholdRequired]
         public async Task<ActionResult> Join(string Code)
         {
             if (ModelState.IsValid)
@@ -216,7 +219,6 @@ namespace BudgetMaster.Controllers
         }
 
         // GET: Households/_LeavePV
-        [HttpGet]
         public PartialViewResult _LeavePV()
         {
             return PartialView();

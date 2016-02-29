@@ -10,7 +10,7 @@
                 <h4>Current Account Balances</h4>
             </div>
             <div class="panel-body">
-                @if (Model.Household.Accounts.Count() == 0)
+                @if (Model.Household.Accounts.Where(a=>a.IsDeleted == false).Count() == 0)
                 {
                     <h4>You currently have no accounts created. <a href="@Url.Action("Index","Transactions")">Click here to create a new account.</a></h4>
                 }
@@ -19,6 +19,10 @@
                 <div class="col-sm-11 col-sm-offset-1">                    
                     <h4>@account.Account.Name: <span class="normal-text">$@account.Account.Balance</span></h4>
                     <h5>Reconciled Balance: <span class="normal-text">$@account.RecBal</span></h5>
+                    @if (@account.Account.Balance < 100)
+                    {
+                        <h5 class="text-danger">Warning! This account is close to a possible overdraft.</h5>
+                    }
                     <hr />
                 </div>
                 }

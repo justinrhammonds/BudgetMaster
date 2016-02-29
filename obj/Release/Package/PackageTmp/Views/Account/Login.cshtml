@@ -29,10 +29,10 @@
                                 @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
                             </div>
                             <div class="form-group">
-                                <span class="checkbox">
+                                @*<span class="checkbox">
                                     @Html.CheckBoxFor(m => m.RememberMe)
                                     @Html.LabelFor(m => m.RememberMe)
-                                </span>
+                                </span>*@
                                 <span>@Html.ActionLink("Forgot your password?", "ForgotPassword")</span>
                             </div>
                             <input type="submit" value="Login" class="btn btn-lg btn-success btn-block" />

@@ -15,7 +15,7 @@ using Microsoft.AspNet.Identity;
 namespace BudgetMaster.Controllers
 {
     [RequireHttps]
-    [Authorize]
+    [AuthorizeHouseholdRequired]
     public class CategoriesController : ApplicationBaseController
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -23,6 +23,13 @@ namespace BudgetMaster.Controllers
         // GET: Categories
         public ActionResult Index()
         {
+            var user = db.Users.Find(User.Identity.GetUserId());
+            Household household = db.Households.Include("Accounts").FirstOrDefault(h => h.Id == user.HouseholdId);
+
+            if (household == null)
+            {
+                return RedirectToAction("Create", "Households");
+            }
             var userHHID = Convert.ToInt32(User.Identity.GetHouseholdId());
             var categories = db.Categories.Where(c => c.HouseholdId == userHHID && c.IsDeleted == false);
             return View(categories.ToList());

@@ -30,6 +30,13 @@ select,
 h1,h2,h3,h4,h5,h6 {
     font-family: 'Montserrat', sans-serif;
     font-weight:700;
+    line-height: 2em !important;
+}
+
+#concerned-kitty {
+    height:150px;
+    border-radius: 50%;
+    border: 5px solid #c7dbbd;
 }
 
 td {

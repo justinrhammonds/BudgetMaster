@@ -6,9 +6,10 @@
 
 <div class="panel panel-default">
     <div class="panel-heading">
-        <h4>Manage Your Extrnal Logins</h4>
+        <h4>Manage Your External Logins</h4>
     </div>
     <div class="panel-body">
+        <p class="text-success">@ViewBag.StatusMessage</p>
 @{
     var loginProviders = Context.GetOwinContext().Authentication.GetExternalAuthenticationTypes();
     if (Model.CurrentLogins.Count > 0)
