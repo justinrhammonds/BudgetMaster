@@ -17,6 +17,7 @@
     <link href="https://cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css" />
     <link href="https://cdn.datatables.net/buttons/1.1.2/css/buttons.dataTables.min.css" rel="stylesheet" type="text/css" />
     <link href="https://cdn.datatables.net/responsive/2.0.2/css/responsive.dataTables.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/animation.css" rel="stylesheet" />
 </head>
 <body>
     <main id="start">
@@ -35,12 +36,18 @@
             <div class="col-sm-5 col-sm-offset-1 col-xs-offset-1 col-xs-10">
                 <h4>With BudgetMaestro, you stay ahead of the game.</h4>
                 <p>BudgetMaestro provides a secure way to monitor your spending according to your monthly budget making it a breeze to balance your personal finances. It's easy to use, and best of all it's free to join.</p>
-                <h4>Take control of your finances today! <a href="@Url.Action("Register","Account")"> Join for free.</a></h4>
+                @*<h4>Take control of your finances today! <a href="@Url.Action("Register","Account")"> Join for free.</a></h4>*@
+                @*<form method="post"><h4>Take control of your finances today! <a href="@Url.Action("DemoLogin","Account")"> Try It Out For free.</a></h4></form>*@
+                <form method="Post" action="@Url.Action("DemoLogin","Account")">
+                    @Html.AntiForgeryToken()
+                    <h4>Take control of your finances today! <input type="submit" value="Try It For Free" class="btn btn-link" /></h4>
+                    
+                </form>
             </div>
 
         </section>
         <section class="how-to-section row">
-            <div class="col-sm-6 col-sm-offset-1 col-xs-offset-1 col-xs-10">
+            <div class="col-sm-5 col-sm-offset-1 col-xs-offset-1 col-xs-10">
                 <h3>Tell Me More!</h3>
                 <h5>Using BudgetMaestro you can</h5>
                 <ul>
@@ -52,6 +59,9 @@
                     <li>search your transactions and budget items by category.</li>
                     <li>monitor your overall spending compared to your budget.</li>
                 </ul>
+            </div>
+            <div class="col-sm-6 col-sm-offset">
+                <img id="screenshots" class="img-responsive" src="~/Content/budget-screenshot.png" />
             </div>
         </section>
         <section class="developer-section row">

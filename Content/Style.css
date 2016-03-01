@@ -59,10 +59,15 @@ td button {
     background-color:transparent;
 }
 
-.login-partial {
+.loginPartial {
     position:relative;
-    top:115px;
-    right:120px;
+    bottom:125px;
+    left:25px;
+}
+
+.accListBox {
+    position:relative;
+    top:35px;
 }
 
 strong, th, .strong {
@@ -92,6 +97,11 @@ strong, th, .strong {
 
 #morris-donut-chart {
     height:300px;
+}
+
+.accIndexBox {
+    height:330px;
+    overflow-y:scroll;
 }
 
 .panel-body {
@@ -138,6 +148,13 @@ strong, th, .strong {
 
 .x-pad {
     padding-right:25px;
+}
+
+#text-underline {
+    text-decoration:underline;
+}
+#text-underline:hover {
+    color:#c7dbbd!important;
 }
 
 .x-pad-all {
@@ -381,4 +398,8 @@ box-shadow: 0px 2px 10px 0px rgba(0,0,0,1);
 
 .panel-body {
     background: #fff !important;
+}
+
+#screenshots {
+    width: 650px;
 }

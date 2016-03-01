@@ -21,13 +21,13 @@
 </head>
 <body>
     <header>
-        <div class="pull-right">
+        @*<div class="pull-right">
             @Html.Partial("_LoginPartial")
-        </div>
+        </div>*@
         <div class="navbar-header">
-            <a class="navbar-brand" href="index.html">
+            <div class="navbar-brand">
                 <img class="brand-logo" src="~/Content/budget-logo.svg" />
-            </a>
+            </div>
         </div>
     </header>
     <div id="page-wrapper">
@@ -54,6 +54,9 @@
             </div>
         </nav>
         <div class="container body-content">
+            <div class="pull-right loginPartial">
+                @Html.Partial("_LoginPartial")
+            </div>
             @RenderBody()
         </div>
     </div>

@@ -246,6 +246,7 @@
     <Compile Include="ViewModels\DashboardNavViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\animation.css" />
     <Content Include="Content\bootstrap-datepicker.css" />
     <Content Include="Content\bootstrap-datepicker.min.css" />
     <Content Include="Content\bootstrap-datepicker.standalone.css" />
@@ -258,6 +259,7 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\budget-logo.svg" />
+    <Content Include="Content\budget-screenshot.png" />
     <Content Include="Content\BudgetMasterLogo.svg" />
     <Content Include="Content\concerned-kitty.jpg" />
     <Content Include="Content\cute-kitten.jpg" />

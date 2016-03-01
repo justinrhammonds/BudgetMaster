@@ -17,8 +17,8 @@
                 @*<input type="hidden" name="Id" value="@Model.Id" />*@
                 @*<input type="hidden" name="HouseholdId" value="@ViewBag.HouseholdId" />*@
                 <input type="text" name="Name" class="form-control" placeholder="Account Name" />
-                <input type="text" name="Balance" class="form-control" placeholder="Starting Balance" />
                 @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                <input type="text" name="Balance" class="form-control" placeholder="Starting Balance" />
                 @Html.ValidationMessageFor(model => model.Balance, "", new { @class = "text-danger" })
             </div>
             <div class="col-xs-12 x-pad-top">

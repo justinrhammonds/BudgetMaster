@@ -112,6 +112,48 @@ namespace BudgetMaster.Controllers
             }
         }
 
+        //POST: /Account/DemoLogin
+        // POST: /Account/Login
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> DemoLogin(LoginViewModel model, string returnUrl)
+        {
+            // Require the user to have a confirmed email before they can log on.
+            var user = await UserManager.FindByNameAsync("donatello@ninja.turtles");
+            if (user != null)
+            {
+                if (!await UserManager.IsEmailConfirmedAsync(user.Id))
+                {
+                    ViewBag.errorMessage = "You must have a confirmed email to log on.";
+                    return View("Error");
+                }
+            }
+
+            var result = await SignInManager.PasswordSignInAsync("donatello@ninja.turtles", "Tota11y!", false, shouldLockout: false);
+
+            switch (result)
+            {
+                case SignInStatus.Success:
+                    var User = UserManager.FindByEmail("donatello@ninja.turtles");
+                    ViewBag.DisplayName = User.FirstName + User.LastName;
+                    if (User.HouseholdId == null)
+                    {
+                        return RedirectToAction("Create", "Households");
+                    }
+                    return RedirectToAction("Index", "Households");
+
+                case SignInStatus.LockedOut:
+                    return View("Lockout");
+                case SignInStatus.RequiresVerification:
+                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
+                case SignInStatus.Failure:
+                default:
+                    ModelState.AddModelError("", "Invalid login attempt.");
+                    return View(model);
+            }
+        }
+
         // GET: /Account/VerifyCode
         [AllowAnonymous]
         public async Task<ActionResult> VerifyCode(string provider, string returnUrl, bool rememberMe)

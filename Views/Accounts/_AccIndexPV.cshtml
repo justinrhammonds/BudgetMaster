@@ -22,7 +22,15 @@
                     <table class="table table-responsive">
                         @foreach (var item in Model.Where(m => m.IsDeleted == false && m.Balance < 100))
                         {
-                            <caption class="text-danger" style="text-align:left;">Warning! The account "@item.Name" is close to overdrafting.</caption>
+                            if (item.Balance < 0)
+                            {
+                                <caption class="text-danger" style="text-align:left;">Warning! The account "@item.Name" is currently in overdraft.</caption>
+                            }
+                            else if (item.Balance < 100)
+                            {
+                                <caption class="text-danger" style="text-align:left;">Warning! The account "@item.Name" is close to overdrafting.</caption>
+                            }
+
                         }
                         <tr>
                             <th>Account Name</th>
