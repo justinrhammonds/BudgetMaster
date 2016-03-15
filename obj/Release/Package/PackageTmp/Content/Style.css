@@ -60,9 +60,7 @@ td button {
 }
 
 .loginPartial {
-    position:relative;
-    bottom:125px;
-    left:25px;
+    margin: -125px -25px 0 0;
 }
 
 .accListBox {
@@ -81,6 +79,10 @@ strong, th, .strong {
     background-size:cover;
     background-repeat: no-repeat;
     border-bottom:15px solid #4c693d;
+}
+
+#dashboard table {
+    width:100%;
 }
 
 #start .intro-message {
@@ -167,6 +169,10 @@ strong, th, .strong {
 
 .x-pad-top {
     padding-top: 20px;
+}
+
+.x-size {
+    font-size:110%;
 }
 
 .start-panel .panel-heading {
@@ -342,8 +348,6 @@ nav {
         border-left:0px !important;
         z-index:1000 !important;
         overflow:visible !important;
-        /*position:relative;
-        bottom:90px;*/
         padding:0 !important;
 -webkit-box-shadow: 0px 2px 10px 0px rgba(0,0,0,1);
 -moz-box-shadow: 0px 2px 10px 0px rgba(0,0,0,1);
@@ -402,4 +406,63 @@ box-shadow: 0px 2px 10px 0px rgba(0,0,0,1);
 
 #screenshots {
     width: 650px;
+}
+
+@media (max-width: 768px) {
+    #page-wrapper {
+        padding: 0 !important;
+    }
+
+    .hide {
+        display:none;
+    }
+
+    header {
+        height:160px;
+        border-bottom: 0;
+    }
+
+    .loginPartial {
+        margin: -135px 0 0 0;
+        display:flex;
+    }
+
+    #start-logo {
+        width:90%;
+        margin:0 auto;
+        padding:2%;
+}
+    #start {
+        height:60vh;
+        background-image: url('cute-kitten.jpg');
+    }
+
+    .start-btn {
+        font-size:1.2em;
+        font-weight:400;
+        padding: 10px;
+    }
+    .bounce {
+        display:none;
+    }
+    .start-panel {
+        z-index:1001 !important;
+    }
+}
+
+@media  only screen and (-webkit-min-device-pixel-ratio : 1.5), 
+        only screen and (min-device-pixel-ratio : 1.5), 
+        only screen and (min-device-width : 320px) and (max-device-width : 480px) and (orientation : landscape) {
+            .start-btn {
+                position:relative;
+                bottom:100px;
+    }
+}
+
+@media  only screen and (min-device-width : 320px) and (max-device-width : 568px),
+        only screen and (min-device-width : 320px) and (max-device-width : 568px) and (orientation : landscape) {
+            .start-btn {
+                position:relative;
+                bottom:100px;
+    }
 }

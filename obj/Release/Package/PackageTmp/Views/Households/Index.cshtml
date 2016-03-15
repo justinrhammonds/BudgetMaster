@@ -68,7 +68,7 @@
             </div>
             <!-- /.panel-heading -->
             <div class="panel-body">
-                <table id="DTable" class="table table-responsive table-hover">
+                <table id="DTable" class="table table-responsive table-hover col-xs-12">
                     <thead>
                         <tr>
                             <th>Date</th>
@@ -107,10 +107,11 @@
 
 @section Scripts {
     <script>
-        $('#DTable').DataTable({
+        $('#DTable').dataTable({
             "lengthChange": false,
             responsive: true
         });
+        $('#DTable').DataTable();
         $.post('@Url.Action("GetCharts","Households")').then(function (response) {
             new Morris.Bar({
                 element: 'morris-bar-chart',
