@@ -29,7 +29,7 @@
     </main>
     <footer>
         <section class="intro-section row">
-            <div class="col-xs-12">
+            <div class="container">
                 <div class="col-sm-4 col-sm-offset-1 col-xs-12">
                     <img class="start-brand img-responsive" src="~/Content/budget-logo.svg" />
                 </div>
@@ -37,8 +37,6 @@
                 <div class="col-sm-5 col-sm-offset-1 col-xs-12">
                     <h4>With BudgetMaestro, you stay ahead of the game.</h4>
                     <p>BudgetMaestro provides a secure way to monitor your spending according to your monthly budget making it a breeze to balance your personal finances. It's easy to use, and best of all it's free to join.</p>
-                    @*<h4>Take control of your finances today! <a href="@Url.Action("Register","Account")"> Join for free.</a></h4>*@
-                    @*<form method="post"><h4>Take control of your finances today! <a href="@Url.Action("DemoLogin","Account")"> Try It Out For free.</a></h4></form>*@
                     <form method="Post" action="@Url.Action("DemoLogin","Account")">
                         @Html.AntiForgeryToken()
                         <h4>Take control of your finances today! <input type="submit" value="Try It For Free" class="btn btn-link x-size" /></h4>
@@ -49,7 +47,7 @@
 
         </section>
         <section class="how-to-section row">
-            <div class="col-xs-12">
+            <div class="container">
                 <div class="col-sm-5 col-sm-offset-1 col-xs-12">
                     <h3>Tell Me More!</h3>
                     <h5>Using BudgetMaestro you can</h5>
@@ -69,7 +67,7 @@
             </div>
         </section>
         <section class="developer-section row">
-            <div class="col-xs-12">
+            <div class="container">
                 <div class="col-xs-12"><img class="img-responsive col-sm-6 col-sm-offset-1 col-xs-12" src="~/Content/dev-img/dotnetmvc4.jpg" /></div>
                 <div class="col-sm-3 col-sm-offset-1 col-xs-12">
                     <h4>Developed By Justin Hammonds</h4>
@@ -86,8 +84,17 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
     <script src="~/Scripts/sb-admin-2.js"></script>
     <script src="~/Scripts/bootstrap-datepicker.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-scrollTo/2.1.0/jquery.scrollTo.min.js"></script>
     <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/responsive/2.0.2/js/dataTables.responsive.min.js"></script>
+    <script>
+        $('#bouncing-arrow').click(function() {
+            $.scrollTo($('.start-brand'), 800);
+        })
+        //$(element).scrollTo(target[,duration][,settings]);
+        //$('#bouncing-arrow').scrollTo($('.start-brand'), 800);
+    </script>
+
     @RenderSection("scripts", required: false)
 
 </body>

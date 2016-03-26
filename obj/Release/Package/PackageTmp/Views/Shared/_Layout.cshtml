@@ -21,9 +21,6 @@
 </head>
 <body id="dashboard">
     <header>
-        @*<div class="pull-right">
-            @Html.Partial("_LoginPartial")
-        </div>*@
         <div class="navbar-header">
             <div class="navbar-brand col-xs-12">
                 <img class="brand-logo img-responsive" src="~/Content/budget-logo.svg" />
@@ -36,19 +33,19 @@
                 <div class="flex-container">
                     <a class="flex-item" href="@Url.Action("Index","Households")">
                         <i class="fa fa-home"></i>
-                        <p><span class="hide">View Your </span>Dashboard</p>
+                        <p><span class="nav-hide">View Your </span>Dashboard</p>
                     </a>
                     <a class="flex-item" href="@Url.Action("Index","Transactions")">
                         <i class="fa fa-money"></i>
-                        <p><span class="hide">Accounts & </span>Transactions</p>
+                        <p><span class="nav-hide">Accounts & </span>Transactions</p>
                     </a>
                     <a class="flex-item" href="@Url.Action("Index","BudgetItems")">
                         <i class="fa fa-balance-scale"></i>
-                        <p><span class="hide">Manage Your </span>Budget</p>
+                        <p><span class="nav-hide">Manage Your </span>Budget</p>
                     </a>
                     <a class="flex-item" href="@Url.Action("Manage","Households")">
                         <i class="fa fa-users"></i>
-                        <p><span class="hide">Manage Your </span>Group</p>
+                        <p><span class="nav-hide">Manage Your </span>Group</p>
                     </a>
                 </div>
             </div>

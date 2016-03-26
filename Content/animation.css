@@ -9,14 +9,14 @@
  line-height:60px;
  text-rendering: auto;
  -webkit-font-smoothing: antialiased;
- margin-right:-25%;
+ /*margin-right:-25%;*/
 }
 .fa-angle-double-down:before {content: "\f103";}
 
 .bounce {
- position: absolute;
- bottom: 50px;
- left: 23%;
+ position: relative;
+ top: 100px;
+ left:110px;
  width: 60px;
  height: 60px ;
  margin-left:-30px;

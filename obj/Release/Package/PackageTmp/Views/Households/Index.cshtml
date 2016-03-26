@@ -4,7 +4,7 @@
     ViewBag.Title = "Index";
 }
 <div class="row">
-    <div class="col-sm-7">
+    <div class="col-md-7">
         <div class="panel panel-default accListBox">
             <div class="panel-heading">
                 <h4>Current Account Balances</h4>
@@ -33,7 +33,7 @@
             </div>
         </div>
     </div>
-    <div class="col-sm-5">
+    <div class="col-md-5">
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h4>This Month's Income vs. Expenses</h4>
@@ -45,13 +45,13 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-sm-12">
+    <div class="col-xs-12">
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h4>Monthly Budget vs. Monthly Expenses</h4>
             </div>
             <!-- /.panel-heading -->
-            <div class="panel-body">
+            <div class="panel-body" style="overflow-x:scroll">
                 <div id="morris-bar-chart"></div>
             </div>
             <!-- /.panel-body -->
@@ -79,7 +79,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var transaction in Model.Household.Accounts.SelectMany(a => a.Transactions).Take(10).OrderByDescending(t => t.PostedDate))
+                        @foreach (var transaction in Model.Household.Accounts.SelectMany(a => a.Transactions).OrderByDescending(t=>t.PostedDate).Take(5))
                         {
                             var disabledColor = transaction.Account.IsDeleted == true ? "disabled-color" : "";
                             var textColor = transaction.Category.Type == "Expense" ? "text-warning" : "";
@@ -109,7 +109,8 @@
     <script>
         $('#DTable').dataTable({
             "lengthChange": false,
-            responsive: true
+            responsive: true,
+            "order": [[0, "desc"]]
         });
         $('#DTable').DataTable();
         $.post('@Url.Action("GetCharts","Households")').then(function (response) {
@@ -119,7 +120,7 @@
                 xkey: 'category',
                 ykeys: ['budgeted', 'actual'],
                 labels: ['Budgeted', 'Actual'],
-                resize: true,
+                resize: false,
                 xLabelMargin: 2,
                 gridTextColor: '#555',
                 barColors: ['#331c16', '#2d5a2d'],
